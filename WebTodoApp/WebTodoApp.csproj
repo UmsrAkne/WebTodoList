@@ -64,6 +64,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\DBHelper.cs" />
     <Compile Include="Models\KeyDownBehavior.cs" />
     <Compile Include="Models\Todo.cs" />

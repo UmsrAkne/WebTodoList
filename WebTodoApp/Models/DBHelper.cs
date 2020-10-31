@@ -211,10 +211,10 @@ namespace WebTodoApp.Models
             get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
                 try {
                     loadTodoList();
-                    Message = "データベースへの接続に成功。TodoList をロードしました";
+                    Message = $"{DateTime.Now} データベースへの接続に成功。TodoList をロードしました";
                 }
                 catch (TimeoutException) {
-                    Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
+                    Message = $"{DateTime.Now} 接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
                 }
             }));
         }

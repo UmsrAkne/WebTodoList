@@ -19,13 +19,29 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
 
+        <Menu Grid.Row="0">
+            <MenuItem Header="ファイル">
+                <MenuItem Header="終了"
+                          Command="{Binding ExitCommand}"
+                          />
+            </MenuItem>
+
+            <MenuItem Header="接続">
+                <MenuItem Header="再接続"
+                          Command="{Binding DatabaseHelper.TryFirstConnectCommand}"
+                          />
+            </MenuItem>
+
+        </Menu>
+
         <ListView ItemsSource="{Binding DatabaseHelper.TodoList}"
-                  Grid.Row="0"
+                  Grid.Row="1"
                   >
 
             <ListView.ItemContainerStyle>
@@ -110,7 +126,7 @@
         </ListView>
 
 
-        <DockPanel Grid.Row="1" >
+        <DockPanel Grid.Row="2" >
 
             <Grid DockPanel.Dock="Top" 
                   Margin="0,3"

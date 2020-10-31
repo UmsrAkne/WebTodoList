@@ -92,6 +92,10 @@ namespace WebTodoApp.Models
             );
         }
 
+        public void insertComment(Comment comment) {
+
+        }
+
         public void update(Todo todo) {
             System.Diagnostics.Debug.WriteLine(todo);
             if(todo.ID < 0 || !todo.existSource) {

@@ -64,5 +64,17 @@ namespace WebTodoApp.ViewModels
         }
         private DelegateCommand<TextBox> toReadOnlyCommand;
         #endregion
+
+
+        public DelegateCommand ExitCommand {
+            #region
+            get => exitCommand ?? (exitCommand = new DelegateCommand(() => {
+                App.Current.Shutdown();
+            }));
+        }
+        private DelegateCommand exitCommand;
+        #endregion
+
+
     }
 }

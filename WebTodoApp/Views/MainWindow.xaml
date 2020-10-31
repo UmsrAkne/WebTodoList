@@ -87,6 +87,12 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
+                            <CheckBox IsChecked="{Binding Started}"
+                                      Background="AntiqueWhite"
+                                      >
+                                
+                            </CheckBox>
+
                             <TextBlock Text="{Binding CreationDateShortString}"
                                        Margin="5,0"
                                        />

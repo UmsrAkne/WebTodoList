@@ -73,6 +73,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.TextContent)}," +
                 $"{nameof(Todo.CreationDate)}," +
                 $"{nameof(Todo.CompletionDate)}," +
+                $"{nameof(Todo.StartDateTime)}," +
                 $"{nameof(Todo.Priority)}," +
                 $"{nameof(Todo.Duration)}," +
                 $"{nameof(Todo.Tag)} ) " +
@@ -83,6 +84,7 @@ namespace WebTodoApp.Models
                 $"'{todo.TextContent}'," +
                 $"'{todo.CreationDate}'," +
                 $"'{todo.CompletionDate}'," +
+                $"'{todo.StartDateTime}'," +
                 $"{todo.Priority}," +
                 $"{todo.Duration}," +
                 $"'{todo.Tag}'" +
@@ -104,6 +106,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.TextContent)} = '{todo.TextContent}', " +
                 $"{nameof(Todo.CreationDate)} = '{todo.CreationDate}', " +
                 $"{nameof(Todo.CompletionDate)} = '{todo.CompletionDate}', " +
+                $"{nameof(Todo.StartDateTime)} = '{todo.StartDateTime}', " +
                 $"{nameof(Todo.Priority)} = {todo.Priority}, " +
                 $"{nameof(Todo.Duration)} = {todo.Duration}, " +
                 $"{nameof(Todo.Tag)} = '{todo.Tag}' " +
@@ -171,6 +174,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.CompletionDate)} TIMESTAMP NOT NULL, " +
                 $"{nameof(Todo.Priority)} INTEGER NOT NULL, " +
                 $"{nameof(Todo.Duration)} INTEGER DEFAULT 0 NOT NULL, " +
+                $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00' " +
                 $"{nameof(Todo.Tag)} TEXT NOT NULL " +
                 ");"
             );

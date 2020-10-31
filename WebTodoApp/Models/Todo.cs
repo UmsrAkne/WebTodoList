@@ -13,6 +13,7 @@ namespace WebTodoApp.Models {
 
         public DateTime CreationDate { get; set; } = new DateTime();
         public DateTime CompletionDate { get; set; } = new DateTime();
+        public DateTime StartDateTime { get; set; } = new DateTime();
 
         public String Title { get => title; set => SetProperty(ref title, value); }
         private String title = "";
@@ -28,6 +29,10 @@ namespace WebTodoApp.Models {
         public bool Completed { get; set; }
 
         public int Duration { get; set; }
+
+        public int ActualDuration { get; set; }
+
+        public bool Started { get; set; }
 
         /// <summary>
         /// この Todo オブジェクトがデータベースのデータを元に作られたものかどうかを示します。

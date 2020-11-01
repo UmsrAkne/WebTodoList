@@ -105,27 +105,25 @@
                                        BorderBrush="Black"
                                        Background="Transparent"
                                        >
-
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDoubleClick">
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.ToWritableCommand}"
-                                                               CommandParameter="{Binding ElementName=titleTextBox}"
-                                                               />
-                                    </i:EventTrigger>
-
-                                    <i:EventTrigger EventName="LostKeyboardFocus">
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.ToReadOnlyCommand}"
-                                                               CommandParameter="{Binding ElementName=titleTextBox}"
-                                                               />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                                <i:Interaction.Behaviors>
+                                    <m:TextBoxROChangeBehavior/>
+                                </i:Interaction.Behaviors>
 
                             </TextBox>
                         </StackPanel>
 
-                        <TextBlock Text="{Binding TextContent}"
-                                   Margin="35,0,0,0"
-                                   />
+                        <TextBox Text="{Binding TextContent}"
+                                 BorderThickness="0"
+                                 BorderBrush="Black"
+                                 Background="Transparent"
+                                 Margin="35,0,0,0"
+                                 >
+
+                            <i:Interaction.Behaviors>
+                                <m:TextBoxROChangeBehavior/>
+                            </i:Interaction.Behaviors>
+
+                        </TextBox>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

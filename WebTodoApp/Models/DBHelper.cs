@@ -92,6 +92,23 @@ namespace WebTodoApp.Models
             );
         }
 
+        public void insertComment(Comment comment) {
+            var maxIDRow = select($"SELECT MAX ({nameof(Comment.ID)}) FROM {CommentTableName};")[0];
+            int maxID = (maxIDRow["max"] is System.DBNull) ? 1 : (int)maxIDRow["max"] + 1;
+
+            executeNonQuery(
+                $"INSERT INTO {CommentTableName} (" +
+                $"{nameof(Comment.ID)}, " +
+                $"{nameof(Comment.CreationDateTime)}," +
+                $"{nameof(Comment.TextContent)} )" +
+                $"VALUES (" +
+                $"{maxID}," +
+                $"'{comment.CreationDateTime}', " +
+                $"'{comment.TextContent}' " +
+                $");"
+            );
+        }
+
         public void update(Todo todo) {
             System.Diagnostics.Debug.WriteLine(todo);
             if(todo.ID < 0 || !todo.existSource) {
@@ -174,13 +191,22 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.CompletionDate)} TIMESTAMP NOT NULL, " +
                 $"{nameof(Todo.Priority)} INTEGER NOT NULL, " +
                 $"{nameof(Todo.Duration)} INTEGER DEFAULT 0 NOT NULL, " +
-                $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00' " +
+                $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', " +
                 $"{nameof(Todo.Tag)} TEXT NOT NULL " +
                 ");"
+            );
+
+            executeNonQuery(
+                $"CREATE TABLE IF NOT EXISTS {CommentTableName} (" +
+                $"{nameof(Comment.ID)} INTEGER PRIMARY KEY, " +
+                $"{nameof(Comment.CreationDateTime)} TIMESTAMP NOT NULL," +
+                $"{nameof(Comment.TextContent)} TEXT NOT NULL " +
+                $");"
             );
         }
 
         public string TableName { get; private set; }
+        public string CommentTableName { get; private set; } = "comments";
 
         private NpgsqlConnection DBConnection {
             get => new NpgsqlConnection(connectionStringBuilder.ToString());

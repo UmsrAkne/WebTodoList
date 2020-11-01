@@ -22,6 +22,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
 
@@ -131,70 +132,85 @@
 
         </ListView>
 
+        <TabControl Grid.Row="2">
+            <TabItem Header="Todo">
 
-        <DockPanel Grid.Row="2" >
+                <DockPanel>
 
-            <Grid DockPanel.Dock="Top" 
-                  Margin="0,3"
-                  >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="7*"/>
-                </Grid.ColumnDefinitions>
+                    <Grid DockPanel.Dock="Top" 
+                          Margin="0,3"
+                          >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="7*"/>
+                        </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Priority : "
-                           HorizontalAlignment="Right"
-                           Grid.Column="0" 
-                           />
+                        <TextBlock Text="Priority : "
+                                   HorizontalAlignment="Right"
+                                   Grid.Column="0" 
+                                   />
 
-                <TextBox Grid.Column="1"
-                         Text="{Binding EnteringTodo.Priority}"
-                         />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding EnteringTodo.Priority}"
+                                 />
 
-                <TextBlock Text="Duration : "
-                         HorizontalAlignment="Right"
-                         Grid.Column="2"
-                         />
+                        <TextBlock Text="Duration : "
+                                 HorizontalAlignment="Right"
+                                 Grid.Column="2"
+                                 />
 
-                <TextBox Grid.Column="3" 
-                         Text="{Binding EnteringTodo.Duration}"
-                         />
+                        <TextBox Grid.Column="3" 
+                                 Text="{Binding EnteringTodo.Duration}"
+                                 />
 
-                <TextBlock Text="Title : "
-                         HorizontalAlignment="Right"
-                         Grid.Column="4"
-                         />
+                        <TextBlock Text="Title : "
+                                 HorizontalAlignment="Right"
+                                 Grid.Column="4"
+                                 />
 
-                <TextBox HorizontalAlignment="Stretch"
-                         Text="{Binding EnteringTodo.Title}"
-                         Grid.Column="5"
-                         />
+                        <TextBox HorizontalAlignment="Stretch"
+                                 Text="{Binding EnteringTodo.Title}"
+                                 Grid.Column="5"
+                                 />
 
-            </Grid>
+                    </Grid>
 
-            <StatusBar DockPanel.Dock="Bottom"
-                       VerticalAlignment="Bottom"
-                       >
 
-                <StatusBarItem>
-                    <TextBlock Text="{Binding DatabaseHelper.Message}"/>
-                </StatusBarItem>
-            </StatusBar>
+                    <TextBox HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             DockPanel.Dock="Bottom"
+                             AcceptsReturn="True"
+                             Text="{Binding EnteringTodo.TextContent, UpdateSourceTrigger=PropertyChanged}"
+                             >
+                        
+                    </TextBox>
 
-            <TextBox HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch"
-                     DockPanel.Dock="Bottom"
-                     AcceptsReturn="True"
-                     Text="{Binding EnteringTodo.TextContent, UpdateSourceTrigger=PropertyChanged}"
-                     >
-                
-            </TextBox>
+                </DockPanel>
 
-        </DockPanel>
+            </TabItem>
+
+            <TabItem Header="Comment">
+                <TextBox Text="{Binding EnteringComment.TextContent, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Modifiers="Ctrl" Key="Return"
+                                    Command="{Binding InsertCommentCommand}"
+                                    />
+                    </TextBox.InputBindings>
+                </TextBox>
+            </TabItem>
+
+        </TabControl>
+
+        <StatusBar Grid.Row="3">
+
+            <StatusBarItem>
+                <TextBlock Text="{Binding DatabaseHelper.Message}"/>
+            </StatusBarItem>
+        </StatusBar>
 
     </Grid>
 </Window>

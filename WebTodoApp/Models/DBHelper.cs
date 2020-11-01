@@ -178,13 +178,22 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.CompletionDate)} TIMESTAMP NOT NULL, " +
                 $"{nameof(Todo.Priority)} INTEGER NOT NULL, " +
                 $"{nameof(Todo.Duration)} INTEGER DEFAULT 0 NOT NULL, " +
-                $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00' " +
+                $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', " +
                 $"{nameof(Todo.Tag)} TEXT NOT NULL " +
                 ");"
+            );
+
+            executeNonQuery(
+                $"CREATE TABLE IF NOT EXISTS {CommentTableName} (" +
+                $"{nameof(Comment.ID)} INTEGER PRIMARY KEY, " +
+                $"{nameof(Comment.CreationDateTime)} TIMESTAMP NOT NULL," +
+                $"{nameof(Comment.TextContent)} TEXT NOT NULL " +
+                $");"
             );
         }
 
         public string TableName { get; private set; }
+        public string CommentTableName { get; private set; } = "comments";
 
         private NpgsqlConnection DBConnection {
             get => new NpgsqlConnection(connectionStringBuilder.ToString());

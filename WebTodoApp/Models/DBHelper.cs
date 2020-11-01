@@ -93,7 +93,20 @@ namespace WebTodoApp.Models
         }
 
         public void insertComment(Comment comment) {
+            var maxIDRow = select($"SELECT MAX ({nameof(Comment.ID)}) FROM {CommentTableName};")[0];
+            int maxID = (maxIDRow["max"] is System.DBNull) ? 1 : (int)maxIDRow["max"] + 1;
 
+            executeNonQuery(
+                $"INSERT INTO {CommentTableName} (" +
+                $"{nameof(Comment.ID)}, " +
+                $"{nameof(Comment.CreationDateTime)}," +
+                $"{nameof(Comment.TextContent)} )" +
+                $"VALUES (" +
+                $"{maxID}," +
+                $"'{comment.CreationDateTime}', " +
+                $"'{comment.TextContent}' " +
+                $");"
+            );
         }
 
         public void update(Todo todo) {

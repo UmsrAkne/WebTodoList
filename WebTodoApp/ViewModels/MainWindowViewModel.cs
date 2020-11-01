@@ -1,5 +1,6 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using System;
 using System.Windows.Controls;
 using WebTodoApp.Models;
 
@@ -25,6 +26,14 @@ namespace WebTodoApp.ViewModels
         private Todo enteringTodo = new Todo();
         #endregion
 
+        public Comment EnteringComment {
+            #region
+            get => enteringComment;
+            set => SetProperty(ref enteringComment, value);
+        }
+        private Comment enteringComment = new Comment();
+        #endregion
+
         public MainWindowViewModel()
         {
             DatabaseHelper = new DBHelper("todo_table");
@@ -42,6 +51,21 @@ namespace WebTodoApp.ViewModels
                 EnteringTodo = new Todo();
             }));
         }
+
+
+        public DelegateCommand InsertCommentCommand {
+            #region
+            get => insertCommentCommand ?? (insertCommentCommand = new DelegateCommand(() => {
+                if(EnteringComment.TextContent != "") {
+                    EnteringComment.CreationDateTime = DateTime.Now;
+                    DatabaseHelper.insertComment(EnteringComment);
+                    EnteringComment = new Comment();
+                }
+            }));
+        }
+        private DelegateCommand insertCommentCommand;
+        #endregion
+
 
         /// <summary>
         /// パラメーターに受け取った TextBox を編集可能状態にします。

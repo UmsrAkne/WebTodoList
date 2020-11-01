@@ -194,8 +194,12 @@
             </TabItem>
 
             <TabItem Header="Comment">
-                <TextBox>
-                    
+                <TextBox Text="{Binding EnteringComment.TextContent, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Modifiers="Ctrl" Key="Return"
+                                    Command="{Binding InsertCommentCommand}"
+                                    />
+                    </TextBox.InputBindings>
                 </TextBox>
             </TabItem>
 

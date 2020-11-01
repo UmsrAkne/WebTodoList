@@ -205,9 +205,21 @@
 
         <StatusBar Grid.Row="3">
 
-            <StatusBarItem>
-                <TextBlock Text="{Binding DatabaseHelper.Message}"/>
+            <StatusBarItem Grid.Column="0">
+                    <TextBlock Text="{Binding DatabaseHelper.Message}"
+                               />
+
             </StatusBarItem>
+
+            <StatusBarItem HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Total "/>
+                    <TextBlock Text="{Binding DatabaseHelper.TodoCount}"/>
+                    <TextBlock Text=" todo."/>
+
+                </StackPanel>
+            </StatusBarItem>
+
         </StatusBar>
 
     </Grid>

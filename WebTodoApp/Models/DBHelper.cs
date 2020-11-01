@@ -253,5 +253,7 @@ namespace WebTodoApp.Models
         public String Message { get => message; set => SetProperty(ref message, value); }
         private String message = "";
 
+        public long TodoCount { get => (long)(select($"SELECT COUNT(*) FROM {TableName};")[0]["count"]);
+        }
     }
 }

@@ -67,6 +67,7 @@
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\DBHelper.cs" />
     <Compile Include="Models\KeyDownBehavior.cs" />
+    <Compile Include="Models\TextBoxROChangeBehavior.cs" />
     <Compile Include="Models\Todo.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">

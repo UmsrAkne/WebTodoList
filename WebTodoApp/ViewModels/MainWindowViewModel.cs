@@ -66,30 +66,6 @@ namespace WebTodoApp.ViewModels
         private DelegateCommand insertCommentCommand;
         #endregion
 
-
-        /// <summary>
-        /// パラメーターに受け取った TextBox を編集可能状態にします。
-        /// </summary>
-        public DelegateCommand<TextBox> ToWritableCommand {
-            #region
-            get => toWritableCommand ?? (toWritableCommand = new DelegateCommand<TextBox>( (TextBox textBox) => {
-                textBox.IsReadOnly = false;
-                textBox.SelectAll();
-            }));
-        }
-        private DelegateCommand<TextBox> toWritableCommand;
-        #endregion
-
-        public DelegateCommand<TextBox> ToReadOnlyCommand {
-            #region
-            get => toReadOnlyCommand ?? (toReadOnlyCommand = new DelegateCommand<TextBox>((TextBox textBox) => {
-                textBox.IsReadOnly = true;
-            }));
-        }
-        private DelegateCommand<TextBox> toReadOnlyCommand;
-        #endregion
-
-
         public DelegateCommand ExitCommand {
             #region
             get => exitCommand ?? (exitCommand = new DelegateCommand(() => {

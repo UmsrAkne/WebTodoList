@@ -90,6 +90,8 @@ namespace WebTodoApp.Models
                 $"'{todo.Tag}'" +
                 ");"
             );
+
+            RaisePropertyChanged(nameof(TodoCount));
         }
 
         public void insertComment(Comment comment) {
@@ -107,6 +109,7 @@ namespace WebTodoApp.Models
                 $"'{comment.TextContent}' " +
                 $");"
             );
+
         }
 
         public void update(Todo todo) {
@@ -129,8 +132,6 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.Tag)} = '{todo.Tag}' " +
                 $"WHERE id = {todo.ID};"
             );
-            System.Diagnostics.Debug.WriteLine(todo);
-            System.Diagnostics.Debug.WriteLine("----");
         }
 
         public DelegateCommand<object> UpdateCommand {
@@ -253,5 +254,7 @@ namespace WebTodoApp.Models
         public String Message { get => message; set => SetProperty(ref message, value); }
         private String message = "";
 
+        public long TodoCount { get => (long)(select($"SELECT COUNT(*) FROM {TableName};")[0]["count"]);
+        }
     }
 }

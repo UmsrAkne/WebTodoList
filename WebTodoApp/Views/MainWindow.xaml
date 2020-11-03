@@ -20,6 +20,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
@@ -41,8 +42,33 @@
 
         </Menu>
 
+        <ToolBar Grid.Row="1">
+            <ToggleButton BorderBrush="Azure"
+                          IsChecked="{Binding DatabaseHelper.SqlCommandOption.ShowOnlyIncompleteTodo}"
+                          Command="{Binding DatabaseHelper.LoadCommand}"
+                          >
+
+                <ContentControl>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Style.Triggers>
+                                    <!-- ToggleButton の IsChecked が切り替わったら透明度を変化させる -->
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton},Path=IsChecked}" Value="False">
+                                        <Setter Property="Opacity" Value="0.4" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+                        <TextBlock Text="未完了のみ表示"
+                                   />
+                    </StackPanel>
+                </ContentControl>
+            </ToggleButton>
+        </ToolBar>
+
         <ListView ItemsSource="{Binding DatabaseHelper.TodoList}"
-                  Grid.Row="1"
+                  Grid.Row="2"
                   >
 
             <ListView.ItemContainerStyle>
@@ -130,7 +156,7 @@
 
         </ListView>
 
-        <TabControl Grid.Row="2">
+        <TabControl Grid.Row="3">
             <TabItem Header="Todo">
 
                 <DockPanel>
@@ -203,7 +229,7 @@
 
         </TabControl>
 
-        <StatusBar Grid.Row="3">
+        <StatusBar Grid.Row="4">
 
             <StatusBarItem Grid.Column="0">
                     <TextBlock Text="{Binding DatabaseHelper.Message}"

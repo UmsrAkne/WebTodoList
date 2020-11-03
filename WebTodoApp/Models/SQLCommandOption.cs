@@ -12,8 +12,17 @@ namespace WebTodoApp.Models {
         public int Limit { get; set; } = 10;
         public List<SQLCommandColumnOption> OrderByColumns { get; set; } = new List<SQLCommandColumnOption>();
 
+        /// <summary>
+        /// 取得する Todo を未完了の Todo のみに絞るかどうかを設定します。
+        /// </summary>
+        public bool ShowOnlyIncompleteTodo { get; set; } 
+
         public string buildSQL() {
             var sql = $"select * from {TableName} ";
+
+            if (ShowOnlyIncompleteTodo) {
+                sql += $"where {nameof(Todo.Completed)} = false ";
+            }
 
             if(OrderByColumns.Count > 0) {
                 sql += $"order by ";

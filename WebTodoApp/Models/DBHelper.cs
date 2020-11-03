@@ -58,6 +58,16 @@ namespace WebTodoApp.Models
             TableName = tableName;
             //createTable();
 
+            SqlCommandOption = new SQLCommandOption();
+            SqlCommandOption.Limit = 100;
+            SqlCommandOption.TableName = TableName;
+            SqlCommandOption.OrderByColumns.Add(
+                new SQLCommandOption.SQLCommandColumnOption() {
+                    Name = nameof(Todo.CreationDate),
+                    DESC = true
+                }
+            );
+
             TryFirstConnectCommand.Execute();
         }
 
@@ -92,6 +102,7 @@ namespace WebTodoApp.Models
             );
 
             RaisePropertyChanged(nameof(TodoCount));
+            loadTodoList();
         }
 
         public void insertComment(Comment comment) {
@@ -214,28 +225,34 @@ namespace WebTodoApp.Models
         }
 
         private void loadTodoList() {
-            var rows = select($"select * from {TableName} ORDER BY {nameof(Todo.CreationDate)} DESC LIMIT 100;");
+            var rows = select(SqlCommandOption.buildSQL());
             var list = new List<Todo>();
             rows.ForEach((Hashtable row) => {
-                var todo = new Todo();
-                todo.existSource = true;
-
-                todo.ID = (int)row[nameof(Todo.ID).ToLower()];
-                todo.Completed = (Boolean)row[nameof(Todo.Completed).ToLower()];
-                todo.Title = (string)row[nameof(Todo.Title).ToLower()];
-                todo.TextContent = (string)row[nameof(Todo.TextContent).ToLower()];
-
-                todo.CreationDate = (DateTime)row[nameof(Todo.CreationDate).ToLower()];
-                todo.CompletionDate = (DateTime)row[nameof(Todo.CompletionDate).ToLower()];
-
-                todo.Priority = (int)row[nameof(Todo.Priority).ToLower()];
-                todo.Duration = (int)row[nameof(Todo.Duration).ToLower()];
-                todo.Tag = (String)row[nameof(Todo.Tag).ToLower()];
-
-                list.Add(todo);
+                list.Add(toTodo(row));
             });
 
             TodoList = list;
+        }
+
+        private Todo toTodo(Hashtable hashtable) {
+            Todo todo = new Todo();
+
+            todo.existSource = true;
+
+            todo.ID = (int)hashtable[nameof(Todo.ID).ToLower()];
+            todo.Completed = (Boolean)hashtable[nameof(Todo.Completed).ToLower()];
+            todo.Title = (string)hashtable[nameof(Todo.Title).ToLower()];
+            todo.TextContent = (string)hashtable[nameof(Todo.TextContent).ToLower()];
+
+            todo.CreationDate = (DateTime)hashtable[nameof(Todo.CreationDate).ToLower()];
+            todo.CompletionDate = (DateTime)hashtable[nameof(Todo.CompletionDate).ToLower()];
+            todo.StartDateTime = (DateTime)hashtable[nameof(Todo.StartDateTime).ToLower()];
+
+            todo.Priority = (int)hashtable[nameof(Todo.Priority).ToLower()];
+            todo.Duration = (int)hashtable[nameof(Todo.Duration).ToLower()];
+            todo.Tag = (String)hashtable[nameof(Todo.Tag).ToLower()];
+
+            return todo;
         }
 
         public DelegateCommand TryFirstConnectCommand {
@@ -254,7 +271,8 @@ namespace WebTodoApp.Models
         public String Message { get => message; set => SetProperty(ref message, value); }
         private String message = "";
 
-        public long TodoCount { get => (long)(select($"SELECT COUNT(*) FROM {TableName};")[0]["count"]);
-        }
+        public long TodoCount { get => (long)(select($"SELECT COUNT(*) FROM {TableName};")[0]["count"]); }
+
+        public SQLCommandOption SqlCommandOption { get; private set; }
     }
 }

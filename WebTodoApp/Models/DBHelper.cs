@@ -58,6 +58,16 @@ namespace WebTodoApp.Models
             TableName = tableName;
             //createTable();
 
+            SqlCommandOption = new SQLCommandOption();
+            SqlCommandOption.Limit = 100;
+            SqlCommandOption.TableName = TableName;
+            SqlCommandOption.OrderByColumns.Add(
+                new SQLCommandOption.SQLCommandColumnOption() {
+                    Name = nameof(Todo.CreationDate),
+                    DESC = true
+                }
+            );
+
             TryFirstConnectCommand.Execute();
         }
 
@@ -215,7 +225,7 @@ namespace WebTodoApp.Models
         }
 
         private void loadTodoList() {
-            var rows = select($"select * from {TableName} ORDER BY {nameof(Todo.CreationDate)} DESC LIMIT 100;");
+            var rows = select(SqlCommandOption.buildSQL());
             var list = new List<Todo>();
             rows.ForEach((Hashtable row) => {
                 list.Add(toTodo(row));
@@ -263,6 +273,6 @@ namespace WebTodoApp.Models
 
         public long TodoCount { get => (long)(select($"SELECT COUNT(*) FROM {TableName};")[0]["count"]); }
 
-        public SQLCommandOption SqlCommandOption { get; private set; } = new SQLCommandOption();
+        public SQLCommandOption SqlCommandOption { get; private set; }
     }
 }

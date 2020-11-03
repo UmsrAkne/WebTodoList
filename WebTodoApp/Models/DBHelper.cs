@@ -268,6 +268,17 @@ namespace WebTodoApp.Models
         }
         private DelegateCommand tryFirstConnectCommand;
 
+
+        public DelegateCommand LoadCommand {
+            #region
+            get => loadCommand ?? (loadCommand = new DelegateCommand(() => {
+                loadTodoList();
+            }));
+        }
+        private DelegateCommand loadCommand;
+        #endregion
+
+
         public String Message { get => message; set => SetProperty(ref message, value); }
         private String message = "";
 

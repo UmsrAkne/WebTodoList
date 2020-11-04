@@ -13,6 +13,38 @@
         d:DataContext="{d:DesignInstance vms:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Title="{Binding Title}" Height="500" Width="800">
 
+    <Window.Resources>
+        <ControlTemplate x:Key="radiusButtonTemplate"
+                         TargetType="ToggleButton">
+            <Border x:Name="border"
+                    BorderThickness="1"
+                    BorderBrush="LightGray" 
+                    CornerRadius="4"
+                    >
+                <ContentPresenter VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  />
+
+            </Border>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="border"
+                            Property="Background"
+                            Value="LightSkyBlue" />
+                </Trigger>
+
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="border"
+                            Property="Background"
+                            Value="LightSkyBlue"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+
+
+        </ControlTemplate>
+    </Window.Resources>
+
     <Window.InputBindings>
         <KeyBinding Key="Return" Modifiers="Ctrl" Command="{Binding InsertTodoCommand}"/>
     </Window.InputBindings>
@@ -119,9 +151,8 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <ToggleButton BorderThickness="0"
-                                          Background="WhiteSmoke"
-                                          Margin="6,0,3,0"
+                            <ToggleButton Margin="6,0,3,0"
+                                          Template="{StaticResource radiusButtonTemplate}"
                                           IsChecked="{Binding Started}"
                                           >
                                 <ContentControl>

@@ -119,12 +119,17 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <CheckBox IsChecked="{Binding Started}"
-                                      Margin="0,1,0,0"
-                                      Background="AntiqueWhite"
-                                      >
-                                
-                            </CheckBox>
+                            <ToggleButton BorderThickness="0"
+                                          Background="WhiteSmoke"
+                                          Margin="6,0,3,0"
+                                          IsChecked="{Binding Started}"
+                                          >
+                                <ContentControl>
+                                    <TextBlock Text="Start"
+                                               Padding="4,0"
+                                               />
+                                </ContentControl>
+                            </ToggleButton>
 
                             <TextBlock Text="{Binding CreationDateShortString}"
                                        Margin="5,0"

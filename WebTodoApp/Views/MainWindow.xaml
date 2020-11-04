@@ -81,19 +81,24 @@
 
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <StackPanel.InputBindings>
+                    <DockPanel>
+                        <DockPanel.InputBindings>
                             <KeyBinding Key="Return" Modifiers="Ctrl" 
                                         Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
                                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
-                        </StackPanel.InputBindings>
+                        </DockPanel.InputBindings>
 
-                        <StackPanel Orientation="Horizontal" Margin="0,2">
+                        <TextBlock Text="{Binding Priority}"
+                                   Width="20"
+                                   DockPanel.Dock="Left"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   />
 
-                            <TextBlock Text="{Binding Priority}"
-                                       Margin="5,0"
-                                       Width="15"
-                                       />
+                        <StackPanel Orientation="Horizontal" Margin="0,2"
+                                    DockPanel.Dock="Top"
+                                    >
+
 
                             <CheckBox IsChecked="{Binding Completed}"
                                       Margin="0,1,0,0"
@@ -115,6 +120,7 @@
                             </CheckBox>
 
                             <CheckBox IsChecked="{Binding Started}"
+                                      Margin="0,1,0,0"
                                       Background="AntiqueWhite"
                                       >
                                 
@@ -131,6 +137,7 @@
                                        BorderBrush="Black"
                                        Background="Transparent"
                                        >
+
                                 <i:Interaction.Behaviors>
                                     <m:TextBoxROChangeBehavior/>
                                 </i:Interaction.Behaviors>
@@ -142,7 +149,6 @@
                                  BorderThickness="0"
                                  BorderBrush="Black"
                                  Background="Transparent"
-                                 Margin="35,0,0,0"
                                  >
 
                             <i:Interaction.Behaviors>
@@ -150,7 +156,7 @@
                             </i:Interaction.Behaviors>
 
                         </TextBox>
-                    </StackPanel>
+                    </DockPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>
 

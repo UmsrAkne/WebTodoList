@@ -163,6 +163,8 @@ namespace WebTodoApp.Models
         /// <param name="commandText"></param>
         /// <returns></returns>
         private List<Hashtable> select(string commandText) {
+                var startTime = DateTime.Now;
+
             using (var con = DBConnection) {
                 List<Hashtable> resultList = new List<Hashtable>();
                 con.Open();
@@ -177,16 +179,24 @@ namespace WebTodoApp.Models
                     resultList.Add(hashtable);
                 }
 
+                TimeSpan processDuration = DateTime.Now - startTime;
+                File.AppendAllText(@"sqllog.txt", $"{DateTime.Now} {processDuration}\t{commandText}{Environment.NewLine}");
+
                 return resultList;
             };
         }
 
         private void executeNonQuery(string CommandText) {
+            var startTime = DateTime.Now;
+
             using (var con = DBConnection) {
                 con.Open();
                 var Command = new NpgsqlCommand(CommandText, con);
                 Command.ExecuteNonQuery();
             }
+
+            TimeSpan processDuration = DateTime.Now - startTime;
+            File.AppendAllText(@"sqllog.txt", $"{DateTime.Now} {processDuration}\t{CommandText}{Environment.NewLine}");
         }
 
         /// <summary>

@@ -161,6 +161,7 @@
                             <ToggleButton Margin="6,0,3,0"
                                           Template="{StaticResource radiusButtonTemplate}"
                                           IsChecked="{Binding Started}"
+                                          IsEnabled="{Binding CanStart}"
                                           >
 
                                 <ToggleButton.Style>
@@ -168,7 +169,11 @@
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Completed}" Value="True">
                                                 <Setter Property="Margin" Value="10" />
-                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding CanStart}" Value="False">
+                                                <Setter Property="Margin" Value="10" />
                                                 <Setter Property="BorderBrush" Value="WhiteSmoke"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -182,12 +187,12 @@
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
 
-                                                    <DataTrigger Binding="{Binding Completed}" Value="True">
-                                                        <Setter Property="Text" Value="Comp" />
+                                                    <DataTrigger Binding="{Binding CanStart}" Value="True">
+                                                        <Setter Property="Text" Value="Start" />
                                                     </DataTrigger>
 
-                                                    <DataTrigger Binding="{Binding Completed}" Value="False">
-                                                        <Setter Property="Text" Value="Start" />
+                                                    <DataTrigger Binding="{Binding CanStart}" Value="False">
+                                                        <Setter Property="Text" Value="Comp " />
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>

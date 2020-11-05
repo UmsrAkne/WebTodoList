@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WebTodoApp.Models {
-    public class Todo: BindableBase {
+    public class Todo : BindableBase {
 
         public int ID { get; set; } = -1;
 
@@ -22,7 +22,7 @@ namespace WebTodoApp.Models {
         private String textContent = "";
 
         // 優先順位は小さいほど高い
-        public int Priority {get; set;} = 5;
+        public int Priority { get; set; } = 5;
 
         public String Tag { get; set; }
 
@@ -33,6 +33,10 @@ namespace WebTodoApp.Models {
                     TimeSpan ts = DateTime.Now - StartDateTime;
                     ActualDuration = (int)ts.TotalMinutes;
                     Started = false;
+                    CanStart = false;
+                }
+                else if(value){
+                    CanStart = false;
                 }
 
                 SetProperty(ref completed, value);
@@ -55,6 +59,14 @@ namespace WebTodoApp.Models {
             }
         }
         private bool started;
+
+        public bool CanStart{
+            get => canStart;
+            set {
+                SetProperty(ref canStart, value);
+            }
+        }
+        private bool canStart = true;
 
         /// <summary>
         /// この Todo オブジェクトがデータベースのデータを元に作られたものかどうかを示します。

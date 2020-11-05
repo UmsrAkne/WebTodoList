@@ -26,13 +26,34 @@ namespace WebTodoApp.Models {
 
         public String Tag { get; set; }
 
-        public bool Completed { get; set; }
+        public bool Completed {
+            get => completed;
+            set {
+                if (Started) {
+                    TimeSpan ts = DateTime.Now - StartDateTime;
+                    ActualDuration = (int)ts.TotalMinutes;
+                }
+
+                completed = value;
+            }
+        }
+        private bool completed;
 
         public int Duration { get; set; }
 
         public int ActualDuration { get; set; }
 
-        public bool Started { get; set; }
+        public bool Started {
+            get => started;
+            set {
+                if (value && StartDateTime == new DateTime()) {
+                    StartDateTime = DateTime.Now;
+                }
+
+                started = value;
+            }
+        }
+        private bool started;
 
         /// <summary>
         /// この Todo オブジェクトがデータベースのデータを元に作られたものかどうかを示します。

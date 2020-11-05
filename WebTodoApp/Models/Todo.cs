@@ -13,7 +13,19 @@ namespace WebTodoApp.Models {
 
         public DateTime CreationDate { get; set; } = new DateTime();
         public DateTime CompletionDate { get; set; } = new DateTime();
-        public DateTime StartDateTime { get; set; } = new DateTime();
+        public DateTime StartDateTime {
+            get => startDateTime;
+            set {
+
+                // 初期値以外がセットされた場合は既に開始ボタンが一度押されているため false
+                if(value.Ticks != 0) {
+                    CanStart = false;
+                }
+
+                SetProperty(ref startDateTime, value);
+            }
+        }
+        private DateTime startDateTime = new DateTime();
 
         public String Title { get => title; set => SetProperty(ref title, value); }
         private String title = "";

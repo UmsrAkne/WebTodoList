@@ -32,9 +32,10 @@ namespace WebTodoApp.Models {
                 if (Started) {
                     TimeSpan ts = DateTime.Now - StartDateTime;
                     ActualDuration = (int)ts.TotalMinutes;
+                    Started = false;
                 }
 
-                completed = value;
+                SetProperty(ref completed, value);
             }
         }
         private bool completed;
@@ -50,7 +51,7 @@ namespace WebTodoApp.Models {
                     StartDateTime = DateTime.Now;
                 }
 
-                started = value;
+                SetProperty(ref started, value);
             }
         }
         private bool started;

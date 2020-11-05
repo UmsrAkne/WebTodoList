@@ -17,8 +17,8 @@
         <ControlTemplate x:Key="radiusButtonTemplate"
                          TargetType="ToggleButton">
             <Border x:Name="border"
-                    BorderThickness="1"
-                    BorderBrush="LightGray" 
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}" 
                     CornerRadius="4"
                     >
                 <ContentPresenter VerticalAlignment="Center"
@@ -39,6 +39,13 @@
                             Property="Background"
                             Value="LightSkyBlue"/>
                 </Trigger>
+
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter TargetName="border"
+                            Property="Background"
+                            Value="Transparent"/>
+                </Trigger>
+
             </ControlTemplate.Triggers>
 
 
@@ -155,10 +162,38 @@
                                           Template="{StaticResource radiusButtonTemplate}"
                                           IsChecked="{Binding Started}"
                                           >
+
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton" >
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Completed}" Value="True">
+                                                <Setter Property="Margin" Value="10" />
+                                                <Setter Property="IsEnabled" Value="False" />
+                                                <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+
                                 <ContentControl>
-                                    <TextBlock Text="Start"
-                                               Padding="4,0"
-                                               />
+                                    <TextBlock Padding="4,0"
+                                               >
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+
+                                                    <DataTrigger Binding="{Binding Completed}" Value="True">
+                                                        <Setter Property="Text" Value="Comp" />
+                                                    </DataTrigger>
+
+                                                    <DataTrigger Binding="{Binding Completed}" Value="False">
+                                                        <Setter Property="Text" Value="Start" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+
+                                    </TextBlock>
                                 </ContentControl>
                             </ToggleButton>
 

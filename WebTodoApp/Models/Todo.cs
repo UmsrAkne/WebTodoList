@@ -7,13 +7,25 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WebTodoApp.Models {
-    public class Todo: BindableBase {
+    public class Todo : BindableBase {
 
         public int ID { get; set; } = -1;
 
         public DateTime CreationDate { get; set; } = new DateTime();
         public DateTime CompletionDate { get; set; } = new DateTime();
-        public DateTime StartDateTime { get; set; } = new DateTime();
+        public DateTime StartDateTime {
+            get => startDateTime;
+            set {
+
+                // 初期値以外がセットされた場合は既に開始ボタンが一度押されているため false
+                if(value.Ticks != 0) {
+                    CanStart = false;
+                }
+
+                SetProperty(ref startDateTime, value);
+            }
+        }
+        private DateTime startDateTime = new DateTime();
 
         public String Title { get => title; set => SetProperty(ref title, value); }
         private String title = "";
@@ -22,17 +34,51 @@ namespace WebTodoApp.Models {
         private String textContent = "";
 
         // 優先順位は小さいほど高い
-        public int Priority {get; set;} = 5;
+        public int Priority { get; set; } = 5;
 
         public String Tag { get; set; }
 
-        public bool Completed { get; set; }
+        public bool Completed {
+            get => completed;
+            set {
+                if (Started) {
+                    TimeSpan ts = DateTime.Now - StartDateTime;
+                    ActualDuration = (int)ts.TotalMinutes;
+                    Started = false;
+                    CanStart = false;
+                }
+                else if(value){
+                    CanStart = false;
+                }
+
+                SetProperty(ref completed, value);
+            }
+        }
+        private bool completed;
 
         public int Duration { get; set; }
 
         public int ActualDuration { get; set; }
 
-        public bool Started { get; set; }
+        public bool Started {
+            get => started;
+            set {
+                if (value && StartDateTime == new DateTime()) {
+                    StartDateTime = DateTime.Now;
+                }
+
+                SetProperty(ref started, value);
+            }
+        }
+        private bool started;
+
+        public bool CanStart{
+            get => canStart;
+            set {
+                SetProperty(ref canStart, value);
+            }
+        }
+        private bool canStart = true;
 
         /// <summary>
         /// この Todo オブジェクトがデータベースのデータを元に作られたものかどうかを示します。

@@ -17,8 +17,8 @@
         <ControlTemplate x:Key="radiusButtonTemplate"
                          TargetType="ToggleButton">
             <Border x:Name="border"
-                    BorderThickness="1"
-                    BorderBrush="LightGray" 
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}" 
                     CornerRadius="4"
                     >
                 <ContentPresenter VerticalAlignment="Center"
@@ -39,6 +39,13 @@
                             Property="Background"
                             Value="LightSkyBlue"/>
                 </Trigger>
+
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter TargetName="border"
+                            Property="Background"
+                            Value="Transparent"/>
+                </Trigger>
+
             </ControlTemplate.Triggers>
 
 
@@ -154,11 +161,44 @@
                             <ToggleButton Margin="6,0,3,0"
                                           Template="{StaticResource radiusButtonTemplate}"
                                           IsChecked="{Binding Started}"
+                                          IsEnabled="{Binding CanStart}"
                                           >
+
+                                <ToggleButton.Style>
+                                    <Style TargetType="ToggleButton" >
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Completed}" Value="True">
+                                                <Setter Property="Margin" Value="10" />
+                                                <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding CanStart}" Value="False">
+                                                <Setter Property="Margin" Value="10" />
+                                                <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ToggleButton.Style>
+
                                 <ContentControl>
-                                    <TextBlock Text="Start"
-                                               Padding="4,0"
-                                               />
+                                    <TextBlock Padding="4,0"
+                                               >
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+
+                                                    <DataTrigger Binding="{Binding CanStart}" Value="True">
+                                                        <Setter Property="Text" Value="Start" />
+                                                    </DataTrigger>
+
+                                                    <DataTrigger Binding="{Binding CanStart}" Value="False">
+                                                        <Setter Property="Text" Value="Comp " />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+
+                                    </TextBlock>
                                 </ContentControl>
                             </ToggleButton>
 

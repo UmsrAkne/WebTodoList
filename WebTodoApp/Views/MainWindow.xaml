@@ -114,6 +114,17 @@
                 <Style TargetType="ListViewItem">
                     <Setter Property="BorderBrush" Value="LightGray"/>
                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
+
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="完了日時を初期化"/>
+                                <MenuItem Header="作業開始日時を初期化"/>
+                                <MenuItem Header="全ての作業状態を初期化"/>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+
                 </Style>
             </ListView.ItemContainerStyle>
 
@@ -257,6 +268,7 @@
 
                         </TextBox>
                     </DockPanel>
+                    
                 </DataTemplate>
             </ListView.ItemTemplate>
 

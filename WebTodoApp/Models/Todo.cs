@@ -89,6 +89,12 @@ namespace WebTodoApp.Models {
         public String CreationDateShortString { get => CreationDate.ToString("yy/MM/dd/ HH:mm"); }
         public String CompletionDateShortString { get => CompletionDate.ToString("yy/MM/dd/ HH:mm"); }
 
+        /// <summary>
+        /// このオブジェクトをパラメーターにしてデータベースに UPDATE をかける時、
+        /// このプロパティに true がセットされていたらアップデートをしません。
+        /// </summary>
+        public bool updateStopping { get; set; }
+
         public DelegateCommand CompleteCommand {
             #region
             get => completeCommand ?? (completeCommand = new DelegateCommand(() => {
@@ -97,5 +103,31 @@ namespace WebTodoApp.Models {
         }
         private DelegateCommand completeCommand;
         #endregion
+
+        public DelegateCommand ResetWorkingStatusCommand {
+            #region
+            get => resetWorkingStatusCommand ?? (resetWorkingStatusCommand = new DelegateCommand(() => {
+
+                // 最後に updateStopping = false を実行するまでの間、無駄なアップデートが実行されるのを防ぐ。
+                updateStopping = true;
+
+                // ここで Completed を true にセットすることで、
+                // 最後の Completed = false の際に PropertyChanged を確実に飛ばしてアップデートを実行させる。
+                Completed = true;
+
+                Started = false;
+                StartDateTime = new DateTime();
+                ActualDuration = 0;
+                CanStart = true;
+                CompletionDate = new DateTime();
+                updateStopping = false;
+
+                Completed = false;
+            }));
+        }
+        private DelegateCommand resetWorkingStatusCommand;
+        #endregion
+
+
     }
 }

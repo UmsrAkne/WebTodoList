@@ -130,6 +130,10 @@ namespace WebTodoApp.Models
                 throw new ArgumentException("更新すべき行を特定できないTodoが指定されました。");
             }
 
+            if (todo.updateStopping) {
+                return;
+            }
+
             executeNonQuery(
                 $"update {TableName} SET " +
                 $"{nameof(Todo.Completed)} = {todo.Completed}, " +

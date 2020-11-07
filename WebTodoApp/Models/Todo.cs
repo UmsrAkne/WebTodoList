@@ -9,6 +9,21 @@ using System.Threading.Tasks;
 namespace WebTodoApp.Models {
     public class Todo : BindableBase {
 
+        public Todo() { 
+        }
+
+        /// <summary>
+        /// 規定の Todo のプロパティをコピーして未完了、未作業状態の新しい Todo を作成します。
+        /// </summary>
+        /// <param name="existTodo"></param>
+        public Todo(Todo existTodo) {
+            Title = existTodo.Title;
+            TextContent = existTodo.TextContent;
+            Priority = existTodo.Priority;
+            Duration = existTodo.Duration;
+            CreationDate = DateTime.Now;
+        }
+
         public int ID { get; set; } = -1;
 
         public DateTime CreationDate { get; set; } = new DateTime();

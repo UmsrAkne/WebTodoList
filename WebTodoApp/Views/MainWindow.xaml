@@ -111,21 +111,26 @@
                   Grid.Row="2"
                   >
 
+            <ListView.Resources>
+                <ContextMenu x:Key="listViewContextMenu">
+                    <MenuItem Header="作業状態を初期化" 
+                              Command="{Binding ResetWorkingStatusCommand}"
+                              />
+
+                    <MenuItem Header="この Todo から新しい Todo を生成する"
+                              Command="{Binding Path=DataContext.DatabaseHelper.CopyTodoCommand,
+                              RelativeSource={RelativeSource AncestorType=Window}}"
+                              CommandParameter="{Binding Self}"
+                              />
+
+                </ContextMenu>
+            </ListView.Resources>
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="BorderBrush" Value="LightGray"/>
                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
-
-                    <Setter Property="ContextMenu">
-                        <Setter.Value>
-                            <ContextMenu>
-
-                                <MenuItem Header="作業状態を初期化" 
-                                          Command="{Binding ResetWorkingStatusCommand}"
-                                          />
-                            </ContextMenu>
-                        </Setter.Value>
-                    </Setter>
+                    <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}"/>
 
                 </Style>
             </ListView.ItemContainerStyle>

@@ -287,6 +287,7 @@ namespace WebTodoApp.Models
             #region
             get => loadCommand ?? (loadCommand = new DelegateCommand(() => {
                 loadTodoList();
+                Message = $"{DateTime.Now} TodoList をリロードしました。";
             }));
         }
         private DelegateCommand loadCommand;

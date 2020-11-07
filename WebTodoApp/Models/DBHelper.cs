@@ -294,6 +294,17 @@ namespace WebTodoApp.Models
         #endregion
 
 
+        public DelegateCommand<Todo> CopyTodoCommand {
+            #region
+            get => copyTodoCommand ?? (copyTodoCommand = new DelegateCommand<Todo>((sourceTodo) => {
+                insertTodo(new Todo(sourceTodo));
+            }));
+        }
+        private DelegateCommand<Todo> copyTodoCommand;
+        #endregion
+
+
+
         public String Message {
             get => message;
             set {

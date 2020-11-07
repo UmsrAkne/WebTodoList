@@ -143,6 +143,11 @@ namespace WebTodoApp.Models {
         private DelegateCommand resetWorkingStatusCommand;
         #endregion
 
+        /// <summary>
+        /// 主に xaml でこのオブジェクトを取得する用のプロパティ。
+        /// なくてもできるけど、あったほうが短くスマートに記述可能。
+        /// </summary>
+        public Todo Self => this;
 
     }
 }

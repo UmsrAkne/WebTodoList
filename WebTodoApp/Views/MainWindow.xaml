@@ -54,6 +54,7 @@
 
     <Window.InputBindings>
         <KeyBinding Key="Return" Modifiers="Ctrl" Command="{Binding InsertTodoCommand}"/>
+        <KeyBinding Key="R" Modifiers="Ctrl" Command="{Binding DatabaseHelper.LoadCommand}" />
     </Window.InputBindings>
 
     <Grid>

@@ -273,10 +273,10 @@ namespace WebTodoApp.Models
             get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
                 try {
                     loadTodoList();
-                    Message = $"{DateTime.Now} データベースへの接続に成功。TodoList をロードしました";
+                    Message = "データベースへの接続に成功。TodoList をロードしました";
                 }
                 catch (TimeoutException) {
-                    Message = $"{DateTime.Now} 接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
+                    Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
                 }
             }));
         }
@@ -287,14 +287,20 @@ namespace WebTodoApp.Models
             #region
             get => loadCommand ?? (loadCommand = new DelegateCommand(() => {
                 loadTodoList();
-                Message = $"{DateTime.Now} TodoList をリロードしました。";
+                Message = "TodoList をリロードしました。";
             }));
         }
         private DelegateCommand loadCommand;
         #endregion
 
 
-        public String Message { get => message; set => SetProperty(ref message, value); }
+        public String Message {
+            get => message;
+            set {
+                value = $"{DateTime.Now} " + value;
+                SetProperty(ref message, value);
+            }
+        }
         private String message = "";
 
         public long TodoCount { get => (long)(select($"SELECT COUNT(*) FROM {TableName};")[0]["count"]); }

@@ -83,27 +83,40 @@
         </Menu>
 
         <ToolBar Grid.Row="1">
+            <ToolBar.Resources>
+                <Style TargetType="TextBlock"
+                       x:Key="opacityTextBlockStyle"
+                       >
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton},Path=IsChecked}" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ToolBar.Resources>
+
             <ToggleButton BorderBrush="Azure"
                           IsChecked="{Binding DatabaseHelper.SqlCommandOption.ShowOnlyIncompleteTodo}"
                           Command="{Binding DatabaseHelper.LoadCommand}"
+                          Margin="4,0"
                           >
 
-                <ContentControl>
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel.Style>
-                            <Style TargetType="StackPanel">
-                                <Style.Triggers>
-                                    <!-- ToggleButton の IsChecked が切り替わったら透明度を変化させる -->
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton},Path=IsChecked}" Value="False">
-                                        <Setter Property="Opacity" Value="0.4" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </StackPanel.Style>
-                        <TextBlock Text="未完了のみ表示"
-                                   />
-                    </StackPanel>
-                </ContentControl>
+                <TextBlock Text="未完了のみ表示"
+                           Style="{StaticResource opacityTextBlockStyle}"
+                           />
+
+            </ToggleButton>
+
+            <ToggleButton BorderBrush="LightBlue"
+                          BorderThickness="1,0,1,0"
+                          Margin="4,0"
+                          Command="{Binding ToggleTextContentVisibilityCommand}"
+                          >
+
+                <TextBlock Text="一行表示"
+                           Style="{StaticResource opacityTextBlockStyle}"
+                           />
+
             </ToggleButton>
         </ToolBar>
 
@@ -267,6 +280,7 @@
                                  BorderThickness="0"
                                  BorderBrush="Black"
                                  Background="Transparent"
+                                 Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}"
                                  >
 
                             <i:Interaction.Behaviors>

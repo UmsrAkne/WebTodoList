@@ -147,9 +147,21 @@
                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
                     <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}"/>
 
+                    <Style.Triggers>
+
+                        <DataTrigger Binding="{Binding Completed}" Value="True">
+                            <Setter Property="Background" Value="White" />
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding Completed}" Value="False">
+                            <Setter Property="Background" Value="AliceBlue" />
+                        </DataTrigger>
+
+                    </Style.Triggers>
+
+
                 </Style>
             </ListView.ItemContainerStyle>
-
 
             <ListView.ItemTemplate>
                 <DataTemplate>

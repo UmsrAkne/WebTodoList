@@ -101,8 +101,10 @@ namespace WebTodoApp.Models {
         /// </summary>
         public bool existSource { get; set; }
 
-        public String CreationDateShortString { get => CreationDate.ToString("yy/MM/dd/ HH:mm"); }
-        public String CompletionDateShortString { get => CompletionDate.ToString("yy/MM/dd/ HH:mm"); }
+        public String CreationDateShortString { get => CreationDate.ToString("MM/dd HH:mm"); }
+        public String CompletionDateShortString { get =>
+                (CompletionDate.Ticks == 0) ? "" : CompletionDate.ToString("MM/dd HH:mm");
+        }
 
         /// <summary>
         /// このオブジェクトをパラメーターにしてデータベースに UPDATE をかける時、
@@ -114,6 +116,7 @@ namespace WebTodoApp.Models {
             #region
             get => completeCommand ?? (completeCommand = new DelegateCommand(() => {
                 CompletionDate = DateTime.Now;
+                RaisePropertyChanged(nameof(CompletionDateShortString));
             }));
         }
         private DelegateCommand completeCommand;

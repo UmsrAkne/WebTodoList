@@ -147,9 +147,21 @@
                     <Setter Property="BorderThickness" Value="0,0,0,1"/>
                     <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}"/>
 
+                    <Style.Triggers>
+
+                        <DataTrigger Binding="{Binding Completed}" Value="True">
+                            <Setter Property="Background" Value="White" />
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding Completed}" Value="False">
+                            <Setter Property="Background" Value="AliceBlue" />
+                        </DataTrigger>
+
+                    </Style.Triggers>
+
+
                 </Style>
             </ListView.ItemContainerStyle>
-
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -239,6 +251,13 @@
                             <TextBlock Text="{Binding CreationDateShortString}"
                                        Margin="5,0"
                                        />
+
+                            <TextBlock Text="-"/>
+
+                            <TextBlock Text="{Binding CompletionDateShortString}"
+                                       Margin="5,0"
+                                       />
+
                             <TextBlock Text="["/>
 
                             <TextBox Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
@@ -265,7 +284,7 @@
                             <TextBox x:Name="titleTextBox"
                                        Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                                        IsReadOnly="True"
-                                       Margin="5,0"
+                                       Margin="3,0"
                                        BorderThickness="0"
                                        BorderBrush="Black"
                                        Background="Transparent"

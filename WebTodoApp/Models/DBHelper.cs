@@ -21,6 +21,9 @@ namespace WebTodoApp.Models
         public List<Todo> TodoList { get => todoList; private set => SetProperty(ref todoList, value); }
         private List<Todo> todoList = new List<Todo>();
 
+        public List<Comment> CommentList { get => commentList; private set => SetProperty(ref commentList, value); }
+        private List<Comment> commentList = new List<Comment>();
+
         public DBHelper(string tableName) {
 
             string userName;
@@ -121,6 +124,7 @@ namespace WebTodoApp.Models
                 $");"
             );
 
+            loadCommentList();
         }
 
         public void update(Todo todo) {
@@ -248,6 +252,24 @@ namespace WebTodoApp.Models
             TodoList = list;
         }
 
+        private void loadCommentList() {
+            var rows = select(
+                $"SELECT * FROM {CommentTableName} ORDER BY {nameof(Comment.CreationDateTime)} DESC;"
+                );
+
+            var list = new List<Comment>();
+
+            rows.ForEach((Hashtable row) => {
+                list.Add(new Comment() {
+                    CreationDateTime = (DateTime)row[nameof(Comment.CreationDateTime).ToLower()],
+                    TextContent = (String)row[nameof(Comment.TextContent).ToLower()],
+                    ID = (int)row[nameof(Comment.ID).ToLower()],
+                });
+            });
+
+            CommentList = list;
+        }
+
         private Todo toTodo(Hashtable hashtable) {
             Todo todo = new Todo();
 
@@ -273,6 +295,7 @@ namespace WebTodoApp.Models
             get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
                 try {
                     loadTodoList();
+                    loadCommentList();
                     Message = "データベースへの接続に成功。TodoList をロードしました";
                 }
                 catch (TimeoutException) {

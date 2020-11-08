@@ -124,6 +124,7 @@ namespace WebTodoApp.Models
                 $");"
             );
 
+            loadCommentList();
         }
 
         public void update(Todo todo) {

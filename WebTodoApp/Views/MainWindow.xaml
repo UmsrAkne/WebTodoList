@@ -239,6 +239,13 @@
                             <TextBlock Text="{Binding CreationDateShortString}"
                                        Margin="5,0"
                                        />
+
+                            <TextBlock Text="-"/>
+
+                            <TextBlock Text="{Binding CompletionDateShortString}"
+                                       Margin="5,0"
+                                       />
+
                             <TextBlock Text="["/>
 
                             <TextBox Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
@@ -265,7 +272,7 @@
                             <TextBox x:Name="titleTextBox"
                                        Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                                        IsReadOnly="True"
-                                       Margin="5,0"
+                                       Margin="3,0"
                                        BorderThickness="0"
                                        BorderBrush="Black"
                                        Background="Transparent"

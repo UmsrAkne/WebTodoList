@@ -11,7 +11,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vms:MainWindowViewModel, IsDesignTimeCreatable=True}"
-        Title="{Binding Title}" Height="500" Width="800">
+        Title="{Binding Title}" Height="600" Width="800">
 
     <Window.Resources>
         <ControlTemplate x:Key="radiusButtonTemplate"
@@ -62,6 +62,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -295,7 +296,11 @@
 
         </ListView>
 
-        <TabControl Grid.Row="3">
+        <ListView Grid.Row="3">
+            
+        </ListView>
+
+        <TabControl Grid.Row="4">
             <TabItem Header="Todo">
 
                 <DockPanel>
@@ -368,7 +373,7 @@
 
         </TabControl>
 
-        <StatusBar Grid.Row="4">
+        <StatusBar Grid.Row="5">
 
             <StatusBarItem Grid.Column="0">
                     <TextBlock Text="{Binding DatabaseHelper.Message}"

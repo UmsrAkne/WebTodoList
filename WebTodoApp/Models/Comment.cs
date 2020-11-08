@@ -13,5 +13,8 @@ namespace WebTodoApp.Models {
 
         public String TextContent { get => textContent; set => SetProperty(ref textContent, value); }
         private String textContent = "";
+
+        public String CreationDateShortString { get => CreationDateTime.ToString("MM/dd HH:mm"); }
+
     }
 }

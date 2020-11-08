@@ -305,6 +305,7 @@
 
         <ListView Grid.Row="4"
                   ItemsSource="{Binding DatabaseHelper.CommentList}"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -314,22 +315,41 @@
                         </Grid.RowDefinitions>
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="{Binding CreationDateTime}"
+                        <TextBlock Text="{Binding CreationDateShortString}"
                                    Grid.Row="0"
                                    Grid.Column="0"
                                    />
 
+                        <Border Width="1"
+                                Background="Black"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="10,0"
+                                />
+
                         <TextBlock Text="{Binding TextContent}"
                                    Grid.Row="0"
-                                   Grid.Column="1"
+                                   Grid.Column="2"
+                                   TextWrapping="Wrap"
+                                   Width="Auto"
                                    />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
+
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="BorderThickness" Value="0,0.5,0,0.5" />
+                    <Setter Property="BorderBrush" Value="WhiteSmoke" />
+
+                </Style>
+            </ListView.ItemContainerStyle>
+
         </ListView>
 
         <TabControl Grid.Row="5">

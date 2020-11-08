@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using WebTodoApp.Models;
 
@@ -51,6 +52,20 @@ namespace WebTodoApp.ViewModels
                 EnteringTodo = new Todo();
             }));
         }
+
+        public Visibility TextContentVisiblity { get; set; }
+
+        public DelegateCommand ToggleTextContentVisibilityCommand {
+            #region
+            get => toggleTextContentVisibilityCommand ?? (toggleTextContentVisibilityCommand = new DelegateCommand(() => {
+                TextContentVisiblity = (TextContentVisiblity == Visibility.Visible)
+                    ? Visibility.Collapsed : Visibility.Visible;
+
+                RaisePropertyChanged(nameof(TextContentVisiblity));
+            }));
+        }
+        private DelegateCommand toggleTextContentVisibilityCommand;
+        #endregion
 
 
         public DelegateCommand InsertCommentCommand {

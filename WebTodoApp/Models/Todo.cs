@@ -80,6 +80,7 @@ namespace WebTodoApp.Models {
             set {
                 if (value && StartDateTime == new DateTime()) {
                     StartDateTime = DateTime.Now;
+                    CanStart = false;
                 }
 
                 SetProperty(ref started, value);
@@ -91,6 +92,7 @@ namespace WebTodoApp.Models {
             get => canStart;
             set {
                 SetProperty(ref canStart, value);
+                RaisePropertyChanged(nameof(WorkingStatus));
             }
         }
         private bool canStart = true;
@@ -117,6 +119,7 @@ namespace WebTodoApp.Models {
             get => completeCommand ?? (completeCommand = new DelegateCommand(() => {
                 CompletionDate = DateTime.Now;
                 RaisePropertyChanged(nameof(CompletionDateShortString));
+                RaisePropertyChanged(nameof(WorkingStatus));
             }));
         }
         private DelegateCommand completeCommand;
@@ -136,8 +139,8 @@ namespace WebTodoApp.Models {
                 Started = false;
                 StartDateTime = new DateTime();
                 ActualDuration = 0;
-                CanStart = true;
                 CompletionDate = new DateTime();
+                CanStart = true;
                 updateStopping = false;
 
                 Completed = false;
@@ -151,6 +154,18 @@ namespace WebTodoApp.Models {
         /// なくてもできるけど、あったほうが短くスマートに記述可能。
         /// </summary>
         public Todo Self => this;
+
+        public String WorkingStatus {
+            get {
+                if(CompletionDate.Ticks != 0) {
+                    return "comp";
+                }else if(StartDateTime.Ticks != 0) {
+                    return "working";
+                }else{
+                    return "start";
+                }
+            }
+        }
 
     }
 }

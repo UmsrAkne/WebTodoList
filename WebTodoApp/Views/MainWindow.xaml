@@ -228,18 +228,12 @@
 
                                 <ContentControl>
                                     <TextBlock Padding="4,0"
+                                               Text="{Binding WorkingStatus}"
                                                >
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Style.Triggers>
 
-                                                    <DataTrigger Binding="{Binding CanStart}" Value="True">
-                                                        <Setter Property="Text" Value="Start" />
-                                                    </DataTrigger>
-
-                                                    <DataTrigger Binding="{Binding CanStart}" Value="False">
-                                                        <Setter Property="Text" Value="Comp " />
-                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
                                         </TextBlock.Style>

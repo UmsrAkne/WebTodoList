@@ -14,42 +14,49 @@
         Title="{Binding Title}" Height="600" Width="800">
 
     <Window.Resources>
-        <ControlTemplate x:Key="radiusButtonTemplate"
-                         TargetType="ToggleButton">
-            <Border x:Name="border"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    BorderBrush="{TemplateBinding BorderBrush}" 
-                    CornerRadius="4"
-                    >
-                <ContentPresenter VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"
-                                  />
 
-            </Border>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../res/Dictionary1.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <ControlTemplate x:Key="radiusButtonTemplate"
+                             TargetType="ToggleButton">
+                <Border x:Name="border"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        CornerRadius="4"
+                        >
+                    <ContentPresenter VerticalAlignment="Center"
+                                      HorizontalAlignment="Center"
+                                      />
 
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsPressed" Value="True">
-                    <Setter TargetName="border"
-                            Property="Background"
-                            Value="LightSkyBlue" />
-                </Trigger>
+                </Border>
 
-                <Trigger Property="IsChecked" Value="True">
-                    <Setter TargetName="border"
-                            Property="Background"
-                            Value="LightSkyBlue"/>
-                </Trigger>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter TargetName="border"
+                                Property="Background"
+                                Value="LightSkyBlue" />
+                    </Trigger>
 
-                <Trigger Property="IsChecked" Value="False">
-                    <Setter TargetName="border"
-                            Property="Background"
-                            Value="Transparent"/>
-                </Trigger>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter TargetName="border"
+                                Property="Background"
+                                Value="LightSkyBlue"/>
+                    </Trigger>
 
-            </ControlTemplate.Triggers>
+                    <Trigger Property="IsChecked" Value="False">
+                        <Setter TargetName="border"
+                                Property="Background"
+                                Value="Transparent"/>
+                    </Trigger>
+
+                </ControlTemplate.Triggers>
 
 
-        </ControlTemplate>
+            </ControlTemplate>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Window.InputBindings>
@@ -142,9 +149,7 @@
             </ListView.Resources>
 
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="BorderBrush" Value="LightGray"/>
-                    <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemContainerStyle}">
                     <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}"/>
 
                     <Style.Triggers>
@@ -320,6 +325,7 @@
                   ItemsSource="{Binding DatabaseHelper.CommentList}"
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   >
+
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -356,7 +362,7 @@
             </ListView.ItemTemplate>
 
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemContainerStyle}">
                     <Setter Property="BorderThickness" Value="0,0.5,0,0.5" />
                     <Setter Property="BorderBrush" Value="WhiteSmoke" />
 

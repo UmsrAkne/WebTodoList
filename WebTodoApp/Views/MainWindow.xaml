@@ -296,18 +296,31 @@
                             </TextBox>
                         </StackPanel>
 
-                        <TextBox Text="{Binding TextContent}"
-                                 BorderThickness="0"
-                                 BorderBrush="Black"
-                                 Background="Transparent"
-                                 Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}"
-                                 >
+                        <Border x:Name="TextContentBoarder"
+                                CornerRadius="3"
+                                HorizontalAlignment="Left"
+                                Background="WhiteSmoke"
+                                MinWidth="30"
+                                >
+                            
+                            <TextBox Text="{Binding TextContent}"
+                                     Margin="4,0"
+                                     HorizontalAlignment="Left"
+                                     BorderThickness="0"
+                                     BorderBrush="Black"
+                                     Background="Transparent"
+                                     Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}"
+                                     MinWidth="{Binding ElementName=TextContentBoarder, Path=MinWidth}"
+                                     IsReadOnly="True"
+                                     >
 
                             <i:Interaction.Behaviors>
                                 <m:TextBoxROChangeBehavior/>
                             </i:Interaction.Behaviors>
 
-                        </TextBox>
+                            </TextBox>
+                        </Border>
+
                     </DockPanel>
                     
                 </DataTemplate>

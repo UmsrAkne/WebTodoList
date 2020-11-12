@@ -283,7 +283,15 @@ namespace WebTodoApp.Models
             todo.CreationDate = (DateTime)hashtable[nameof(Todo.CreationDate).ToLower()];
             todo.CompletionDate = (DateTime)hashtable[nameof(Todo.CompletionDate).ToLower()];
             todo.StartDateTime = (DateTime)hashtable[nameof(Todo.StartDateTime).ToLower()];
-            todo.Started = (todo.CompletionDate.Ticks == 0);
+
+            if(todo.CompletionDate.Ticks != 0) {
+                todo.Started = false;
+                todo.CanStart = false;
+            }
+            else {
+                todo.Started = (todo.StartDateTime.Ticks != 0);
+                todo.CanStart = (todo.CompletionDate.Ticks == 0 && todo.StartDateTime.Ticks == 0);
+            }
 
             todo.Priority = (int)hashtable[nameof(Todo.Priority).ToLower()];
             todo.Duration = (int)hashtable[nameof(Todo.Duration).ToLower()];

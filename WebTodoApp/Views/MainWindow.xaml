@@ -231,6 +231,23 @@
                                     </Style>
                                 </ToggleButton.Style>
 
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Checked">
+                                        <i:InvokeCommandAction
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                            />
+                                    </i:EventTrigger>
+
+                                    <i:EventTrigger EventName="Unchecked">
+                                        <i:InvokeCommandAction
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
+                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                            />
+                                    </i:EventTrigger>
+
+                                </i:Interaction.Triggers>
+
                                 <ContentControl>
                                     <TextBlock Padding="4,0"
                                                Text="{Binding WorkingStatus}"

@@ -442,12 +442,11 @@
                                  />
 
                         <TextBox HorizontalAlignment="Stretch"
-                                 Text="{Binding EnteringTodo.Title}"
+                                 Text="{Binding EnteringTodo.Title, UpdateSourceTrigger=PropertyChanged}"
                                  Grid.Column="5"
                                  />
 
                     </Grid>
-
 
                     <TextBox HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"

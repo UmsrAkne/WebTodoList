@@ -43,7 +43,7 @@ namespace WebTodoApp.ViewModels
         private DelegateCommand insertTodoCommand;
         public DelegateCommand InsertTodoCommand {
             get => insertTodoCommand ?? (insertTodoCommand = new DelegateCommand(() => {
-                if(EnteringTodo.Title == "" && EnteringTodo.TextContent == "") {
+                if(EnteringTodo.Title == "") {
                     return;
                 }
 

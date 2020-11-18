@@ -184,6 +184,11 @@
                                    TextAlignment="Center"
                                    />
 
+                        <Border Background="AliceBlue"
+                                Height="2"
+                                DockPanel.Dock="Top"
+                                />
+
                         <Grid Margin="0,2"
                               DockPanel.Dock="Top"
                               >

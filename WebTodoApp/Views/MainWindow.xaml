@@ -184,13 +184,27 @@
                                    TextAlignment="Center"
                                    />
 
-                        <StackPanel Orientation="Horizontal" Margin="0,2"
-                                    DockPanel.Dock="Top"
-                                    >
+                        <Border Background="AliceBlue"
+                                Height="2"
+                                DockPanel.Dock="Top"
+                                />
+
+                        <Grid Margin="0,2"
+                              DockPanel.Dock="Top"
+                              >
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="4*"/>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition MinWidth="170"/>
+                            </Grid.ColumnDefinitions>
 
 
                             <CheckBox IsChecked="{Binding Completed}"
                                       Margin="0,1,0,0"
+                                      Grid.Column="0"
                                       >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
@@ -213,6 +227,7 @@
                                           IsChecked="{Binding Started}"
                                           IsEnabled="{Binding CanStart}"
                                           Width="50"
+                                          Grid.Column="1"
                                           >
 
                                 <ToggleButton.Style>
@@ -264,39 +279,49 @@
                                 </ContentControl>
                             </ToggleButton>
 
-                            <TextBlock Text="{Binding CreationDateShortString}"
-                                       Margin="5,0"
-                                       />
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="4"
+                                        >
+                                <TextBlock Text="{Binding CreationDateShortString}"
+                                           Margin="5,0"
+                                           />
 
-                            <TextBlock Text="-"/>
+                                <TextBlock Text="-"/>
 
-                            <TextBlock Text="{Binding CompletionDateShortString}"
-                                       Margin="5,0"
-                                       />
+                                <TextBlock Text="{Binding CompletionDateShortString}"
+                                           Margin="5,0"
+                                           />
 
-                            <TextBlock Text="["/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="3"
+                                        Margin="5,0"
+                                        >
+                                
+                                <TextBlock Text="["/>
 
-                            <TextBox Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
-                                     IsReadOnly="True"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     Margin="2,0,1,0"
-                                     Width="25"
-                                     TextAlignment="Center"
-                                     >
+                                <TextBox Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
+                                         IsReadOnly="True"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         Margin="2,0,1,0"
+                                         Width="25"
+                                         TextAlignment="Center"
+                                         >
 
-                                <i:Interaction.Behaviors>
-                                    <m:TextBoxROChangeBehavior/>
-                                </i:Interaction.Behaviors>
+                                    <i:Interaction.Behaviors>
+                                        <m:TextBoxROChangeBehavior/>
+                                    </i:Interaction.Behaviors>
 
-                            </TextBox>
+                                </TextBox>
 
-                            <TextBlock Text="min"
-                                       Margin="0,0,3,0"
-                                       />
+                                <TextBlock Text="min"
+                                           Margin="0,0,3,0"
+                                           />
 
-                            <TextBlock Text="]"/>
+                                <TextBlock Text="]"/>
 
+                            </StackPanel>
                             <TextBox x:Name="titleTextBox"
                                        Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                                        IsReadOnly="True"
@@ -304,6 +329,7 @@
                                        BorderThickness="0"
                                        BorderBrush="Black"
                                        Background="Transparent"
+                                       Grid.Column="2"
                                        >
 
                                 <i:Interaction.Behaviors>
@@ -311,7 +337,7 @@
                                 </i:Interaction.Behaviors>
 
                             </TextBox>
-                        </StackPanel>
+                        </Grid>
 
                         <Border x:Name="TextContentBoarder"
                                 CornerRadius="3"
@@ -366,6 +392,8 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 

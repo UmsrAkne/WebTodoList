@@ -26,27 +26,31 @@ namespace WebTodoApp.Models
 
         public DBHelper(string tableName) {
 
+            string homePath =
+                Environment.GetEnvironmentVariable("HOMEDRIVE") +
+                Environment.GetEnvironmentVariable("HOMEPATH");
+
             string userName;
             using (StreamReader sr = new StreamReader(
-                @"C:\Users\main10\awsrds\user.txt", Encoding.GetEncoding("Shift_JIS"))) {
+                homePath + @"\awsrds\user.txt", Encoding.GetEncoding("Shift_JIS"))) {
                 userName = sr.ReadToEnd();
             }
 
             string pass;
             using (StreamReader sr = new StreamReader(
-                @"C:\Users\main10\awsrds\pass.txt", Encoding.GetEncoding("Shift_JIS"))) {
+                homePath + @"\awsrds\pass.txt", Encoding.GetEncoding("Shift_JIS"))) {
                 pass = sr.ReadToEnd();
             }
 
             string hostName;
             using (StreamReader sr = new StreamReader(
-                @"C:\Users\main10\awsrds\hostName.txt", Encoding.GetEncoding("Shift_JIS"))) {
+                homePath + @"\awsrds\hostName.txt", Encoding.GetEncoding("Shift_JIS"))) {
                 hostName = sr.ReadToEnd();
             }
 
             int portNumber;
             using (StreamReader sr = new StreamReader(
-                @"C:\Users\main10\awsrds\port.txt", Encoding.GetEncoding("Shift_JIS"))) {
+                homePath + @"\awsrds\port.txt", Encoding.GetEncoding("Shift_JIS"))) {
                 portNumber = int.Parse(sr.ReadToEnd());
             }
 

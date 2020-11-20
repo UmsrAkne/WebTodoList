@@ -135,9 +135,12 @@
 
             <ListView.Resources>
                 <ContextMenu x:Key="listViewContextMenu">
-                    <MenuItem Header="作業状態を初期化" 
-                              Command="{Binding ResetWorkingStatusCommand}"
-                              />
+
+                    <MenuItem Header="初期化">
+                        <MenuItem Header="作業状態を初期化" 
+                                  Command="{Binding ResetWorkingStatusCommand}"
+                                  />
+                    </MenuItem>
 
                     <MenuItem Header="この Todo から新しい Todo を生成する"
                               Command="{Binding Path=DataContext.DatabaseHelper.CopyTodoCommand,

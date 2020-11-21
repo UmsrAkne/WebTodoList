@@ -149,6 +149,7 @@
                               />
 
                 </ContextMenu>
+
             </ListView.Resources>
 
             <ListView.ItemContainerStyle>
@@ -316,6 +317,15 @@
                                         <m:TextBoxROChangeBehavior/>
                                     </i:Interaction.Behaviors>
 
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostKeyboardFocus">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
+                                                                   ,Path=DataContext.DatabaseHelper.UpdateCommand }"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                                   />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
                                 </TextBox>
 
                                 <TextBlock Text="min"
@@ -339,6 +349,15 @@
                                     <m:TextBoxROChangeBehavior/>
                                 </i:Interaction.Behaviors>
 
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostKeyboardFocus">
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
+                                                               ,Path=DataContext.DatabaseHelper.UpdateCommand }"
+                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                               />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+
                             </TextBox>
                         </Grid>
 
@@ -349,7 +368,7 @@
                                 MinWidth="30"
                                 >
                             
-                            <TextBox Text="{Binding TextContent}"
+                            <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
                                      Margin="4,0"
                                      HorizontalAlignment="Left"
                                      BorderThickness="0"
@@ -360,9 +379,18 @@
                                      IsReadOnly="True"
                                      >
 
-                            <i:Interaction.Behaviors>
-                                <m:TextBoxROChangeBehavior/>
-                            </i:Interaction.Behaviors>
+                                <i:Interaction.Behaviors>
+                                    <m:TextBoxROChangeBehavior/>
+                                </i:Interaction.Behaviors>
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="LostKeyboardFocus">
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
+                                                               ,Path=DataContext.DatabaseHelper.UpdateCommand }"
+                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                               />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
 
                             </TextBox>
                         </Border>

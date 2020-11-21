@@ -289,12 +289,18 @@ namespace WebTodoApp.Models
             todo.StartDateTime = (DateTime)hashtable[nameof(Todo.StartDateTime).ToLower()];
 
             if(todo.CompletionDate.Ticks != 0) {
+                // 既に完了している状態
                 todo.Started = false;
                 todo.CanStart = false;
             }
             else {
+                // todo 未完了の状態
                 todo.Started = (todo.StartDateTime.Ticks != 0);
                 todo.CanStart = (todo.CompletionDate.Ticks == 0 && todo.StartDateTime.Ticks == 0);
+            }
+
+            if(todo.CompletionDate.Ticks != 0 && todo.StartDateTime.Ticks != 0) {
+                todo.ActualDuration = (int)(todo.CompletionDate - todo.StartDateTime).TotalMinutes;
             }
 
             todo.Priority = (int)hashtable[nameof(Todo.Priority).ToLower()];

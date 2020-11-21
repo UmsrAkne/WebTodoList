@@ -230,7 +230,7 @@
                                           Template="{StaticResource radiusButtonTemplate}"
                                           IsChecked="{Binding Started}"
                                           IsEnabled="{Binding CanStart}"
-                                          Width="50"
+                                          Width="60"
                                           Grid.Column="1"
                                           >
 

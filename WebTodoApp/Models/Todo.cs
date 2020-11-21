@@ -158,9 +158,9 @@ namespace WebTodoApp.Models {
         public String WorkingStatus {
             get {
                 if(CompletionDate.Ticks != 0) {
-                    return "comp";
+                    return (ActualDuration == 0) ? " - " : $"{ActualDuration} min";
                 }else if(StartDateTime.Ticks != 0) {
-                    return "working";
+                    return $"{StartDateTime.ToShortTimeString()}";
                 }else{
                     return "start";
                 }

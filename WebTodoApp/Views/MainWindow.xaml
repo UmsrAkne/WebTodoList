@@ -224,6 +224,17 @@
                                                                />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
+
+                                <CheckBox.Style>
+                                    <Style TargetType="CheckBox">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Completed}" Value="True">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+
                             </CheckBox>
 
                             <ToggleButton Margin="6,0,3,0"

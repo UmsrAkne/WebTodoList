@@ -138,7 +138,9 @@
 
                     <MenuItem Header="初期化">
                         <MenuItem Header="作業状態を初期化" 
-                                  Command="{Binding ResetWorkingStatusCommand}"
+                                  Command="{Binding DataContext.DatabaseHelper.ResetTodoWorkingStatusCommand,
+                                          RelativeSource={RelativeSource AncestorType=ListView}}"
+                                  CommandParameter="{Binding Self}"
                                   />
                     </MenuItem>
 
@@ -224,6 +226,17 @@
                                                                />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
+
+                                <CheckBox.Style>
+                                    <Style TargetType="CheckBox">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Completed}" Value="True">
+                                                <Setter Property="IsEnabled" Value="False" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </CheckBox.Style>
+
                             </CheckBox>
 
                             <ToggleButton Margin="6,0,3,0"

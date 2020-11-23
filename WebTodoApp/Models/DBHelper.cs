@@ -346,6 +346,16 @@ namespace WebTodoApp.Models
         #endregion
 
 
+        public DelegateCommand<Todo> ResetTodoWorkingStatusCommand {
+            #region
+            get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) => {
+                targetTodo.resetWorkingStatus();
+                update(targetTodo);
+            }));
+        }
+        private DelegateCommand<Todo> resetTodoWorkingStatusCommand;
+        #endregion
+
 
         public String Message {
             get => message;

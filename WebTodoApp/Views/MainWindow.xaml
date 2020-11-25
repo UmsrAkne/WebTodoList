@@ -88,7 +88,6 @@
                           Command="{Binding DatabaseHelper.TryFirstConnectCommand}"
                           />
             </MenuItem>
-
         </Menu>
 
         <ToolBar Grid.Row="1">
@@ -127,6 +126,21 @@
                            />
 
             </ToggleButton>
+
+            <TextBlock Text="日時指定 : "
+                       Margin="6,3"
+                       />
+
+            <TextBox Text="{Binding DatabaseHelper.SqlCommandOption.DisplayDateRange, UpdateSourceTrigger=PropertyChanged}"
+                     TextAlignment="Center"
+                     MinWidth="30"
+                     />
+
+            <TextBlock Text="日前まで表示"
+                       Margin="6,3"
+                       />
+
+
         </ToolBar>
 
         <ListView ItemsSource="{Binding DatabaseHelper.TodoList}"

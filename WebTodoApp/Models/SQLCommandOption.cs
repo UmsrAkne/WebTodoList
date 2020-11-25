@@ -54,6 +54,22 @@ namespace WebTodoApp.Models {
         /// </summary>
         public int DisplayDateRange { get; set; }
 
+        public string DisplayDateRangeString {
+            get => displayDateRangeString;
+            set {
+                if(int.TryParse(value,out int result)) {
+                    DisplayDateRange = result;
+                }
+                else {
+                    DisplayDateRange = 0;
+                }
+
+                displayDateRangeString = DisplayDateRange.ToString();
+            }
+        }
+
+        private string displayDateRangeString = "0";
+
         public class SQLCommandColumnOption {
             public string Name { get; set; }
             public bool DESC { get; set; }

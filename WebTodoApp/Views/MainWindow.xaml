@@ -131,7 +131,8 @@
                        Margin="6,3"
                        />
 
-            <TextBox Text="{Binding DatabaseHelper.SqlCommandOption.DisplayDateRange, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding DatabaseHelper.SqlCommandOption.DisplayDateRangeString,
+                UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      MinWidth="30"
                      >

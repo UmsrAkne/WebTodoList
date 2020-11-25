@@ -134,7 +134,13 @@
             <TextBox Text="{Binding DatabaseHelper.SqlCommandOption.DisplayDateRange, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"
                      MinWidth="30"
-                     />
+                     >
+                <i:Interaction.Behaviors>
+                    <m:TextInputLimitBehavior/>
+                </i:Interaction.Behaviors>
+
+            </TextBox>
+
 
             <TextBlock Text="日前まで表示"
                        Margin="6,3"

@@ -72,6 +72,7 @@
     <Compile Include="Models\DBHelper.cs" />
     <Compile Include="Models\KeyDownBehavior.cs" />
     <Compile Include="Models\SQLCommandOption.cs" />
+    <Compile Include="Models\TextInputLimitBehavior.cs" />
     <Compile Include="Models\TextBoxROChangeBehavior.cs" />
     <Compile Include="Models\Todo.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

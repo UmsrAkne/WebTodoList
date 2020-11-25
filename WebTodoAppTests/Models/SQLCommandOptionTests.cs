@@ -32,7 +32,7 @@ namespace WebTodoApp.Models.Tests {
 
             Assert.AreEqual(
                 commandOption.buildSQL(),
-                "select * from testTableName order by firstColumn DESC ,secondColumn DESC LIMIT 20;"
+                "select * from testTableName where 1=1 order by firstColumn DESC ,secondColumn DESC LIMIT 20;"
             );
 
         }

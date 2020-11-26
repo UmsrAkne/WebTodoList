@@ -171,6 +171,13 @@
                               CommandParameter="{Binding Self}"
                               />
 
+                    <MenuItem Header="この Todo の詳細を初期化して複製する"
+                              Command="{Binding Path=DataContext.DatabaseHelper.CopyTodoWithoutTextCommand,
+                              RelativeSource={RelativeSource AncestorType=ListView}}"
+                              CommandParameter="{Binding Self}"
+                              />
+
+
                 </ContextMenu>
 
             </ListView.Resources>

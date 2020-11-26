@@ -346,6 +346,17 @@ namespace WebTodoApp.Models
         #endregion
 
 
+        public DelegateCommand<Todo> CopyTodoWithoutTextCommand {
+            #region
+            get => copyTodoWithoutTextCommand ?? (copyTodoWithoutTextCommand = new DelegateCommand<Todo>((sourceTodo) => {
+                Todo t = new Todo(sourceTodo) { TextContent = "" };
+                insertTodo(t);
+            }));
+        }
+        private DelegateCommand<Todo> copyTodoWithoutTextCommand;
+        #endregion
+
+
         public DelegateCommand<Todo> ResetTodoWorkingStatusCommand {
             #region
             get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) => {

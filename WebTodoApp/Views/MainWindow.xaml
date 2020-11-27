@@ -70,8 +70,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="120"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />

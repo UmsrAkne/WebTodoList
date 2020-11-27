@@ -11,7 +11,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vms:MainWindowViewModel, IsDesignTimeCreatable=True}"
-        Title="{Binding Title}" Height="600" Width="800">
+        Title="{Binding Title}" Height="700" Width="800">
 
     <Window.Resources>
 
@@ -70,8 +70,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="1*"/>
-            <RowDefinition/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="120"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
@@ -234,6 +234,11 @@
                                 <ColumnDefinition Width="auto"/>
                                 <ColumnDefinition MinWidth="170"/>
                             </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
 
 
                             <CheckBox IsChecked="{Binding Completed}"
@@ -400,16 +405,19 @@
                                 </i:Interaction.Triggers>
 
                             </TextBox>
-                        </Grid>
 
                         <Border x:Name="TextContentBoarder"
                                 CornerRadius="3"
                                 HorizontalAlignment="Left"
                                 Background="WhiteSmoke"
                                 MinWidth="30"
+                                Grid.Row="1"
+                                Grid.Column="2"
                                 >
                             
                             <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                     Grid.Column="2"
+                                     Grid.Row="1"
                                      Margin="4,0"
                                      HorizontalAlignment="Left"
                                      BorderThickness="0"
@@ -418,6 +426,8 @@
                                      Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}"
                                      MinWidth="{Binding ElementName=TextContentBoarder, Path=MinWidth}"
                                      IsReadOnly="True"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
                                      >
 
                                 <i:Interaction.Behaviors>
@@ -435,6 +445,7 @@
 
                             </TextBox>
                         </Border>
+                    </Grid>
 
                     </DockPanel>
                     

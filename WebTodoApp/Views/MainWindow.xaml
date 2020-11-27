@@ -413,10 +413,11 @@
                                 MinWidth="30"
                                 Grid.Row="1"
                                 Grid.Column="2"
-                                Grid.ColumnSpan="3"
                                 >
                             
                             <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                     Grid.Column="2"
+                                     Grid.Row="1"
                                      Margin="4,0"
                                      HorizontalAlignment="Left"
                                      BorderThickness="0"
@@ -425,6 +426,8 @@
                                      Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}"
                                      MinWidth="{Binding ElementName=TextContentBoarder, Path=MinWidth}"
                                      IsReadOnly="True"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
                                      >
 
                                 <i:Interaction.Behaviors>

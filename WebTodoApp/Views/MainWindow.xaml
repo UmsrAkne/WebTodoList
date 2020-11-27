@@ -235,6 +235,11 @@
                                 <ColumnDefinition MinWidth="170"/>
                             </Grid.ColumnDefinitions>
 
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
 
                             <CheckBox IsChecked="{Binding Completed}"
                                       Margin="0,1,0,0"
@@ -400,13 +405,15 @@
                                 </i:Interaction.Triggers>
 
                             </TextBox>
-                        </Grid>
 
                         <Border x:Name="TextContentBoarder"
                                 CornerRadius="3"
                                 HorizontalAlignment="Left"
                                 Background="WhiteSmoke"
                                 MinWidth="30"
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Grid.ColumnSpan="3"
                                 >
                             
                             <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
@@ -435,6 +442,7 @@
 
                             </TextBox>
                         </Border>
+                    </Grid>
 
                     </DockPanel>
                     

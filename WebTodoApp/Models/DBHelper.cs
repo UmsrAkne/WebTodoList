@@ -82,6 +82,16 @@ namespace WebTodoApp.Models
             var maxIDRow = select($"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};")[0];
             var maxID = (int)maxIDRow["max"] + 1;
 
+            var ps = new List<NpgsqlParameter>();
+
+            // ユーザーの入力が入る余地がある部分はパラメーターによる入力を行う。
+            // もともと固定になっている部分はそうでなくてもOKなはず
+            ps.Add(new NpgsqlParameter(nameof(Todo.Title), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Title });
+            ps.Add(new NpgsqlParameter(nameof(Todo.TextContent), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.TextContent });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Priority), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Priority });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Duration), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Duration });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Tag), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Tag });
+
             executeNonQuery(
                 $"INSERT INTO {TableName} ( " +
                 $"{nameof(Todo.ID)}, " +
@@ -97,16 +107,16 @@ namespace WebTodoApp.Models
                 $"VALUES (" +
                 $"{maxID}," +
                 $"{todo.Completed}," +
-                $"'{todo.Title}'," +
-                $"'{todo.TextContent}'," +
+                $":{nameof(todo.Title)}," +
+                $":{nameof(todo.TextContent)}," +
                 $"'{todo.CreationDate}'," +
                 $"'{todo.CompletionDate}'," +
                 $"'{todo.StartDateTime}'," +
-                $"{todo.Priority}," +
-                $"{todo.Duration}," +
-                $"'{todo.Tag}'" +
+                $":{nameof(todo.Priority)}," +
+                $":{nameof(todo.Duration)}," +
+                $":{nameof(todo.Tag)}" +
                 ");"
-                , new List<NpgsqlParameter>()
+                , ps
             );
 
             RaisePropertyChanged(nameof(TodoCount));

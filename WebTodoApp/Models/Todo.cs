@@ -51,7 +51,7 @@ namespace WebTodoApp.Models {
         // 優先順位は小さいほど高い
         public int Priority { get; set; } = 5;
 
-        public String Tag { get; set; }
+        public String Tag { get; set; } = "";
 
         public bool Completed {
             get => completed;

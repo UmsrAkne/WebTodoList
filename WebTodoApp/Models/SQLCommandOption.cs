@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,23 +16,39 @@ namespace WebTodoApp.Models {
         /// <summary>
         /// 取得する Todo を未完了の Todo のみに絞るかどうかを設定します。
         /// </summary>
-        public bool ShowOnlyIncompleteTodo { get; set; } 
+        public bool ShowOnlyIncompleteTodo { get; set; }
 
         public string buildSQL() {
             var sql = $"select * from {TableName} ";
 
             sql += "where 1=1 ";
 
+            SqlParams.Clear();
+
             if (ShowOnlyIncompleteTodo) {
                 sql += $"AND {nameof(Todo.Completed)} = false ";
             }
 
-            if(DisplayDateRange > 0) {
+            if (DisplayDateRange > 0) {
                 var pastDate = DateTime.Now - new TimeSpan(24 * DisplayDateRange, 0, 0);
                 sql += $"AND {nameof(Todo.CreationDate)} >= '{pastDate}' ";
             }
 
-            if(OrderByColumns.Count > 0) {
+            if (SearchString != "") {
+                sql += $"AND " +
+                    $"(" +
+                    $"{nameof(Todo.Title)} LIKE :searchString " +
+                    $" OR " +
+                    $"{nameof(Todo.TextContent)} LIKE :searchString " +
+                    $")";
+
+                SqlParams.Add(
+                    new NpgsqlParameter("searchString", NpgsqlTypes.NpgsqlDbType.Text) { Value = $"%{SearchString}%"});
+            }
+
+            // WHERE ここまで。ここから ORDER　
+
+            if (OrderByColumns.Count > 0) {
                 sql += $"order by ";
                 OrderByColumns.ForEach((SQLCommandColumnOption cco) => {
                     sql += $"{cco.Name} ";
@@ -57,7 +74,7 @@ namespace WebTodoApp.Models {
         public string DisplayDateRangeString {
             get => displayDateRangeString;
             set {
-                if(int.TryParse(value,out int result)) {
+                if (int.TryParse(value, out int result)) {
                     DisplayDateRange = result;
                 }
                 else {
@@ -69,6 +86,13 @@ namespace WebTodoApp.Models {
         }
 
         private string displayDateRangeString = "0";
+
+        public string SearchString { get; set; } = "";
+
+        public List<NpgsqlParameter> SqlParams {
+            get;
+            private set;
+        } = new List<NpgsqlParameter>();
 
         public class SQLCommandColumnOption {
             public string Name { get; set; }

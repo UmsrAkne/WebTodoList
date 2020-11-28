@@ -147,6 +147,25 @@
                        Margin="6,3"
                        />
 
+            <Border Background="Black"
+                    Width="1"
+                    Margin="3,0"
+                    />
+
+            <TextBlock Text="テキスト検索 : "
+                       Margin="6,3"
+                       />
+
+            <TextBox Width="200"
+                     Text="{Binding DatabaseHelper.SqlCommandOption.SearchString,UpdateSourceTrigger=PropertyChanged}"
+             >
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding DatabaseHelper.LoadCommand}">
+                    </KeyBinding>
+                </TextBox.InputBindings>
+            </TextBox>
+
+
 
         </ToolBar>
 

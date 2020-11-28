@@ -285,7 +285,7 @@ namespace WebTodoApp.Models
         private void loadTodoList() {
             var rows = select(
                 SqlCommandOption.buildSQL(),
-                new List<NpgsqlParameter>()
+                SqlCommandOption.SqlParams
                 );
             var list = new List<Todo>();
             rows.ForEach((Hashtable row) => {

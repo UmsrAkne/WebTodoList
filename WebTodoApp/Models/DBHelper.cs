@@ -157,19 +157,27 @@ namespace WebTodoApp.Models
                 return;
             }
 
+            var ps = new List<NpgsqlParameter>();
+
+            ps.Add(new NpgsqlParameter(nameof(Todo.Title), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Title });
+            ps.Add(new NpgsqlParameter(nameof(Todo.TextContent), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.TextContent });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Priority), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Priority });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Duration), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Duration });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Tag), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Tag });
+
             executeNonQuery(
                 $"update {TableName} SET " +
                 $"{nameof(Todo.Completed)} = {todo.Completed}, " +
-                $"{nameof(Todo.Title)} = '{todo.Title}', " +
-                $"{nameof(Todo.TextContent)} = '{todo.TextContent}', " +
+                $"{nameof(Todo.Title)} = :{nameof(todo.Title)}, " +
+                $"{nameof(Todo.TextContent)} = :{nameof(todo.TextContent)}, " +
                 $"{nameof(Todo.CreationDate)} = '{todo.CreationDate}', " +
                 $"{nameof(Todo.CompletionDate)} = '{todo.CompletionDate}', " +
                 $"{nameof(Todo.StartDateTime)} = '{todo.StartDateTime}', " +
-                $"{nameof(Todo.Priority)} = {todo.Priority}, " +
-                $"{nameof(Todo.Duration)} = {todo.Duration}, " +
-                $"{nameof(Todo.Tag)} = '{todo.Tag}' " +
+                $"{nameof(Todo.Priority)} = :{nameof(todo.Priority)}, " +
+                $"{nameof(Todo.Duration)} = :{nameof(todo.Duration)}, " +
+                $"{nameof(Todo.Tag)} = :{nameof(todo.Tag)} " +
                 $"WHERE id = {todo.ID};"
-                , new List<NpgsqlParameter>()
+                ,ps
             );
         }
 

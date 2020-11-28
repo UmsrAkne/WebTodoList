@@ -79,7 +79,11 @@ namespace WebTodoApp.Models
         }
 
         public void insertTodo(Todo todo) {
-            var maxIDRow = select($"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};")[0];
+            var maxIDRow = select(
+                $"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};",
+                new List<NpgsqlParameter>()
+                )[0];
+
             var maxID = (int)maxIDRow["max"] + 1;
 
             var ps = new List<NpgsqlParameter>();
@@ -124,7 +128,11 @@ namespace WebTodoApp.Models
         }
 
         public void insertComment(Comment comment) {
-            var maxIDRow = select($"SELECT MAX ({nameof(Comment.ID)}) FROM {CommentTableName};")[0];
+            var maxIDRow = select(
+                $"SELECT MAX ({nameof(Comment.ID)}) FROM {CommentTableName};",
+                new List<NpgsqlParameter>()
+                )[0];
+
             int maxID = (maxIDRow["max"] is System.DBNull) ? 1 : (int)maxIDRow["max"] + 1;
 
             var ps = new List<NpgsqlParameter>();
@@ -198,13 +206,14 @@ namespace WebTodoApp.Models
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        private List<Hashtable> select(string commandText) {
+        private List<Hashtable> select(string commandText, List<NpgsqlParameter> parameters) {
                 var startTime = DateTime.Now;
 
             using (var con = DBConnection) {
                 List<Hashtable> resultList = new List<Hashtable>();
                 con.Open();
                 var command = new NpgsqlCommand(commandText, con);
+                parameters.ForEach(p => command.Parameters.Add(p));
                 var dataReader = command.ExecuteReader();
 
                 while (dataReader.Read()) {
@@ -274,7 +283,10 @@ namespace WebTodoApp.Models
         }
 
         private void loadTodoList() {
-            var rows = select(SqlCommandOption.buildSQL());
+            var rows = select(
+                SqlCommandOption.buildSQL(),
+                new List<NpgsqlParameter>()
+                );
             var list = new List<Todo>();
             rows.ForEach((Hashtable row) => {
                 list.Add(toTodo(row));
@@ -285,7 +297,8 @@ namespace WebTodoApp.Models
 
         private void loadCommentList() {
             var rows = select(
-                $"SELECT * FROM {CommentTableName} ORDER BY {nameof(Comment.CreationDateTime)} DESC;"
+                $"SELECT * FROM {CommentTableName} ORDER BY {nameof(Comment.CreationDateTime)} DESC;",
+                new List<NpgsqlParameter>()
                 );
 
             var list = new List<Comment>();
@@ -404,7 +417,14 @@ namespace WebTodoApp.Models
         }
         private String message = "";
 
-        public long TodoCount { get => (long)(select($"SELECT COUNT(*) FROM {TableName};")[0]["count"]); }
+        public long TodoCount {
+            get {
+                return (long)(select(
+                    $"SELECT COUNT(*) FROM {TableName};",
+                    new List<NpgsqlParameter>()
+                    )[0]["count"]);
+            }
+        }
 
         public SQLCommandOption SqlCommandOption { get; private set; }
     }

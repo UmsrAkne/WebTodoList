@@ -106,6 +106,7 @@ namespace WebTodoApp.Models
                 $"{todo.Duration}," +
                 $"'{todo.Tag}'" +
                 ");"
+                , new List<NpgsqlParameter>()
             );
 
             RaisePropertyChanged(nameof(TodoCount));
@@ -126,6 +127,7 @@ namespace WebTodoApp.Models
                 $"'{comment.CreationDateTime}', " +
                 $"'{comment.TextContent}' " +
                 $");"
+                , new List<NpgsqlParameter>()
             );
 
             loadCommentList();
@@ -154,6 +156,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.Duration)} = {todo.Duration}, " +
                 $"{nameof(Todo.Tag)} = '{todo.Tag}' " +
                 $"WHERE id = {todo.ID};"
+                , new List<NpgsqlParameter>()
             );
         }
 
@@ -198,12 +201,13 @@ namespace WebTodoApp.Models
             };
         }
 
-        private void executeNonQuery(string CommandText) {
+        private void executeNonQuery(string CommandText, List<NpgsqlParameter> commandParams) {
             var startTime = DateTime.Now;
 
             using (var con = DBConnection) {
                 con.Open();
                 var Command = new NpgsqlCommand(CommandText, con);
+                commandParams.ForEach((param) => { Command.Parameters.Add(param); });
                 Command.ExecuteNonQuery();
             }
 
@@ -228,6 +232,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', " +
                 $"{nameof(Todo.Tag)} TEXT NOT NULL " +
                 ");"
+                , new List<NpgsqlParameter>()
             );
 
             executeNonQuery(
@@ -236,6 +241,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Comment.CreationDateTime)} TIMESTAMP NOT NULL," +
                 $"{nameof(Comment.TextContent)} TEXT NOT NULL " +
                 $");"
+                , new List<NpgsqlParameter>()
             );
         }
 

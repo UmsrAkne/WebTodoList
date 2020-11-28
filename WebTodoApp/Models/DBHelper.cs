@@ -79,8 +79,22 @@ namespace WebTodoApp.Models
         }
 
         public void insertTodo(Todo todo) {
-            var maxIDRow = select($"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};")[0];
+            var maxIDRow = select(
+                $"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};",
+                new List<NpgsqlParameter>()
+                )[0];
+
             var maxID = (int)maxIDRow["max"] + 1;
+
+            var ps = new List<NpgsqlParameter>();
+
+            // ユーザーの入力が入る余地がある部分はパラメーターによる入力を行う。
+            // もともと固定になっている部分はそうでなくてもOKなはず
+            ps.Add(new NpgsqlParameter(nameof(Todo.Title), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Title });
+            ps.Add(new NpgsqlParameter(nameof(Todo.TextContent), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.TextContent });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Priority), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Priority });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Duration), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Duration });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Tag), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Tag });
 
             executeNonQuery(
                 $"INSERT INTO {TableName} ( " +
@@ -97,15 +111,16 @@ namespace WebTodoApp.Models
                 $"VALUES (" +
                 $"{maxID}," +
                 $"{todo.Completed}," +
-                $"'{todo.Title}'," +
-                $"'{todo.TextContent}'," +
+                $":{nameof(todo.Title)}," +
+                $":{nameof(todo.TextContent)}," +
                 $"'{todo.CreationDate}'," +
                 $"'{todo.CompletionDate}'," +
                 $"'{todo.StartDateTime}'," +
-                $"{todo.Priority}," +
-                $"{todo.Duration}," +
-                $"'{todo.Tag}'" +
+                $":{nameof(todo.Priority)}," +
+                $":{nameof(todo.Duration)}," +
+                $":{nameof(todo.Tag)}" +
                 ");"
+                , ps
             );
 
             RaisePropertyChanged(nameof(TodoCount));
@@ -113,8 +128,15 @@ namespace WebTodoApp.Models
         }
 
         public void insertComment(Comment comment) {
-            var maxIDRow = select($"SELECT MAX ({nameof(Comment.ID)}) FROM {CommentTableName};")[0];
+            var maxIDRow = select(
+                $"SELECT MAX ({nameof(Comment.ID)}) FROM {CommentTableName};",
+                new List<NpgsqlParameter>()
+                )[0];
+
             int maxID = (maxIDRow["max"] is System.DBNull) ? 1 : (int)maxIDRow["max"] + 1;
+
+            var ps = new List<NpgsqlParameter>();
+            ps.Add(new NpgsqlParameter(nameof(Comment.TextContent), NpgsqlTypes.NpgsqlDbType.Text) { Value = comment.TextContent });
 
             executeNonQuery(
                 $"INSERT INTO {CommentTableName} (" +
@@ -124,8 +146,9 @@ namespace WebTodoApp.Models
                 $"VALUES (" +
                 $"{maxID}," +
                 $"'{comment.CreationDateTime}', " +
-                $"'{comment.TextContent}' " +
+                $":{nameof(comment.TextContent)} " +
                 $");"
+                ,ps
             );
 
             loadCommentList();
@@ -142,18 +165,27 @@ namespace WebTodoApp.Models
                 return;
             }
 
+            var ps = new List<NpgsqlParameter>();
+
+            ps.Add(new NpgsqlParameter(nameof(Todo.Title), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Title });
+            ps.Add(new NpgsqlParameter(nameof(Todo.TextContent), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.TextContent });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Priority), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Priority });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Duration), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Duration });
+            ps.Add(new NpgsqlParameter(nameof(Todo.Tag), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Tag });
+
             executeNonQuery(
                 $"update {TableName} SET " +
                 $"{nameof(Todo.Completed)} = {todo.Completed}, " +
-                $"{nameof(Todo.Title)} = '{todo.Title}', " +
-                $"{nameof(Todo.TextContent)} = '{todo.TextContent}', " +
+                $"{nameof(Todo.Title)} = :{nameof(todo.Title)}, " +
+                $"{nameof(Todo.TextContent)} = :{nameof(todo.TextContent)}, " +
                 $"{nameof(Todo.CreationDate)} = '{todo.CreationDate}', " +
                 $"{nameof(Todo.CompletionDate)} = '{todo.CompletionDate}', " +
                 $"{nameof(Todo.StartDateTime)} = '{todo.StartDateTime}', " +
-                $"{nameof(Todo.Priority)} = {todo.Priority}, " +
-                $"{nameof(Todo.Duration)} = {todo.Duration}, " +
-                $"{nameof(Todo.Tag)} = '{todo.Tag}' " +
+                $"{nameof(Todo.Priority)} = :{nameof(todo.Priority)}, " +
+                $"{nameof(Todo.Duration)} = :{nameof(todo.Duration)}, " +
+                $"{nameof(Todo.Tag)} = :{nameof(todo.Tag)} " +
                 $"WHERE id = {todo.ID};"
+                ,ps
             );
         }
 
@@ -174,13 +206,14 @@ namespace WebTodoApp.Models
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        private List<Hashtable> select(string commandText) {
+        private List<Hashtable> select(string commandText, List<NpgsqlParameter> parameters) {
                 var startTime = DateTime.Now;
 
             using (var con = DBConnection) {
                 List<Hashtable> resultList = new List<Hashtable>();
                 con.Open();
                 var command = new NpgsqlCommand(commandText, con);
+                parameters.ForEach(p => command.Parameters.Add(p));
                 var dataReader = command.ExecuteReader();
 
                 while (dataReader.Read()) {
@@ -198,12 +231,13 @@ namespace WebTodoApp.Models
             };
         }
 
-        private void executeNonQuery(string CommandText) {
+        private void executeNonQuery(string CommandText, List<NpgsqlParameter> commandParams) {
             var startTime = DateTime.Now;
 
             using (var con = DBConnection) {
                 con.Open();
                 var Command = new NpgsqlCommand(CommandText, con);
+                commandParams.ForEach((param) => { Command.Parameters.Add(param); });
                 Command.ExecuteNonQuery();
             }
 
@@ -228,6 +262,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', " +
                 $"{nameof(Todo.Tag)} TEXT NOT NULL " +
                 ");"
+                , new List<NpgsqlParameter>()
             );
 
             executeNonQuery(
@@ -236,6 +271,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Comment.CreationDateTime)} TIMESTAMP NOT NULL," +
                 $"{nameof(Comment.TextContent)} TEXT NOT NULL " +
                 $");"
+                , new List<NpgsqlParameter>()
             );
         }
 
@@ -247,7 +283,10 @@ namespace WebTodoApp.Models
         }
 
         private void loadTodoList() {
-            var rows = select(SqlCommandOption.buildSQL());
+            var rows = select(
+                SqlCommandOption.buildSQL(),
+                new List<NpgsqlParameter>()
+                );
             var list = new List<Todo>();
             rows.ForEach((Hashtable row) => {
                 list.Add(toTodo(row));
@@ -258,7 +297,8 @@ namespace WebTodoApp.Models
 
         private void loadCommentList() {
             var rows = select(
-                $"SELECT * FROM {CommentTableName} ORDER BY {nameof(Comment.CreationDateTime)} DESC;"
+                $"SELECT * FROM {CommentTableName} ORDER BY {nameof(Comment.CreationDateTime)} DESC;",
+                new List<NpgsqlParameter>()
                 );
 
             var list = new List<Comment>();
@@ -377,7 +417,14 @@ namespace WebTodoApp.Models
         }
         private String message = "";
 
-        public long TodoCount { get => (long)(select($"SELECT COUNT(*) FROM {TableName};")[0]["count"]); }
+        public long TodoCount {
+            get {
+                return (long)(select(
+                    $"SELECT COUNT(*) FROM {TableName};",
+                    new List<NpgsqlParameter>()
+                    )[0]["count"]);
+            }
+        }
 
         public SQLCommandOption SqlCommandOption { get; private set; }
     }

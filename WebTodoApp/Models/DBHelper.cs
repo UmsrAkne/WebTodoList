@@ -127,6 +127,9 @@ namespace WebTodoApp.Models
             var maxIDRow = select($"SELECT MAX ({nameof(Comment.ID)}) FROM {CommentTableName};")[0];
             int maxID = (maxIDRow["max"] is System.DBNull) ? 1 : (int)maxIDRow["max"] + 1;
 
+            var ps = new List<NpgsqlParameter>();
+            ps.Add(new NpgsqlParameter(nameof(Comment.TextContent), NpgsqlTypes.NpgsqlDbType.Text) { Value = comment.TextContent });
+
             executeNonQuery(
                 $"INSERT INTO {CommentTableName} (" +
                 $"{nameof(Comment.ID)}, " +
@@ -135,9 +138,9 @@ namespace WebTodoApp.Models
                 $"VALUES (" +
                 $"{maxID}," +
                 $"'{comment.CreationDateTime}', " +
-                $"'{comment.TextContent}' " +
+                $":{nameof(comment.TextContent)} " +
                 $");"
-                , new List<NpgsqlParameter>()
+                ,ps
             );
 
             loadCommentList();

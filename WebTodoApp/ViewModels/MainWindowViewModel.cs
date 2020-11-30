@@ -91,5 +91,15 @@ namespace WebTodoApp.ViewModels
         #endregion
 
 
+        public DelegateCommand<UIElement> FocusCommand {
+            #region
+            get => focusCommand ?? (focusCommand = new DelegateCommand<UIElement>((focusableElement) => {
+                focusableElement?.Focus();
+            }));
+        }
+        private DelegateCommand<UIElement> focusCommand;
+        #endregion
+
+
     }
 }

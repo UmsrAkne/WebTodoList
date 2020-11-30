@@ -201,6 +201,12 @@
 
             </ListView.Resources>
 
+            <ListView.InputBindings>
+                <KeyBinding Key="Return" Modifiers="Ctrl" 
+                            Command="{Binding SelectedItem.CompleteCommand,
+                    RelativeSource={RelativeSource AncestorType=ListView}}"/>
+            </ListView.InputBindings>
+
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemContainerStyle}">
                     <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}"/>

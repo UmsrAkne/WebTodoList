@@ -117,6 +117,10 @@ namespace WebTodoApp.Models {
         public DelegateCommand CompleteCommand {
             #region
             get => completeCommand ?? (completeCommand = new DelegateCommand(() => {
+                if (!Completed) {
+                    Completed = true;
+                }
+
                 CompletionDate = DateTime.Now;
                 RaisePropertyChanged(nameof(CompletionDateShortString));
                 RaisePropertyChanged(nameof(WorkingStatus));

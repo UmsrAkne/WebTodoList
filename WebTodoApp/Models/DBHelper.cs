@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml.Serialization;
 using Npgsql;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -405,6 +406,26 @@ namespace WebTodoApp.Models
             }));
         }
         private DelegateCommand<Todo> resetTodoWorkingStatusCommand;
+        #endregion
+
+
+        /// <summary>
+        /// データベースから全てのTodoを取り出してテキストファイルに出力します。
+        /// </summary>
+        public DelegateCommand ExportAllTodoCommand {
+            #region
+            get => exportAllTodoCommand ?? (exportAllTodoCommand = new DelegateCommand(() => {
+                var hashTable = select($"SELECT * FROM {TableName};", new List<NpgsqlParameter>());
+                var todos = new List<Todo>();
+                hashTable.ForEach((h) => todos.Add(toTodo(h)));
+
+                using (var sw = new StreamWriter( @"backup.xml", false, new UTF8Encoding(false))) {
+                    XmlSerializer serializer1 = new XmlSerializer(typeof(List<Todo>));
+                    serializer1.Serialize(sw, todos);
+                }
+            }));
+        }
+        private DelegateCommand exportAllTodoCommand;
         #endregion
 
 

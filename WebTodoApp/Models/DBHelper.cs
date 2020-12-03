@@ -357,6 +357,12 @@ namespace WebTodoApp.Models
                     loadTodoList();
                     loadCommentList();
                     Message = "データベースへの接続に成功。TodoList をロードしました";
+
+                    if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
+                        ExportAllCommand.Execute();
+                        Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
+                        Properties.Settings.Default.Save();
+                    }
                 }
                 catch (TimeoutException) {
                     Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
@@ -460,6 +466,8 @@ namespace WebTodoApp.Models
                     )[0]["count"]);
             }
         }
+
+        public int BackupDateInterval { get; set; } = 7;
 
         public SQLCommandOption SqlCommandOption { get; private set; }
     }

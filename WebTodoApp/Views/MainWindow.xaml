@@ -89,7 +89,7 @@
         <Menu Grid.Row="0">
             <MenuItem Header="ファイル">
                 <MenuItem Header="全てのTodoを出力"
-                          Command="{Binding DatabaseHelper.ExportAllTodoCommand}"
+                          Command="{Binding DatabaseHelper.ExportAllCommand}"
                           />
 
                 <MenuItem Header="終了"

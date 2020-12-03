@@ -412,9 +412,9 @@ namespace WebTodoApp.Models
         /// <summary>
         /// データベースから全てのTodoを取り出してテキストファイルに出力します。
         /// </summary>
-        public DelegateCommand ExportAllTodoCommand {
+        public DelegateCommand ExportAllCommand {
             #region
-            get => exportAllTodoCommand ?? (exportAllTodoCommand = new DelegateCommand(() => {
+            get => exportAllCommand ?? (exportAllCommand = new DelegateCommand(() => {
                 var hashTable = select($"SELECT * FROM {TableName};", new List<NpgsqlParameter>());
                 var todos = new List<Todo>();
                 hashTable.ForEach((h) => todos.Add(toTodo(h)));
@@ -425,7 +425,7 @@ namespace WebTodoApp.Models
                 }
             }));
         }
-        private DelegateCommand exportAllTodoCommand;
+        private DelegateCommand exportAllCommand;
         #endregion
 
 

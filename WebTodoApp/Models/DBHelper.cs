@@ -412,9 +412,9 @@ namespace WebTodoApp.Models
         /// <summary>
         /// データベースから全てのTodoを取り出してテキストファイルに出力します。
         /// </summary>
-        public DelegateCommand ExportAllTodoCommand {
+        public DelegateCommand ExportAllCommand {
             #region
-            get => exportAllTodoCommand ?? (exportAllTodoCommand = new DelegateCommand(() => {
+            get => exportAllCommand ?? (exportAllCommand = new DelegateCommand(() => {
                 var hashTable = select($"SELECT * FROM {TableName};", new List<NpgsqlParameter>());
                 var todos = new List<Todo>();
                 hashTable.ForEach((h) => todos.Add(toTodo(h)));
@@ -423,9 +423,23 @@ namespace WebTodoApp.Models
                     XmlSerializer serializer1 = new XmlSerializer(typeof(List<Todo>));
                     serializer1.Serialize(sw, todos);
                 }
+
+                var commentHashTable = select($"select * from {CommentTableName};", new List<NpgsqlParameter>());
+                var comments = new List<Comment>();
+                commentHashTable.ForEach((h) => {
+                    comments.Add(new Comment() {
+                        ID = (int)h[nameof(Comment.ID).ToLower()],
+                        CreationDateTime = (DateTime)h[nameof(Comment.CreationDateTime).ToLower()],
+                        TextContent = (String)h[nameof(Comment.TextContent).ToLower()]
+                    });
+                });
+
+                using (var sw = new StreamWriter( @"backup-comment.xml", false, new UTF8Encoding(false))) {
+                    new XmlSerializer(typeof(List<Comment>)).Serialize(sw, comments);
+                }
             }));
         }
-        private DelegateCommand exportAllTodoCommand;
+        private DelegateCommand exportAllCommand;
         #endregion
 
 

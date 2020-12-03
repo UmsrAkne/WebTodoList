@@ -423,6 +423,20 @@ namespace WebTodoApp.Models
                     XmlSerializer serializer1 = new XmlSerializer(typeof(List<Todo>));
                     serializer1.Serialize(sw, todos);
                 }
+
+                var commentHashTable = select($"select * from {CommentTableName};", new List<NpgsqlParameter>());
+                var comments = new List<Comment>();
+                commentHashTable.ForEach((h) => {
+                    comments.Add(new Comment() {
+                        ID = (int)h[nameof(Comment.ID).ToLower()],
+                        CreationDateTime = (DateTime)h[nameof(Comment.CreationDateTime).ToLower()],
+                        TextContent = (String)h[nameof(Comment.TextContent).ToLower()]
+                    });
+                });
+
+                using (var sw = new StreamWriter( @"backup-comment.xml", false, new UTF8Encoding(false))) {
+                    new XmlSerializer(typeof(List<Comment>)).Serialize(sw, comments);
+                }
             }));
         }
         private DelegateCommand exportAllCommand;

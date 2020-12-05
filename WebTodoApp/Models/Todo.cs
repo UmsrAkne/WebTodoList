@@ -147,6 +147,11 @@ namespace WebTodoApp.Models {
                 }
             }
         }
+
+        /// <summary>
+        /// WorkingStatus に表示されている、作業開始からの経過時間の変更をビューに通知します。
+        /// </summary>
+        public void updateElapsedTime() => RaisePropertyChanged(nameof(WorkingStatus));
         
         public void resetWorkingStatus() {
             Completed = false;

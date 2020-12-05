@@ -140,12 +140,18 @@ namespace WebTodoApp.Models {
                 if(CompletionDate.Ticks != 0) {
                     return (ActualDuration == 0) ? " - " : $"{ActualDuration} min";
                 }else if(StartDateTime.Ticks != 0) {
-                    return $"{StartDateTime.ToShortTimeString()}";
+                    var elapsedDT = DateTime.Now - StartDateTime;
+                    return $"{(int)elapsedDT.TotalMinutes} min";
                 }else{
                     return "start";
                 }
             }
         }
+
+        /// <summary>
+        /// WorkingStatus に表示されている、作業開始からの経過時間の変更をビューに通知します。
+        /// </summary>
+        public void updateElapsedTime() => RaisePropertyChanged(nameof(WorkingStatus));
         
         public void resetWorkingStatus() {
             Completed = false;

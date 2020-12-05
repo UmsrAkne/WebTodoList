@@ -357,6 +357,7 @@
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
                                             CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
                                             />
+
                                     </i:EventTrigger>
 
                                     <i:EventTrigger EventName="Unchecked">

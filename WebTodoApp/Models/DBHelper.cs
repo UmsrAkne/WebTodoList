@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Controls;
 using System.Xml.Serialization;
 using Npgsql;
@@ -24,6 +25,9 @@ namespace WebTodoApp.Models
 
         public List<Comment> CommentList { get => commentList; private set => SetProperty(ref commentList, value); }
         private List<Comment> commentList = new List<Comment>();
+
+        private HashSet<Todo> WorkingTodos { get; set; } = new HashSet<Todo>();
+        private Timer timer = new Timer(10000);
 
         public DBHelper(string tableName) {
 
@@ -75,6 +79,14 @@ namespace WebTodoApp.Models
                     DESC = true
                 }
             );
+
+            timer.Elapsed += (sender, e) => {
+                foreach(Todo t in WorkingTodos) {
+                    t.updateElapsedTime();
+                }
+            };
+
+            timer.Start();
 
             TryFirstConnectCommand.Execute();
         }
@@ -196,6 +208,9 @@ namespace WebTodoApp.Models
                 Todo todo = ((ListViewItem)l).Content as Todo;
                 if(todo != null) {
                     update(todo);
+                    if (todo.Started) {
+                        WorkingTodos.Add(todo);
+                    }
                 }
             }));
         }
@@ -289,8 +304,17 @@ namespace WebTodoApp.Models
                 SqlCommandOption.SqlParams
                 );
             var list = new List<Todo>();
+
+            WorkingTodos.Clear();
+
             rows.ForEach((Hashtable row) => {
-                list.Add(toTodo(row));
+                var t = toTodo(row);
+
+                if (t.Started) {
+                    WorkingTodos.Add(t);
+                }
+
+                list.Add(t);
             });
 
             TodoList = list;

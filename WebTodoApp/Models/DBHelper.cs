@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Controls;
 using System.Xml.Serialization;
+using System.Media;
 using Npgsql;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -28,6 +29,8 @@ namespace WebTodoApp.Models
 
         private HashSet<Todo> WorkingTodos { get; set; } = new HashSet<Todo>();
         private Timer timer = new Timer(10000);
+
+        private SoundPlayer soundPlayer = new SoundPlayer(@"C:\Windows\Media\Windows Notify Calendar.wav");
 
         public DBHelper(string tableName) {
 
@@ -83,6 +86,10 @@ namespace WebTodoApp.Models
             timer.Elapsed += (sender, e) => {
                 foreach(Todo t in WorkingTodos) {
                     t.updateElapsedTime();
+
+                    if((int)t.Duration == (int)(DateTime.Now - t.StartDateTime).TotalMinutes && !t.Completed) {
+                        soundPlayer.Play();
+                    }
                 }
             };
 

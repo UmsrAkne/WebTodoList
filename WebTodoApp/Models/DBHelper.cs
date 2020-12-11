@@ -491,10 +491,14 @@ namespace WebTodoApp.Models
 
         public long TodoCount {
             get {
-                return (long)(select(
-                    $"SELECT COUNT(*) FROM {TableName};",
-                    new List<NpgsqlParameter>()
-                    )[0]["count"]);
+                try {
+                    long count = (long)(select( $"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"]);
+                    return count;
+                }
+                catch (TimeoutException e) {
+                    // DBの接続に失敗時のコード。仮に接続に失敗した場合、何もできることはないので０を返すのみとする。
+                    return 0;
+                }
             }
         }
 

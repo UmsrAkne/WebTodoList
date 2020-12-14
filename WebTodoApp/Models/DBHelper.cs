@@ -435,6 +435,17 @@ namespace WebTodoApp.Models
         #endregion
 
 
+        public DelegateCommand<Todo> CopyAndContinueCommand {
+            #region
+            get => copyAndContinueCommand ?? (copyAndContinueCommand = new DelegateCommand<Todo>((sourceTodo) => {
+                Todo t = new Todo(sourceTodo) { Started = true};
+                sourceTodo.CompleteCommand.Execute();
+                insertTodo(t);
+            }));
+        }
+        private DelegateCommand<Todo> copyAndContinueCommand;
+        #endregion
+
         public DelegateCommand<Todo> ResetTodoWorkingStatusCommand {
             #region
             get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) => {

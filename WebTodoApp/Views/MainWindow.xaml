@@ -213,6 +213,11 @@
                               CommandParameter="{Binding Self}"
                               />
 
+                    <MenuItem Header="この Todo を複製して継続作業する"
+                              Command="{Binding Path=DataContext.DatabaseHelper.CopyAndContinueCommand,
+                              RelativeSource={RelativeSource AncestorType=ListView}}"
+                              CommandParameter="{Binding Self}"
+                              />
 
                 </ContextMenu>
 

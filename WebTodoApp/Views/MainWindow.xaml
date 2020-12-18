@@ -19,6 +19,12 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../res/Dictionary1.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBox">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
             
             <ControlTemplate x:Key="radiusButtonTemplate"
                              TargetType="ToggleButton">
@@ -413,8 +419,6 @@
 
                                 <TextBox Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
                                          IsReadOnly="True"
-                                         Background="Transparent"
-                                         BorderThickness="0"
                                          Margin="2,0,1,0"
                                          Width="25"
                                          TextAlignment="Center"
@@ -451,9 +455,7 @@
                                            Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
                                            IsReadOnly="True"
                                            Margin="3,0"
-                                           BorderThickness="0"
                                            BorderBrush="Black"
-                                           Background="Transparent"
                                            >
 
                                     <i:Interaction.Behaviors>
@@ -473,8 +475,6 @@
                                 <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
                                          Grid.Column="3"
                                          IsReadOnly="True"
-                                         BorderBrush="Transparent"
-                                         Background="Transparent"
                                          Margin="3,0"
                                          Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}"
                                          TextWrapping="NoWrap"
@@ -513,9 +513,6 @@
                                      Grid.Row="1"
                                      Margin="4,0"
                                      HorizontalAlignment="Left"
-                                     BorderThickness="0"
-                                     BorderBrush="Black"
-                                     Background="Transparent"
                                      Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}"
                                      MinWidth="{Binding ElementName=TextContentBoarder, Path=MinWidth}"
                                      IsReadOnly="True"

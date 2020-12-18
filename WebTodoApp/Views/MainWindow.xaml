@@ -231,19 +231,16 @@
 
             <ListView.InputBindings>
                 <KeyBinding Key="Return" Modifiers="Ctrl" 
-                            Command="{Binding SelectedItem.CompleteCommand,
-                    RelativeSource={RelativeSource AncestorType=ListView}}"/>
+                            Command="{Binding SelectedItem.CompleteCommand, ElementName=todoListView}"/>
 
                 <KeyBinding Key="C" Modifiers="Ctrl"
                             Command="{Binding DatabaseHelper.CopyTodoCommand}"
-                            CommandParameter="{Binding SelectedItem,
-                    RelativeSource={RelativeSource AncestorType=ListView}}"
+                            CommandParameter="{Binding SelectedItem, ElementName=todoListView}"
                             />
 
                 <KeyBinding Gesture="Ctrl+Shift+C"
                             Command="{Binding DatabaseHelper.CopyTodoWithoutTextCommand}"
-                            CommandParameter="{Binding SelectedItem,
-                    RelativeSource={RelativeSource AncestorType=ListView}}"
+                            CommandParameter="{Binding SelectedItem,ElementName=todoListView}"
                             />
 
             </ListView.InputBindings>

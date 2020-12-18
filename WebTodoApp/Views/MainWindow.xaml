@@ -19,6 +19,12 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../res/Dictionary1.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="TextBox">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="BorderThickness" Value="0"/>
+            </Style>
             
             <ControlTemplate x:Key="radiusButtonTemplate"
                              TargetType="ToggleButton">
@@ -225,19 +231,16 @@
 
             <ListView.InputBindings>
                 <KeyBinding Key="Return" Modifiers="Ctrl" 
-                            Command="{Binding SelectedItem.CompleteCommand,
-                    RelativeSource={RelativeSource AncestorType=ListView}}"/>
+                            Command="{Binding SelectedItem.CompleteCommand, ElementName=todoListView}"/>
 
                 <KeyBinding Key="C" Modifiers="Ctrl"
                             Command="{Binding DatabaseHelper.CopyTodoCommand}"
-                            CommandParameter="{Binding SelectedItem,
-                    RelativeSource={RelativeSource AncestorType=ListView}}"
+                            CommandParameter="{Binding SelectedItem, ElementName=todoListView}"
                             />
 
                 <KeyBinding Gesture="Ctrl+Shift+C"
                             Command="{Binding DatabaseHelper.CopyTodoWithoutTextCommand}"
-                            CommandParameter="{Binding SelectedItem,
-                    RelativeSource={RelativeSource AncestorType=ListView}}"
+                            CommandParameter="{Binding SelectedItem,ElementName=todoListView}"
                             />
 
             </ListView.InputBindings>
@@ -377,16 +380,8 @@
                                 <ContentControl>
                                     <TextBlock Padding="4,0"
                                                Text="{Binding WorkingStatus}"
-                                               >
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
+                                               />
 
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-
-                                    </TextBlock>
                                 </ContentControl>
                             </ToggleButton>
 
@@ -413,8 +408,6 @@
 
                                 <TextBox Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
                                          IsReadOnly="True"
-                                         Background="Transparent"
-                                         BorderThickness="0"
                                          Margin="2,0,1,0"
                                          Width="25"
                                          TextAlignment="Center"
@@ -442,32 +435,60 @@
                                 <TextBlock Text="]"/>
 
                             </StackPanel>
-                            <TextBox x:Name="titleTextBox"
-                                       Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
-                                       IsReadOnly="True"
-                                       Margin="3,0"
-                                       BorderThickness="0"
-                                       BorderBrush="Black"
-                                       Background="Transparent"
-                                       Grid.Column="2"
-                                       >
 
-                                <i:Interaction.Behaviors>
-                                    <m:TextBoxROChangeBehavior/>
-                                </i:Interaction.Behaviors>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        >
 
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="LostKeyboardFocus">
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
-                                                               ,Path=DataContext.DatabaseHelper.UpdateCommand }"
-                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                                               />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                                <TextBox x:Name="titleTextBox"
+                                           Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                                           IsReadOnly="True"
+                                           Margin="3,0"
+                                           BorderBrush="Black"
+                                           >
 
-                            </TextBox>
+                                    <i:Interaction.Behaviors>
+                                        <m:TextBoxROChangeBehavior/>
+                                    </i:Interaction.Behaviors>
 
-                        <Border x:Name="TextContentBoarder"
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostKeyboardFocus">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
+                                                                   ,Path=DataContext.DatabaseHelper.UpdateCommand }"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                                   />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+
+                                <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                         Grid.Column="3"
+                                         IsReadOnly="True"
+                                         Margin="3,0"
+                                         Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}"
+                                         TextWrapping="NoWrap"
+                                         MinWidth="30"
+                                         >
+
+
+                                    <i:Interaction.Behaviors>
+                                        <m:TextBoxROChangeBehavior/>
+                                    </i:Interaction.Behaviors>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostKeyboardFocus">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
+                                                                   ,Path=DataContext.DatabaseHelper.UpdateCommand }"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                                   />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                </TextBox>
+
+                            </StackPanel>
+
+                            <Border x:Name="TextContentBoarder"
                                 CornerRadius="3"
                                 HorizontalAlignment="Left"
                                 Background="WhiteSmoke"
@@ -481,9 +502,6 @@
                                      Grid.Row="1"
                                      Margin="4,0"
                                      HorizontalAlignment="Left"
-                                     BorderThickness="0"
-                                     BorderBrush="Black"
-                                     Background="Transparent"
                                      Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}"
                                      MinWidth="{Binding ElementName=TextContentBoarder, Path=MinWidth}"
                                      IsReadOnly="True"

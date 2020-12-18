@@ -380,16 +380,8 @@
                                 <ContentControl>
                                     <TextBlock Padding="4,0"
                                                Text="{Binding WorkingStatus}"
-                                               >
-                                        <TextBlock.Style>
-                                            <Style TargetType="TextBlock">
-                                                <Style.Triggers>
+                                               />
 
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBlock.Style>
-
-                                    </TextBlock>
                                 </ContentControl>
                             </ToggleButton>
 

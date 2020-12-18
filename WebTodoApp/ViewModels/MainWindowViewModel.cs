@@ -54,14 +54,23 @@ namespace WebTodoApp.ViewModels
         }
 
         public Visibility TextContentVisiblity { get; set; }
+        public Visibility SideTextContentVisiblity { get; set; } = Visibility.Collapsed;
 
         public DelegateCommand ToggleTextContentVisibilityCommand {
             #region
             get => toggleTextContentVisibilityCommand ?? (toggleTextContentVisibilityCommand = new DelegateCommand(() => {
-                TextContentVisiblity = (TextContentVisiblity == Visibility.Visible)
-                    ? Visibility.Collapsed : Visibility.Visible;
+                if(TextContentVisiblity == Visibility.Visible) {
+                    TextContentVisiblity = Visibility.Collapsed;
+                    SideTextContentVisiblity = Visibility.Visible;
+                }
+                else {
+                    TextContentVisiblity = Visibility.Visible;
+                    SideTextContentVisiblity = Visibility.Collapsed;
+                }
 
                 RaisePropertyChanged(nameof(TextContentVisiblity));
+                RaisePropertyChanged(nameof(SideTextContentVisiblity));
+
             }));
         }
         private DelegateCommand toggleTextContentVisibilityCommand;

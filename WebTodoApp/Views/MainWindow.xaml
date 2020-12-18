@@ -442,32 +442,64 @@
                                 <TextBlock Text="]"/>
 
                             </StackPanel>
-                            <TextBox x:Name="titleTextBox"
-                                       Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
-                                       IsReadOnly="True"
-                                       Margin="3,0"
-                                       BorderThickness="0"
-                                       BorderBrush="Black"
-                                       Background="Transparent"
-                                       Grid.Column="2"
-                                       >
 
-                                <i:Interaction.Behaviors>
-                                    <m:TextBoxROChangeBehavior/>
-                                </i:Interaction.Behaviors>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        >
 
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="LostKeyboardFocus">
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
-                                                               ,Path=DataContext.DatabaseHelper.UpdateCommand }"
-                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                                               />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                                <TextBox x:Name="titleTextBox"
+                                           Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+                                           IsReadOnly="True"
+                                           Margin="3,0"
+                                           BorderThickness="0"
+                                           BorderBrush="Black"
+                                           Background="Transparent"
+                                           >
 
-                            </TextBox>
+                                    <i:Interaction.Behaviors>
+                                        <m:TextBoxROChangeBehavior/>
+                                    </i:Interaction.Behaviors>
 
-                        <Border x:Name="TextContentBoarder"
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostKeyboardFocus">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
+                                                                   ,Path=DataContext.DatabaseHelper.UpdateCommand }"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                                   />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+
+                                <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                         Grid.Column="3"
+                                         IsReadOnly="True"
+                                         BorderBrush="Transparent"
+                                         Background="Transparent"
+                                         Margin="3,0"
+                                         Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}"
+                                         TextWrapping="NoWrap"
+                                         MinWidth="30"
+                                         >
+
+
+                                    <i:Interaction.Behaviors>
+                                        <m:TextBoxROChangeBehavior/>
+                                    </i:Interaction.Behaviors>
+
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostKeyboardFocus">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
+                                                                   ,Path=DataContext.DatabaseHelper.UpdateCommand }"
+                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                                                   />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                </TextBox>
+
+                            </StackPanel>
+
+                            <Border x:Name="TextContentBoarder"
                                 CornerRadius="3"
                                 HorizontalAlignment="Left"
                                 Background="WhiteSmoke"

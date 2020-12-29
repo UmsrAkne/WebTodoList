@@ -12,7 +12,16 @@ namespace WebTodoApp.ViewModels
         private string _title = "Todo List";
         public string Title
         {
-            get { return _title; }
+            get {
+                if (DatabaseHelper != null && DatabaseHelper.WorkingTodos.Count == 1) {
+                    foreach(Todo t in DatabaseHelper.WorkingTodos) {
+                        return $"{t.WorkingStatus} {t.Title}";
+                    }
+                }
+
+                return "Todo List";
+            }
+
             set { SetProperty(ref _title, value); }
         }
 

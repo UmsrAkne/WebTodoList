@@ -27,7 +27,7 @@ namespace WebTodoApp.Models
         public List<Comment> CommentList { get => commentList; private set => SetProperty(ref commentList, value); }
         private List<Comment> commentList = new List<Comment>();
 
-        private HashSet<Todo> WorkingTodos { get; set; } = new HashSet<Todo>();
+        public HashSet<Todo> WorkingTodos { get; set; } = new HashSet<Todo>();
         private Timer timer = new Timer(10000);
 
         private SoundPlayer soundPlayer = new SoundPlayer(@"C:\Windows\Media\Windows Notify Calendar.wav");

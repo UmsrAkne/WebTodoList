@@ -140,6 +140,7 @@
                           BorderThickness="1,0,1,0"
                           Margin="4,0"
                           Command="{Binding ToggleTextContentVisibilityCommand}"
+                          IsChecked="True"
                           >
 
                 <TextBlock Text="一行表示"

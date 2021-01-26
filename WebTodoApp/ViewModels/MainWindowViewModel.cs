@@ -62,8 +62,8 @@ namespace WebTodoApp.ViewModels
             }));
         }
 
-        public Visibility TextContentVisiblity { get; set; }
-        public Visibility SideTextContentVisiblity { get; set; } = Visibility.Collapsed;
+        public Visibility TextContentVisiblity { get; set; } = Visibility.Collapsed;
+        public Visibility SideTextContentVisiblity { get; set; } = Visibility.Visible;
 
         public DelegateCommand ToggleTextContentVisibilityCommand {
             #region

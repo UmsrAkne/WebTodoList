@@ -446,6 +446,7 @@
                                            IsReadOnly="True"
                                            Margin="3,0"
                                            BorderBrush="Black"
+                                           Background="WhiteSmoke"
                                            >
 
                                     <i:Interaction.Behaviors>
@@ -462,6 +463,13 @@
                                     </i:Interaction.Triggers>
                                 </TextBox>
 
+                                <!-- ただの区切り線 -->
+                                <Border Width="1"
+                                        Background="Silver"
+                                        Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}"
+                                        />
+
+
                                 <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
                                          Grid.Column="3"
                                          IsReadOnly="True"
@@ -469,6 +477,7 @@
                                          Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}"
                                          TextWrapping="NoWrap"
                                          MinWidth="30"
+                                         Background="WhiteSmoke"
                                          >
 
 
@@ -489,14 +498,15 @@
 
                             </StackPanel>
 
-                            <Border x:Name="TextContentBoarder"
-                                CornerRadius="3"
-                                HorizontalAlignment="Left"
-                                Background="WhiteSmoke"
-                                MinWidth="30"
-                                Grid.Row="1"
-                                Grid.Column="2"
-                                >
+                        <Border x:Name="TextContentBoarder"
+                            CornerRadius="3"
+                            HorizontalAlignment="Left"
+                            Background="WhiteSmoke"
+                            Margin="2,1"
+                            MinWidth="30"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            >
                             
                             <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
                                      Grid.Column="2"
@@ -508,6 +518,7 @@
                                      IsReadOnly="True"
                                      TextWrapping="Wrap"
                                      AcceptsReturn="True"
+                                     Background="WhiteSmoke"
                                      >
 
                                 <i:Interaction.Behaviors>

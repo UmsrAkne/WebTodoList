@@ -206,6 +206,12 @@
                                           RelativeSource={RelativeSource AncestorType=ListView}}"
                                   CommandParameter="{Binding Self}"
                                   />
+
+                        <MenuItem Header="詳細テキストを消去" 
+                                  Command="{Binding DataContext.DatabaseHelper.ClearTextContentCommand,
+                                          RelativeSource={RelativeSource AncestorType=ListView}}"
+                                  CommandParameter="{Binding Self}"
+                                  />
                     </MenuItem>
 
                     <MenuItem Header="この Todo から新しい Todo を生成する"

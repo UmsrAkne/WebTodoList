@@ -446,6 +446,18 @@ namespace WebTodoApp.Models
         private DelegateCommand<Todo> copyAndContinueCommand;
         #endregion
 
+
+        public DelegateCommand<Todo> ClearTextContentCommand {
+            #region
+            get => clearTextContentCommand ?? (clearTextContentCommand = new DelegateCommand<Todo>((sourceTodo) => {
+                sourceTodo.TextContent = "";
+                update(sourceTodo);
+            }));
+        }
+        private DelegateCommand<Todo> clearTextContentCommand;
+        #endregion
+
+
         public DelegateCommand<Todo> ResetTodoWorkingStatusCommand {
             #region
             get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) => {

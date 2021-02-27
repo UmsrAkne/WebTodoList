@@ -86,7 +86,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="3*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="90"/>
             <RowDefinition Height="120"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -551,63 +550,7 @@
 
         </ListView>
 
-        <GridSplitter Grid.Row="3"
-                      Height="3"
-                      HorizontalAlignment="Stretch"
-                      />
-
-
-        <ListView Grid.Row="4"
-                  ItemsSource="{Binding DatabaseHelper.CommentList}"
-                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  >
-
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-
-                        <TextBlock Text="{Binding CreationDateShortString}"
-                                   Grid.Row="0"
-                                   Grid.Column="0"
-                                   />
-
-                        <Border Width="1"
-                                Background="Black"
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Margin="10,0"
-                                />
-
-                        <TextBlock Text="{Binding TextContent}"
-                                   Grid.Row="0"
-                                   Grid.Column="2"
-                                   TextWrapping="Wrap"
-                                   Width="Auto"
-                                   />
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemContainerStyle}">
-                    <Setter Property="BorderThickness" Value="0,0.5,0,0.5" />
-                    <Setter Property="BorderBrush" Value="WhiteSmoke" />
-
-                </Style>
-            </ListView.ItemContainerStyle>
-
-        </ListView>
-
-        <TabControl Grid.Row="5">
+        <TabControl Grid.Row="4">
             <TabControl.Resources>
                 <Style x:Key="tabItemTextBoxStyle"
                        TargetType="TextBox" 
@@ -681,18 +624,6 @@
 
                 </DockPanel>
 
-            </TabItem>
-
-            <TabItem Header="Comment">
-                <TextBox Text="{Binding EnteringComment.TextContent, UpdateSourceTrigger=PropertyChanged}"
-                         Style="{StaticResource tabItemTextBoxStyle}"
-                         >
-                    <TextBox.InputBindings>
-                        <KeyBinding Modifiers="Ctrl" Key="Return"
-                                    Command="{Binding InsertCommentCommand}"
-                                    />
-                    </TextBox.InputBindings>
-                </TextBox>
             </TabItem>
 
         </TabControl>

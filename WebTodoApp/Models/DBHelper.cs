@@ -24,9 +24,6 @@ namespace WebTodoApp.Models
         public List<Todo> TodoList { get => todoList; private set => SetProperty(ref todoList, value); }
         private List<Todo> todoList = new List<Todo>();
 
-        public List<Comment> CommentList { get => commentList; private set => SetProperty(ref commentList, value); }
-        private List<Comment> commentList = new List<Comment>();
-
         public HashSet<Todo> WorkingTodos { get; set; } = new HashSet<Todo>();
         private Timer timer = new Timer(10000);
 
@@ -145,33 +142,6 @@ namespace WebTodoApp.Models
 
             RaisePropertyChanged(nameof(TodoCount));
             loadTodoList();
-        }
-
-        public void insertComment(Comment comment) {
-            var maxIDRow = select(
-                $"SELECT MAX ({nameof(Comment.ID)}) FROM {CommentTableName};",
-                new List<NpgsqlParameter>()
-                )[0];
-
-            int maxID = (maxIDRow["max"] is System.DBNull) ? 1 : (int)maxIDRow["max"] + 1;
-
-            var ps = new List<NpgsqlParameter>();
-            ps.Add(new NpgsqlParameter(nameof(Comment.TextContent), NpgsqlTypes.NpgsqlDbType.Text) { Value = comment.TextContent });
-
-            executeNonQuery(
-                $"INSERT INTO {CommentTableName} (" +
-                $"{nameof(Comment.ID)}, " +
-                $"{nameof(Comment.CreationDateTime)}," +
-                $"{nameof(Comment.TextContent)} )" +
-                $"VALUES (" +
-                $"{maxID}," +
-                $"'{comment.CreationDateTime}', " +
-                $":{nameof(comment.TextContent)} " +
-                $");"
-                ,ps
-            );
-
-            loadCommentList();
         }
 
         public void update(Todo todo) {
@@ -327,25 +297,6 @@ namespace WebTodoApp.Models
             TodoList = list;
         }
 
-        private void loadCommentList() {
-            var rows = select(
-                $"SELECT * FROM {CommentTableName} ORDER BY {nameof(Comment.CreationDateTime)} DESC;",
-                new List<NpgsqlParameter>()
-                );
-
-            var list = new List<Comment>();
-
-            rows.ForEach((Hashtable row) => {
-                list.Add(new Comment() {
-                    CreationDateTime = (DateTime)row[nameof(Comment.CreationDateTime).ToLower()],
-                    TextContent = (String)row[nameof(Comment.TextContent).ToLower()],
-                    ID = (int)row[nameof(Comment.ID).ToLower()],
-                });
-            });
-
-            CommentList = list;
-        }
-
         private Todo toTodo(Hashtable hashtable) {
             Todo todo = new Todo();
 
@@ -386,7 +337,6 @@ namespace WebTodoApp.Models
             get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
                 try {
                     loadTodoList();
-                    loadCommentList();
                     Message = "データベースへの接続に成功。TodoList をロードしました";
 
                     if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {

@@ -31,40 +31,14 @@ namespace WebTodoApp.Models
 
         public DBHelper(string tableName) {
 
-            string homePath =
-                Environment.GetEnvironmentVariable("HOMEDRIVE") +
-                Environment.GetEnvironmentVariable("HOMEPATH");
-
-            string userName;
-            using (StreamReader sr = new StreamReader(
-                homePath + @"\awsrds\user.txt", Encoding.GetEncoding("Shift_JIS"))) {
-                userName = sr.ReadToEnd();
-            }
-
-            string pass;
-            using (StreamReader sr = new StreamReader(
-                homePath + @"\awsrds\pass.txt", Encoding.GetEncoding("Shift_JIS"))) {
-                pass = sr.ReadToEnd();
-            }
-
-            string hostName;
-            using (StreamReader sr = new StreamReader(
-                homePath + @"\awsrds\hostName.txt", Encoding.GetEncoding("Shift_JIS"))) {
-                hostName = sr.ReadToEnd();
-            }
-
-            int portNumber;
-            using (StreamReader sr = new StreamReader(
-                homePath + @"\awsrds\port.txt", Encoding.GetEncoding("Shift_JIS"))) {
-                portNumber = int.Parse(sr.ReadToEnd());
-            }
+            IDBConnectionStrings dbConnectionStrings = new RDSConnectionStrings();
 
             connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
-                Host = hostName,
-                Username = userName,
+                Host = dbConnectionStrings.HostName,
+                Username = dbConnectionStrings.UserName,
                 Database = "postgres",
-                Password = pass,
-                Port = portNumber
+                Password = dbConnectionStrings.PassWord,
+                Port =dbConnectionStrings.PortNumber 
             };
 
             TableName = tableName;

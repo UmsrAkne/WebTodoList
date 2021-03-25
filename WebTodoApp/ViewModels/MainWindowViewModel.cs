@@ -96,6 +96,16 @@ namespace WebTodoApp.ViewModels
         private DelegateCommand<UIElement> focusCommand;
         #endregion
 
+        public DelegateCommand<IDBConnectionStrings> ChangeDatabaseServerCommand {
+            #region
+            get => changeDatabaseServerCommand ?? (changeDatabaseServerCommand = new DelegateCommand<IDBConnectionStrings>((IDBConnectionStrings dbinfo) => {
+                DatabaseHelper.changeDatabase(dbinfo);
+            }));
+        }
+        private DelegateCommand<IDBConnectionStrings> changeDatabaseServerCommand;
+        #endregion
+
+
 
     }
 }

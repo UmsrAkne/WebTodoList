@@ -31,42 +31,6 @@ namespace WebTodoApp.Models
 
         public DBHelper(string tableName) {
 
-            string homePath =
-                Environment.GetEnvironmentVariable("HOMEDRIVE") +
-                Environment.GetEnvironmentVariable("HOMEPATH");
-
-            string userName;
-            using (StreamReader sr = new StreamReader(
-                homePath + @"\awsrds\user.txt", Encoding.GetEncoding("Shift_JIS"))) {
-                userName = sr.ReadToEnd();
-            }
-
-            string pass;
-            using (StreamReader sr = new StreamReader(
-                homePath + @"\awsrds\pass.txt", Encoding.GetEncoding("Shift_JIS"))) {
-                pass = sr.ReadToEnd();
-            }
-
-            string hostName;
-            using (StreamReader sr = new StreamReader(
-                homePath + @"\awsrds\hostName.txt", Encoding.GetEncoding("Shift_JIS"))) {
-                hostName = sr.ReadToEnd();
-            }
-
-            int portNumber;
-            using (StreamReader sr = new StreamReader(
-                homePath + @"\awsrds\port.txt", Encoding.GetEncoding("Shift_JIS"))) {
-                portNumber = int.Parse(sr.ReadToEnd());
-            }
-
-            connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
-                Host = hostName,
-                Username = userName,
-                Database = "postgres",
-                Password = pass,
-                Port = portNumber
-            };
-
             TableName = tableName;
             //createTable();
 
@@ -92,7 +56,7 @@ namespace WebTodoApp.Models
 
             timer.Start();
 
-            TryFirstConnectCommand.Execute();
+            changeDatabase(new RDSConnectionStrings());
         }
 
         public void insertTodo(Todo todo) {
@@ -333,6 +297,18 @@ namespace WebTodoApp.Models
             return todo;
         }
 
+        public void changeDatabase(IDBConnectionStrings destDatabaseInfo) {
+            connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
+                Host = destDatabaseInfo.HostName,
+                Username = destDatabaseInfo.UserName,
+                Database = "postgres",
+                Password = destDatabaseInfo.PassWord,
+                Port =destDatabaseInfo.PortNumber
+            };
+
+            TryFirstConnectCommand.Execute();
+        }
+
         public DelegateCommand TryFirstConnectCommand {
             get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
                 try {
@@ -417,7 +393,6 @@ namespace WebTodoApp.Models
         }
         private DelegateCommand<Todo> resetTodoWorkingStatusCommand;
         #endregion
-
 
         /// <summary>
         /// データベースから全てのTodoを取り出してテキストファイルに出力します。

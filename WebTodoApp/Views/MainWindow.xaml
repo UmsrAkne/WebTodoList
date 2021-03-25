@@ -1,61 +1,55 @@
-﻿<Window x:Class="WebTodoApp.Views.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:prism="http://prismlibrary.com/"
-        prism:ViewModelLocator.AutoWireViewModel="True"
-
-        xmlns:m="clr-namespace:WebTodoApp.Models"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:vms="clr-namespace:WebTodoApp.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d"
-        d:DataContext="{d:DesignInstance vms:MainWindowViewModel, IsDesignTimeCreatable=True}"
-        Title="{Binding Title}" Height="700" Width="800">
+﻿<Window
+    x:Class="WebTodoApp.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:m="clr-namespace:WebTodoApp.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:vms="clr-namespace:WebTodoApp.ViewModels"
+    Title="{Binding Title}"
+    Width="800"
+    Height="700"
+    d:DataContext="{d:DesignInstance vms:MainWindowViewModel,
+                                     IsDesignTimeCreatable=True}"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
 
     <Window.Resources>
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../res/Dictionary1.xaml"/>
+                <ResourceDictionary Source="../res/Dictionary1.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="TextBox">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
             </Style>
-            
-            <ControlTemplate x:Key="radiusButtonTemplate"
-                             TargetType="ToggleButton">
-                <Border x:Name="border"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        CornerRadius="4"
-                        >
-                    <ContentPresenter VerticalAlignment="Center"
-                                      HorizontalAlignment="Center"
-                                      />
+
+            <ControlTemplate x:Key="radiusButtonTemplate" TargetType="ToggleButton">
+                <Border
+                    x:Name="border"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="4">
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
 
                 </Border>
 
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsPressed" Value="True">
-                        <Setter TargetName="border"
-                                Property="Background"
-                                Value="LightSkyBlue" />
+                        <Setter TargetName="border" Property="Background" Value="LightSkyBlue" />
                     </Trigger>
 
                     <Trigger Property="IsChecked" Value="True">
-                        <Setter TargetName="border"
-                                Property="Background"
-                                Value="LightSkyBlue"/>
+                        <Setter TargetName="border" Property="Background" Value="LightSkyBlue" />
                     </Trigger>
 
                     <Trigger Property="IsChecked" Value="False">
-                        <Setter TargetName="border"
-                                Property="Background"
-                                Value="Transparent"/>
+                        <Setter TargetName="border" Property="Background" Value="Transparent" />
                     </Trigger>
 
                 </ControlTemplate.Triggers>
@@ -66,124 +60,125 @@
     </Window.Resources>
 
     <Window.InputBindings>
-        <KeyBinding Key="Return" Modifiers="Ctrl" Command="{Binding InsertTodoCommand}"/>
-        <KeyBinding Key="R" Modifiers="Ctrl" Command="{Binding DatabaseHelper.LoadCommand}" />
+        <KeyBinding
+            Key="Return"
+            Command="{Binding InsertTodoCommand}"
+            Modifiers="Ctrl" />
+        <KeyBinding
+            Key="R"
+            Command="{Binding DatabaseHelper.LoadCommand}"
+            Modifiers="Ctrl" />
 
-        <KeyBinding Key="F" Modifiers="Ctrl"
-                    Command="{Binding FocusCommand}"
-                    CommandParameter="{Binding ElementName=searchTextBox}"
-                    />
+        <KeyBinding
+            Key="F"
+            Command="{Binding FocusCommand}"
+            CommandParameter="{Binding ElementName=searchTextBox}"
+            Modifiers="Ctrl" />
 
-        <KeyBinding Key="T" Modifiers="Ctrl"
-                    Command="{Binding FocusCommand}"
-                    CommandParameter="{Binding ElementName=PriorityInputTextBox}"
-                    />
+        <KeyBinding
+            Key="T"
+            Command="{Binding FocusCommand}"
+            CommandParameter="{Binding ElementName=PriorityInputTextBox}"
+            Modifiers="Ctrl" />
     </Window.InputBindings>
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="120"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="120" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
 
         <Menu Grid.Row="0">
             <MenuItem Header="ファイル">
-                <MenuItem Header="全てのTodoを出力"
-                          Command="{Binding DatabaseHelper.ExportAllCommand}"
-                          />
+                <MenuItem Command="{Binding DatabaseHelper.ExportAllCommand}" Header="全てのTodoを出力" />
 
-                <MenuItem Header="終了"
-                          Command="{Binding ExitCommand}"
-                          />
+                <MenuItem Command="{Binding ExitCommand}" Header="終了" />
 
             </MenuItem>
 
             <MenuItem Header="接続">
-                <MenuItem Header="再接続"
-                          Command="{Binding DatabaseHelper.TryFirstConnectCommand}"
-                          />
+                <MenuItem Command="{Binding DatabaseHelper.TryFirstConnectCommand}" Header="再接続" />
+
+                <MenuItem Command="{Binding ChangeDatabaseServerCommand}" Header="RDSに接続">
+                    <MenuItem.CommandParameter>
+                        <m:RDSConnectionStrings />
+                    </MenuItem.CommandParameter>
+                </MenuItem>
+
+                <MenuItem Command="{Binding ChangeDatabaseServerCommand}" Header="EC2に接続">
+                    <MenuItem.CommandParameter>
+                        <m:EC2ConnectionStrings />
+                    </MenuItem.CommandParameter>
+                </MenuItem>
+
             </MenuItem>
         </Menu>
 
         <ToolBar Grid.Row="1">
             <ToolBar.Resources>
-                <Style TargetType="TextBlock"
-                       x:Key="opacityTextBlockStyle"
-                       >
+                <Style x:Key="opacityTextBlockStyle" TargetType="TextBlock">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton},Path=IsChecked}" Value="False">
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton}, Path=IsChecked}" Value="False">
                             <Setter Property="Opacity" Value="0.4" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
             </ToolBar.Resources>
 
-            <ToggleButton BorderBrush="Azure"
-                          IsChecked="{Binding DatabaseHelper.SqlCommandOption.ShowOnlyIncompleteTodo}"
-                          Command="{Binding DatabaseHelper.LoadCommand}"
-                          Margin="4,0"
-                          >
+            <ToggleButton
+                Margin="4,0"
+                BorderBrush="Azure"
+                Command="{Binding DatabaseHelper.LoadCommand}"
+                IsChecked="{Binding DatabaseHelper.SqlCommandOption.ShowOnlyIncompleteTodo}">
 
-                <TextBlock Text="未完了のみ表示"
-                           Style="{StaticResource opacityTextBlockStyle}"
-                           />
+                <TextBlock Style="{StaticResource opacityTextBlockStyle}" Text="未完了のみ表示" />
 
             </ToggleButton>
 
-            <ToggleButton BorderBrush="LightBlue"
-                          BorderThickness="1,0,1,0"
-                          Margin="4,0"
-                          Command="{Binding ToggleTextContentVisibilityCommand}"
-                          IsChecked="True"
-                          >
+            <ToggleButton
+                Margin="4,0"
+                BorderBrush="LightBlue"
+                BorderThickness="1,0,1,0"
+                Command="{Binding ToggleTextContentVisibilityCommand}"
+                IsChecked="True">
 
-                <TextBlock Text="一行表示"
-                           Style="{StaticResource opacityTextBlockStyle}"
-                           />
+                <TextBlock Style="{StaticResource opacityTextBlockStyle}" Text="一行表示" />
 
             </ToggleButton>
 
-            <TextBlock Text="日時指定 : "
-                       Margin="6,3"
-                       />
+            <TextBlock Margin="6,3" Text="日時指定 : " />
 
-            <TextBox Text="{Binding DatabaseHelper.SqlCommandOption.DisplayDateRangeString,
-                UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"
-                     MinWidth="30"
-                     >
+            <TextBox
+                MinWidth="30"
+                Text="{Binding DatabaseHelper.SqlCommandOption.DisplayDateRangeString, UpdateSourceTrigger=PropertyChanged}"
+                TextAlignment="Center">
                 <i:Interaction.Behaviors>
-                    <m:TextInputLimitBehavior/>
+                    <m:TextInputLimitBehavior />
                 </i:Interaction.Behaviors>
 
             </TextBox>
 
 
-            <TextBlock Text="日前まで表示"
-                       Margin="6,3"
-                       />
+            <TextBlock Margin="6,3" Text="日前まで表示" />
 
-            <Border Background="Black"
-                    Width="1"
-                    Margin="3,0"
-                    />
+            <Border
+                Width="1"
+                Margin="3,0"
+                Background="Black" />
 
-            <TextBlock Text="テキスト検索 : "
-                       Margin="6,3"
-                       />
+            <TextBlock Margin="6,3" Text="テキスト検索 : " />
 
-            <TextBox Width="200"
-                     x:Name="searchTextBox"
-                     Text="{Binding DatabaseHelper.SqlCommandOption.SearchString,UpdateSourceTrigger=PropertyChanged}"
-             >
+            <TextBox
+                x:Name="searchTextBox"
+                Width="200"
+                Text="{Binding DatabaseHelper.SqlCommandOption.SearchString, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding DatabaseHelper.LoadCommand}">
-                    </KeyBinding>
+                    <KeyBinding Key="Enter" Command="{Binding DatabaseHelper.LoadCommand}" />
                 </TextBox.InputBindings>
             </TextBox>
 
@@ -191,69 +186,67 @@
 
         </ToolBar>
 
-        <ListView ItemsSource="{Binding DatabaseHelper.TodoList}"
-                  Grid.Row="2"
-                  x:Name="todoListView"
-                  >
+        <ListView
+            x:Name="todoListView"
+            Grid.Row="2"
+            ItemsSource="{Binding DatabaseHelper.TodoList}">
 
             <ListView.Resources>
                 <ContextMenu x:Key="listViewContextMenu">
 
                     <MenuItem Header="初期化">
-                        <MenuItem Header="作業状態を初期化" 
-                                  Command="{Binding DataContext.DatabaseHelper.ResetTodoWorkingStatusCommand,
-                                          RelativeSource={RelativeSource AncestorType=ListView}}"
-                                  CommandParameter="{Binding Self}"
-                                  />
+                        <MenuItem
+                            Command="{Binding DataContext.DatabaseHelper.ResetTodoWorkingStatusCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                            CommandParameter="{Binding Self}"
+                            Header="作業状態を初期化" />
 
-                        <MenuItem Header="詳細テキストを消去" 
-                                  Command="{Binding DataContext.DatabaseHelper.ClearTextContentCommand,
-                                          RelativeSource={RelativeSource AncestorType=ListView}}"
-                                  CommandParameter="{Binding Self}"
-                                  />
+                        <MenuItem
+                            Command="{Binding DataContext.DatabaseHelper.ClearTextContentCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                            CommandParameter="{Binding Self}"
+                            Header="詳細テキストを消去" />
                     </MenuItem>
 
-                    <MenuItem Header="この Todo から新しい Todo を生成する"
-                              Command="{Binding Path=DataContext.DatabaseHelper.CopyTodoCommand,
-                              RelativeSource={RelativeSource AncestorType=Window}}"
-                              CommandParameter="{Binding Self}"
-                              />
+                    <MenuItem
+                        Command="{Binding Path=DataContext.DatabaseHelper.CopyTodoCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding Self}"
+                        Header="この Todo から新しい Todo を生成する" />
 
-                    <MenuItem Header="この Todo の詳細を初期化して複製する"
-                              Command="{Binding Path=DataContext.DatabaseHelper.CopyTodoWithoutTextCommand,
-                              RelativeSource={RelativeSource AncestorType=ListView}}"
-                              CommandParameter="{Binding Self}"
-                              />
+                    <MenuItem
+                        Command="{Binding Path=DataContext.DatabaseHelper.CopyTodoWithoutTextCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                        CommandParameter="{Binding Self}"
+                        Header="この Todo の詳細を初期化して複製する" />
 
-                    <MenuItem Header="この Todo を複製して継続作業する"
-                              Command="{Binding Path=DataContext.DatabaseHelper.CopyAndContinueCommand,
-                              RelativeSource={RelativeSource AncestorType=ListView}}"
-                              CommandParameter="{Binding Self}"
-                              />
+                    <MenuItem
+                        Command="{Binding Path=DataContext.DatabaseHelper.CopyAndContinueCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                        CommandParameter="{Binding Self}"
+                        Header="この Todo を複製して継続作業する" />
 
                 </ContextMenu>
 
             </ListView.Resources>
 
             <ListView.InputBindings>
-                <KeyBinding Key="Return" Modifiers="Ctrl" 
-                            Command="{Binding SelectedItem.CompleteCommand, ElementName=todoListView}"/>
+                <KeyBinding
+                    Key="Return"
+                    Command="{Binding SelectedItem.CompleteCommand, ElementName=todoListView}"
+                    Modifiers="Ctrl" />
 
-                <KeyBinding Key="C" Modifiers="Ctrl"
-                            Command="{Binding DatabaseHelper.CopyTodoCommand}"
-                            CommandParameter="{Binding SelectedItem, ElementName=todoListView}"
-                            />
+                <KeyBinding
+                    Key="C"
+                    Command="{Binding DatabaseHelper.CopyTodoCommand}"
+                    CommandParameter="{Binding SelectedItem, ElementName=todoListView}"
+                    Modifiers="Ctrl" />
 
-                <KeyBinding Gesture="Ctrl+Shift+C"
-                            Command="{Binding DatabaseHelper.CopyTodoWithoutTextCommand}"
-                            CommandParameter="{Binding SelectedItem,ElementName=todoListView}"
-                            />
+                <KeyBinding
+                    Command="{Binding DatabaseHelper.CopyTodoWithoutTextCommand}"
+                    CommandParameter="{Binding SelectedItem, ElementName=todoListView}"
+                    Gesture="Ctrl+Shift+C" />
 
             </ListView.InputBindings>
 
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem" BasedOn="{StaticResource ListViewItemContainerStyle}">
-                    <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}"/>
+                <Style BasedOn="{StaticResource ListViewItemContainerStyle}" TargetType="ListViewItem">
+                    <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}" />
 
                     <Style.Triggers>
 
@@ -275,57 +268,53 @@
                 <DataTemplate>
                     <DockPanel>
                         <DockPanel.InputBindings>
-                            <KeyBinding Key="Return" Modifiers="Ctrl" 
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
-                                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"/>
+                            <KeyBinding
+                                Key="Return"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.DatabaseHelper.UpdateCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
+                                Modifiers="Ctrl" />
                         </DockPanel.InputBindings>
 
-                        <TextBlock Text="{Binding Priority}"
-                                   Width="20"
-                                   DockPanel.Dock="Left"
-                                   VerticalAlignment="Center"
-                                   TextAlignment="Center"
-                                   />
+                        <TextBlock
+                            Width="20"
+                            VerticalAlignment="Center"
+                            DockPanel.Dock="Left"
+                            Text="{Binding Priority}"
+                            TextAlignment="Center" />
 
-                        <Border Background="AliceBlue"
-                                Height="2"
-                                DockPanel.Dock="Top"
-                                />
+                        <Border
+                            Height="2"
+                            Background="AliceBlue"
+                            DockPanel.Dock="Top" />
 
-                        <Grid Margin="0,2"
-                              DockPanel.Dock="Top"
-                              >
+                        <Grid Margin="0,2" DockPanel.Dock="Top">
 
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition Width="4*"/>
-                                <ColumnDefinition Width="auto"/>
-                                <ColumnDefinition MinWidth="170"/>
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition Width="4*" />
+                                <ColumnDefinition Width="auto" />
+                                <ColumnDefinition MinWidth="170" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition />
+                                <RowDefinition />
                             </Grid.RowDefinitions>
 
 
-                            <CheckBox IsChecked="{Binding Completed}"
-                                      Margin="0,1,0,0"
-                                      Grid.Column="0"
-                                      >
+                            <CheckBox
+                                Grid.Column="0"
+                                Margin="0,1,0,0"
+                                IsChecked="{Binding Completed}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
                                         <i:InvokeCommandAction Command="{Binding CompleteCommand}" />
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
-                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                                               />
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
                                     </i:EventTrigger>
 
                                     <i:EventTrigger EventName="Unchecked">
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
-                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                                               />
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
 
@@ -341,25 +330,25 @@
 
                             </CheckBox>
 
-                            <ToggleButton Margin="6,0,3,0"
-                                          Template="{StaticResource radiusButtonTemplate}"
-                                          IsChecked="{Binding Started}"
-                                          IsEnabled="{Binding CanStart}"
-                                          Width="60"
-                                          Grid.Column="1"
-                                          >
+                            <ToggleButton
+                                Grid.Column="1"
+                                Width="60"
+                                Margin="6,0,3,0"
+                                IsChecked="{Binding Started}"
+                                IsEnabled="{Binding CanStart}"
+                                Template="{StaticResource radiusButtonTemplate}">
 
                                 <ToggleButton.Style>
-                                    <Style TargetType="ToggleButton" >
+                                    <Style TargetType="ToggleButton">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Completed}" Value="True">
                                                 <Setter Property="Margin" Value="10" />
-                                                <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                                <Setter Property="BorderBrush" Value="WhiteSmoke" />
                                             </DataTrigger>
 
                                             <DataTrigger Binding="{Binding CanStart}" Value="False">
                                                 <Setter Property="Margin" Value="10" />
-                                                <Setter Property="BorderBrush" Value="WhiteSmoke"/>
+                                                <Setter Property="BorderBrush" Value="WhiteSmoke" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -367,135 +356,108 @@
 
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">
-                                        <i:InvokeCommandAction
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                            />
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
 
                                     </i:EventTrigger>
 
                                     <i:EventTrigger EventName="Unchecked">
-                                        <i:InvokeCommandAction
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.DatabaseHelper.UpdateCommand}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                            />
+                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
                                     </i:EventTrigger>
 
                                 </i:Interaction.Triggers>
 
                                 <ContentControl>
-                                    <TextBlock Padding="4,0"
-                                               Text="{Binding WorkingStatus}"
-                                               />
+                                    <TextBlock Padding="4,0" Text="{Binding WorkingStatus}" />
 
                                 </ContentControl>
                             </ToggleButton>
 
-                            <StackPanel Orientation="Horizontal"
-                                        Grid.Column="4"
-                                        >
-                                <TextBlock Text="{Binding CreationDateShortString}"
-                                           Margin="5,0"
-                                           />
+                            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                <TextBlock Margin="5,0" Text="{Binding CreationDateShortString}" />
 
-                                <TextBlock Text="-"/>
+                                <TextBlock Text="-" />
 
-                                <TextBlock Text="{Binding CompletionDateShortString}"
-                                           Margin="5,0"
-                                           />
+                                <TextBlock Margin="5,0" Text="{Binding CompletionDateShortString}" />
 
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal"
-                                        Grid.Column="3"
-                                        Margin="5,0"
-                                        >
-                                
-                                <TextBlock Text="["/>
+                            <StackPanel
+                                Grid.Column="3"
+                                Margin="5,0"
+                                Orientation="Horizontal">
 
-                                <TextBox Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
-                                         IsReadOnly="True"
-                                         Margin="2,0,1,0"
-                                         Width="25"
-                                         TextAlignment="Center"
-                                         >
+                                <TextBlock Text="[" />
+
+                                <TextBox
+                                    Width="25"
+                                    Margin="2,0,1,0"
+                                    IsReadOnly="True"
+                                    Text="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
+                                    TextAlignment="Center">
 
                                     <i:Interaction.Behaviors>
-                                        <m:TextBoxROChangeBehavior/>
+                                        <m:TextBoxROChangeBehavior />
                                     </i:Interaction.Behaviors>
 
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="LostKeyboardFocus">
-                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
-                                                                   ,Path=DataContext.DatabaseHelper.UpdateCommand }"
-                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                                                   />
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
 
                                 </TextBox>
 
-                                <TextBlock Text="min"
-                                           Margin="0,0,3,0"
-                                           />
+                                <TextBlock Margin="0,0,3,0" Text="min" />
 
-                                <TextBlock Text="]"/>
+                                <TextBlock Text="]" />
 
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal"
-                                        Grid.Column="2"
-                                        >
+                            <StackPanel Grid.Column="2" Orientation="Horizontal">
 
-                                <TextBox x:Name="titleTextBox"
-                                           Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
-                                           IsReadOnly="True"
-                                           Margin="3,0"
-                                           BorderBrush="Black"
-                                           Background="WhiteSmoke"
-                                           >
+                                <TextBox
+                                    x:Name="titleTextBox"
+                                    Margin="3,0"
+                                    Background="WhiteSmoke"
+                                    BorderBrush="Black"
+                                    IsReadOnly="True"
+                                    Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}">
 
                                     <i:Interaction.Behaviors>
-                                        <m:TextBoxROChangeBehavior/>
+                                        <m:TextBoxROChangeBehavior />
                                     </i:Interaction.Behaviors>
 
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="LostKeyboardFocus">
-                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
-                                                                   ,Path=DataContext.DatabaseHelper.UpdateCommand }"
-                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                                                   />
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </TextBox>
 
-                                <!-- ただの区切り線 -->
-                                <Border Width="1"
-                                        Background="Silver"
-                                        Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}"
-                                        />
+                                <!--  ただの区切り線  -->
+                                <Border
+                                    Width="1"
+                                    Background="Silver"
+                                    Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}" />
 
 
-                                <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
-                                         Grid.Column="3"
-                                         IsReadOnly="True"
-                                         Margin="3,0"
-                                         Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}"
-                                         TextWrapping="NoWrap"
-                                         MinWidth="30"
-                                         Background="WhiteSmoke"
-                                         >
+                                <TextBox
+                                    Grid.Column="3"
+                                    MinWidth="30"
+                                    Margin="3,0"
+                                    Background="WhiteSmoke"
+                                    IsReadOnly="True"
+                                    Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                    TextWrapping="NoWrap"
+                                    Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}">
 
 
                                     <i:Interaction.Behaviors>
-                                        <m:TextBoxROChangeBehavior/>
+                                        <m:TextBoxROChangeBehavior />
                                     </i:Interaction.Behaviors>
 
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="LostKeyboardFocus">
-                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
-                                                                   ,Path=DataContext.DatabaseHelper.UpdateCommand }"
-                                                                   CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                                                   />
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
 
@@ -503,48 +465,45 @@
 
                             </StackPanel>
 
-                        <Border x:Name="TextContentBoarder"
-                            CornerRadius="3"
-                            HorizontalAlignment="Left"
-                            Background="WhiteSmoke"
-                            Margin="2,1"
-                            MinWidth="30"
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            >
-                            
-                            <TextBox Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
-                                     Grid.Column="2"
-                                     Grid.Row="1"
-                                     Margin="4,0"
-                                     HorizontalAlignment="Left"
-                                     Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}"
-                                     MinWidth="{Binding ElementName=TextContentBoarder, Path=MinWidth}"
-                                     IsReadOnly="True"
-                                     TextWrapping="Wrap"
-                                     AcceptsReturn="True"
-                                     Background="WhiteSmoke"
-                                     >
+                            <Border
+                                x:Name="TextContentBoarder"
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                MinWidth="30"
+                                Margin="2,1"
+                                HorizontalAlignment="Left"
+                                Background="WhiteSmoke"
+                                CornerRadius="3">
 
-                                <i:Interaction.Behaviors>
-                                    <m:TextBoxROChangeBehavior/>
-                                </i:Interaction.Behaviors>
+                                <TextBox
+                                    Grid.Row="1"
+                                    Grid.Column="2"
+                                    MinWidth="{Binding ElementName=TextContentBoarder, Path=MinWidth}"
+                                    Margin="4,0"
+                                    HorizontalAlignment="Left"
+                                    AcceptsReturn="True"
+                                    Background="WhiteSmoke"
+                                    IsReadOnly="True"
+                                    Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
+                                    TextWrapping="Wrap"
+                                    Visibility="{Binding Path=DataContext.TextContentVisiblity, RelativeSource={RelativeSource AncestorType=Window}}">
 
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="LostKeyboardFocus">
-                                        <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}
-                                                               ,Path=DataContext.DatabaseHelper.UpdateCommand }"
-                                                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
-                                                               />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                                    <i:Interaction.Behaviors>
+                                        <m:TextBoxROChangeBehavior />
+                                    </i:Interaction.Behaviors>
 
-                            </TextBox>
-                        </Border>
-                    </Grid>
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="LostKeyboardFocus">
+                                            <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+
+                                </TextBox>
+                            </Border>
+                        </Grid>
 
                     </DockPanel>
-                    
+
                 </DataTemplate>
             </ListView.ItemTemplate>
 
@@ -552,12 +511,12 @@
 
         <TabControl Grid.Row="4">
             <TabControl.Resources>
-                <Style x:Key="tabItemTextBoxStyle"
-                       TargetType="TextBox" 
-                       BasedOn="{StaticResource {x:Type TextBox}}"
-                       >
-                    <Setter Property="BorderBrush" Value="DarkGray"/>
-                    <Setter Property="BorderThickness" Value="0.5"/>
+                <Style
+                    x:Key="tabItemTextBoxStyle"
+                    BasedOn="{StaticResource {x:Type TextBox}}"
+                    TargetType="TextBox">
+                    <Setter Property="BorderBrush" Value="DarkGray" />
+                    <Setter Property="BorderThickness" Value="0.5" />
                 </Style>
             </TabControl.Resources>
 
@@ -566,61 +525,57 @@
 
                 <DockPanel>
 
-                    <Grid DockPanel.Dock="Top" 
-                          Margin="0,3"
-                          >
+                    <Grid Margin="0,3" DockPanel.Dock="Top">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="7*" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="Priority : "
-                                   HorizontalAlignment="Right"
-                                   Grid.Column="0" 
-                                   />
+                        <TextBlock
+                            Grid.Column="0"
+                            HorizontalAlignment="Right"
+                            Text="Priority : " />
 
-                        <TextBox Grid.Column="1"
-                                 Text="{Binding EnteringTodo.Priority}"
-                                 x:Name="PriorityInputTextBox"
-                                 Style="{StaticResource tabItemTextBoxStyle}"
-                                 />
+                        <TextBox
+                            x:Name="PriorityInputTextBox"
+                            Grid.Column="1"
+                            Style="{StaticResource tabItemTextBoxStyle}"
+                            Text="{Binding EnteringTodo.Priority}" />
 
-                        <TextBlock Text="Duration : "
-                                 HorizontalAlignment="Right"
-                                 Grid.Column="2"
-                                 />
+                        <TextBlock
+                            Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            Text="Duration : " />
 
-                        <TextBox Grid.Column="3" 
-                                 Text="{Binding EnteringTodo.Duration}"
-                                 Style="{StaticResource tabItemTextBoxStyle}"
-                                 />
+                        <TextBox
+                            Grid.Column="3"
+                            Style="{StaticResource tabItemTextBoxStyle}"
+                            Text="{Binding EnteringTodo.Duration}" />
 
-                        <TextBlock Text="Title : "
-                                 HorizontalAlignment="Right"
-                                 Grid.Column="4"
-                                 />
+                        <TextBlock
+                            Grid.Column="4"
+                            HorizontalAlignment="Right"
+                            Text="Title : " />
 
-                        <TextBox HorizontalAlignment="Stretch"
-                                 Text="{Binding EnteringTodo.Title, UpdateSourceTrigger=PropertyChanged}"
-                                 Grid.Column="5"
-                                 Style="{StaticResource tabItemTextBoxStyle}"
-                                 />
+                        <TextBox
+                            Grid.Column="5"
+                            HorizontalAlignment="Stretch"
+                            Style="{StaticResource tabItemTextBoxStyle}"
+                            Text="{Binding EnteringTodo.Title, UpdateSourceTrigger=PropertyChanged}" />
 
                     </Grid>
 
-                    <TextBox HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             DockPanel.Dock="Bottom"
-                             AcceptsReturn="True"
-                             Text="{Binding EnteringTodo.TextContent, UpdateSourceTrigger=PropertyChanged}"
-                             Style="{StaticResource tabItemTextBoxStyle}"
-                             >
-                        
-                    </TextBox>
+                    <TextBox
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        AcceptsReturn="True"
+                        DockPanel.Dock="Bottom"
+                        Style="{StaticResource tabItemTextBoxStyle}"
+                        Text="{Binding EnteringTodo.TextContent, UpdateSourceTrigger=PropertyChanged}" />
 
                 </DockPanel>
 
@@ -631,16 +586,15 @@
         <StatusBar Grid.Row="6">
 
             <StatusBarItem Grid.Column="0">
-                    <TextBlock Text="{Binding DatabaseHelper.Message}"
-                               />
+                <TextBlock Text="{Binding DatabaseHelper.Message}" />
 
             </StatusBarItem>
 
             <StatusBarItem HorizontalAlignment="Right">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Total "/>
-                    <TextBlock Text="{Binding DatabaseHelper.TodoCount}"/>
-                    <TextBlock Text=" todo."/>
+                    <TextBlock Text="Total " />
+                    <TextBlock Text="{Binding DatabaseHelper.TodoCount}" />
+                    <TextBlock Text=" todo." />
 
                 </StackPanel>
             </StatusBarItem>

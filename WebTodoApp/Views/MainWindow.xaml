@@ -104,6 +104,18 @@
             <MenuItem Header="接続">
                 <MenuItem Command="{Binding DatabaseHelper.TryFirstConnectCommand}" Header="再接続" />
 
+                <MenuItem Command="{Binding ChangeDatabaseServerCommand}" Header="RDSに接続">
+                    <MenuItem.CommandParameter>
+                        <m:RDSConnectionStrings />
+                    </MenuItem.CommandParameter>
+                </MenuItem>
+
+                <MenuItem Command="{Binding ChangeDatabaseServerCommand}" Header="EC2に接続">
+                    <MenuItem.CommandParameter>
+                        <m:EC2ConnectionStrings />
+                    </MenuItem.CommandParameter>
+                </MenuItem>
+
             </MenuItem>
         </Menu>
 

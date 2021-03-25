@@ -31,16 +31,6 @@ namespace WebTodoApp.Models
 
         public DBHelper(string tableName) {
 
-            IDBConnectionStrings dbConnectionStrings = new RDSConnectionStrings();
-
-            connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
-                Host = dbConnectionStrings.HostName,
-                Username = dbConnectionStrings.UserName,
-                Database = "postgres",
-                Password = dbConnectionStrings.PassWord,
-                Port =dbConnectionStrings.PortNumber 
-            };
-
             TableName = tableName;
             //createTable();
 
@@ -66,7 +56,7 @@ namespace WebTodoApp.Models
 
             timer.Start();
 
-            TryFirstConnectCommand.Execute();
+            changeDatabase(new RDSConnectionStrings());
         }
 
         public void insertTodo(Todo todo) {
@@ -307,6 +297,18 @@ namespace WebTodoApp.Models
             return todo;
         }
 
+        public void changeDatabase(IDBConnectionStrings destDatabaseInfo) {
+            connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
+                Host = destDatabaseInfo.HostName,
+                Username = destDatabaseInfo.UserName,
+                Database = "postgres",
+                Password = destDatabaseInfo.PassWord,
+                Port =destDatabaseInfo.PortNumber
+            };
+
+            TryFirstConnectCommand.Execute();
+        }
+
         public DelegateCommand TryFirstConnectCommand {
             get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
                 try {
@@ -391,7 +393,6 @@ namespace WebTodoApp.Models
         }
         private DelegateCommand<Todo> resetTodoWorkingStatusCommand;
         #endregion
-
 
         /// <summary>
         /// データベースから全てのTodoを取り出してテキストファイルに出力します。

@@ -60,12 +60,22 @@ namespace WebTodoApp.Models
         }
 
         public void insertTodo(Todo todo) {
-            var maxIDRow = select(
-                $"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};",
+            var count = select(
+                $"SELECT COUNT (*) FROM {TableName};",
                 new List<NpgsqlParameter>()
                 )[0];
 
-            var maxID = (int)maxIDRow["max"] + 1;
+            int maxID = 0;
+
+            if((long)count["count"] > 0) {
+                var maxIDRow = select(
+                    $"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};",
+                    new List<NpgsqlParameter>()
+                    )[0];
+
+                maxID = (int)maxIDRow["max"] + 1;
+            };
+
 
             var ps = new List<NpgsqlParameter>();
 

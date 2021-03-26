@@ -28,6 +28,7 @@ namespace WebTodoApp.Models
         private Timer timer = new Timer(10000);
 
         private SoundPlayer soundPlayer = new SoundPlayer(@"C:\Windows\Media\Windows Notify Calendar.wav");
+        private string CurrentServiceName { get; set; }
 
         public DBHelper(string tableName) {
 
@@ -316,6 +317,7 @@ namespace WebTodoApp.Models
                 Port =destDatabaseInfo.PortNumber
             };
 
+            CurrentServiceName = destDatabaseInfo.ServiceName;
             TryFirstConnectCommand.Execute();
         }
 
@@ -323,7 +325,7 @@ namespace WebTodoApp.Models
             get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
                 try {
                     loadTodoList();
-                    Message = "データベースへの接続に成功。TodoList をロードしました";
+                    Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
 
                     if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
                         ExportAllCommand.Execute();

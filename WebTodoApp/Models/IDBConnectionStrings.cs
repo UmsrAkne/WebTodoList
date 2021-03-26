@@ -13,5 +13,7 @@ namespace WebTodoApp.Models {
         string HostName { get; }
 
         int PortNumber { get; }
+
+        string ServiceName { get; }
     }
 }

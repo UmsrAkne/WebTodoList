@@ -12,6 +12,8 @@ namespace WebTodoApp.Models {
 
         public int PortNumber { get; private set; }
 
+        public string ServiceName => "EC2";
+
         public EC2ConnectionStrings() {
 
             string basePath =

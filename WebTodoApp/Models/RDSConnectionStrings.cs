@@ -13,6 +13,8 @@ namespace WebTodoApp.Models {
 
         public int PortNumber { get; private set; }
 
+        public string ServiceName => "RDS";
+
         public RDSConnectionStrings() {
 
             string homePath =

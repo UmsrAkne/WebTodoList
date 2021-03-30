@@ -510,7 +510,11 @@
 
         </ListView>
 
-        <TabControl Grid.Row="4">
+        <TabControl
+            Grid.Row="4"
+            Background="{StaticResource darkBackgroundBrush}"
+            BorderThickness="0">
+
             <TabControl.Resources>
                 <Style
                     x:Key="tabItemTextBoxStyle"
@@ -519,10 +523,14 @@
                     <Setter Property="BorderBrush" Value="DarkGray" />
                     <Setter Property="BorderThickness" Value="0.5" />
                 </Style>
+
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
+                </Style>
+
             </TabControl.Resources>
 
-            <TabItem Header="Todo">
-
+            <TabItem Background="{StaticResource lightBackgroundBrush}" Header="Todo">
 
                 <DockPanel>
 
@@ -584,7 +592,13 @@
 
         </TabControl>
 
-        <StatusBar Grid.Row="6">
+        <StatusBar Grid.Row="6" Background="{StaticResource darkBackgroundBrush}">
+            <StatusBar.Resources>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
+                </Style>
+
+            </StatusBar.Resources>
 
             <StatusBarItem Grid.Column="0">
                 <TextBlock Text="{Binding DatabaseHelper.Message}" />

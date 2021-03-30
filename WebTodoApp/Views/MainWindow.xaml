@@ -510,12 +510,14 @@
 
         </ListView>
 
-        <TabControl
-            Grid.Row="4"
-            Background="{StaticResource darkBackgroundBrush}"
-            BorderThickness="0">
 
-            <TabControl.Resources>
+
+
+
+        <DockPanel Grid.Row="4" Background="{StaticResource darkBackgroundBrush}">
+
+            <DockPanel.Resources>
+
                 <Style
                     x:Key="tabItemTextBoxStyle"
                     BasedOn="{StaticResource {x:Type TextBox}}"
@@ -527,70 +529,62 @@
                 <Style TargetType="TextBlock">
                     <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
                 </Style>
+            </DockPanel.Resources>
 
-            </TabControl.Resources>
 
-            <TabItem Background="{StaticResource lightBackgroundBrush}" Header="Todo">
+            <Grid Margin="0,3" DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="7*" />
+                </Grid.ColumnDefinitions>
 
-                <DockPanel>
+                <TextBlock
+                    Grid.Column="0"
+                    HorizontalAlignment="Right"
+                    Text="Priority : " />
 
-                    <Grid Margin="0,3" DockPanel.Dock="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition />
-                            <ColumnDefinition Width="7*" />
-                        </Grid.ColumnDefinitions>
+                <TextBox
+                    x:Name="PriorityInputTextBox"
+                    Grid.Column="1"
+                    Style="{StaticResource tabItemTextBoxStyle}"
+                    Text="{Binding EnteringTodo.Priority}" />
 
-                        <TextBlock
-                            Grid.Column="0"
-                            HorizontalAlignment="Right"
-                            Text="Priority : " />
+                <TextBlock
+                    Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    Text="Duration : " />
 
-                        <TextBox
-                            x:Name="PriorityInputTextBox"
-                            Grid.Column="1"
-                            Style="{StaticResource tabItemTextBoxStyle}"
-                            Text="{Binding EnteringTodo.Priority}" />
+                <TextBox
+                    Grid.Column="3"
+                    Style="{StaticResource tabItemTextBoxStyle}"
+                    Text="{Binding EnteringTodo.Duration}" />
 
-                        <TextBlock
-                            Grid.Column="2"
-                            HorizontalAlignment="Right"
-                            Text="Duration : " />
+                <TextBlock
+                    Grid.Column="4"
+                    HorizontalAlignment="Right"
+                    Text="Title : " />
 
-                        <TextBox
-                            Grid.Column="3"
-                            Style="{StaticResource tabItemTextBoxStyle}"
-                            Text="{Binding EnteringTodo.Duration}" />
+                <TextBox
+                    Grid.Column="5"
+                    HorizontalAlignment="Stretch"
+                    Style="{StaticResource tabItemTextBoxStyle}"
+                    Text="{Binding EnteringTodo.Title, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <TextBlock
-                            Grid.Column="4"
-                            HorizontalAlignment="Right"
-                            Text="Title : " />
+            </Grid>
 
-                        <TextBox
-                            Grid.Column="5"
-                            HorizontalAlignment="Stretch"
-                            Style="{StaticResource tabItemTextBoxStyle}"
-                            Text="{Binding EnteringTodo.Title, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBox
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                AcceptsReturn="True"
+                DockPanel.Dock="Bottom"
+                Style="{StaticResource tabItemTextBoxStyle}"
+                Text="{Binding EnteringTodo.TextContent, UpdateSourceTrigger=PropertyChanged}" />
 
-                    </Grid>
-
-                    <TextBox
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        AcceptsReturn="True"
-                        DockPanel.Dock="Bottom"
-                        Style="{StaticResource tabItemTextBoxStyle}"
-                        Text="{Binding EnteringTodo.TextContent, UpdateSourceTrigger=PropertyChanged}" />
-
-                </DockPanel>
-
-            </TabItem>
-
-        </TabControl>
+        </DockPanel>
 
         <StatusBar Grid.Row="6" Background="{StaticResource darkBackgroundBrush}">
             <StatusBar.Resources>

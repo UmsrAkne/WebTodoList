@@ -195,6 +195,7 @@
             x:Name="todoListView"
             Grid.Row="2"
             Background="{StaticResource ResourceKey=darkBackgroundBrush}"
+            BorderThickness="0"
             ItemsSource="{Binding DatabaseHelper.TodoList}">
 
             <ListView.Resources>

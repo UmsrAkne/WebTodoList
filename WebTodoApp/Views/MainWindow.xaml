@@ -268,7 +268,6 @@
 
                     </Style.Triggers>
 
-
                 </Style>
             </ListView.ItemContainerStyle>
 
@@ -473,7 +472,7 @@
                                 Grid.Row="1"
                                 Grid.Column="2"
                                 MinWidth="30"
-                                Margin="2,1"
+                                Margin="0,1"
                                 HorizontalAlignment="Left"
                                 Background="{StaticResource mediumLightBackgroundBrush}"
                                 CornerRadius="3">
@@ -482,7 +481,7 @@
                                     Grid.Row="1"
                                     Grid.Column="2"
                                     MinWidth="{Binding ElementName=TextContentBoarder, Path=MinWidth}"
-                                    Margin="4,0"
+                                    Margin="3,0"
                                     HorizontalAlignment="Left"
                                     AcceptsReturn="True"
                                     IsReadOnly="True"
@@ -510,10 +509,6 @@
             </ListView.ItemTemplate>
 
         </ListView>
-
-
-
-
 
         <DockPanel Grid.Row="4" Background="{StaticResource darkBackgroundBrush}">
 

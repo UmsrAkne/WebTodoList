@@ -23,8 +23,13 @@
                 <ResourceDictionary Source="../res/Dictionary1.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <SolidColorBrush x:Key="darkBackgroundBrush" Color="#444444" />
+            <SolidColorBrush x:Key="mediumLightBackgroundBrush" Color="#777777" />
+            <SolidColorBrush x:Key="lightBackgroundBrush" Color="#aaaaaa" />
+            <SolidColorBrush x:Key="lightForegroundBrush" Color="WhiteSmoke" />
+
             <Style TargetType="TextBox">
-                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Background" Value="{StaticResource ResourceKey=lightBackgroundBrush}" />
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
@@ -32,7 +37,7 @@
             <ControlTemplate x:Key="radiusButtonTemplate" TargetType="ToggleButton">
                 <Border
                     x:Name="border"
-                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderBrush="{StaticResource lightBackgroundBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     CornerRadius="4">
                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -189,9 +194,11 @@
         <ListView
             x:Name="todoListView"
             Grid.Row="2"
+            Background="{StaticResource ResourceKey=darkBackgroundBrush}"
             ItemsSource="{Binding DatabaseHelper.TodoList}">
 
             <ListView.Resources>
+
                 <ContextMenu x:Key="listViewContextMenu">
 
                     <MenuItem Header="初期化">
@@ -251,11 +258,11 @@
                     <Style.Triggers>
 
                         <DataTrigger Binding="{Binding Completed}" Value="True">
-                            <Setter Property="Background" Value="White" />
+                            <Setter Property="Background" Value="{StaticResource darkBackgroundBrush}" />
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding Completed}" Value="False">
-                            <Setter Property="Background" Value="AliceBlue" />
+                            <Setter Property="Background" Value="{StaticResource mediumLightBackgroundBrush}" />
                         </DataTrigger>
 
                     </Style.Triggers>
@@ -267,6 +274,12 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
+                        <DockPanel.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
+                            </Style>
+                        </DockPanel.Resources>
+
                         <DockPanel.InputBindings>
                             <KeyBinding
                                 Key="Return"
@@ -282,11 +295,6 @@
                             Text="{Binding Priority}"
                             TextAlignment="Center" />
 
-                        <Border
-                            Height="2"
-                            Background="AliceBlue"
-                            DockPanel.Dock="Top" />
-
                         <Grid Margin="0,2" DockPanel.Dock="Top">
 
                             <Grid.ColumnDefinitions>
@@ -301,7 +309,6 @@
                                 <RowDefinition />
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-
 
                             <CheckBox
                                 Grid.Column="0"
@@ -327,7 +334,6 @@
                                         </Style.Triggers>
                                     </Style>
                                 </CheckBox.Style>
-
                             </CheckBox>
 
                             <ToggleButton
@@ -343,12 +349,10 @@
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Completed}" Value="True">
                                                 <Setter Property="Margin" Value="10" />
-                                                <Setter Property="BorderBrush" Value="WhiteSmoke" />
                                             </DataTrigger>
 
                                             <DataTrigger Binding="{Binding CanStart}" Value="False">
                                                 <Setter Property="Margin" Value="10" />
-                                                <Setter Property="BorderBrush" Value="WhiteSmoke" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -417,7 +421,6 @@
                                 <TextBox
                                     x:Name="titleTextBox"
                                     Margin="3,0"
-                                    Background="WhiteSmoke"
                                     BorderBrush="Black"
                                     IsReadOnly="True"
                                     Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}">
@@ -444,7 +447,6 @@
                                     Grid.Column="3"
                                     MinWidth="30"
                                     Margin="3,0"
-                                    Background="WhiteSmoke"
                                     IsReadOnly="True"
                                     Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
                                     TextWrapping="NoWrap"
@@ -472,7 +474,7 @@
                                 MinWidth="30"
                                 Margin="2,1"
                                 HorizontalAlignment="Left"
-                                Background="WhiteSmoke"
+                                Background="{StaticResource mediumLightBackgroundBrush}"
                                 CornerRadius="3">
 
                                 <TextBox
@@ -482,7 +484,6 @@
                                     Margin="4,0"
                                     HorizontalAlignment="Left"
                                     AcceptsReturn="True"
-                                    Background="WhiteSmoke"
                                     IsReadOnly="True"
                                     Text="{Binding TextContent, UpdateSourceTrigger=PropertyChanged}"
                                     TextWrapping="Wrap"

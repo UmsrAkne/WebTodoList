@@ -124,63 +124,82 @@
             </MenuItem>
         </Menu>
 
-        <ToolBar Grid.Row="1">
-            <ToolBar.Resources>
+        <Grid Grid.Row="1" Background="{StaticResource darkBackgroundBrush}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.Resources>
+
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
+                </Style>
                 <Style x:Key="opacityTextBlockStyle" TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="Black" />
+
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton}, Path=IsChecked}" Value="False">
                             <Setter Property="Opacity" Value="0.4" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </ToolBar.Resources>
+            </Grid.Resources>
 
-            <ToggleButton
-                Margin="4,0"
-                BorderBrush="Azure"
-                Command="{Binding DatabaseHelper.LoadCommand}"
-                IsChecked="{Binding DatabaseHelper.SqlCommandOption.ShowOnlyIncompleteTodo}">
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
 
-                <TextBlock Style="{StaticResource opacityTextBlockStyle}" Text="未完了のみ表示" />
+                <ToggleButton
+                    BorderBrush="Azure"
+                    Command="{Binding DatabaseHelper.LoadCommand}"
+                    IsChecked="{Binding DatabaseHelper.SqlCommandOption.ShowOnlyIncompleteTodo}">
 
-            </ToggleButton>
+                    <TextBlock Style="{StaticResource opacityTextBlockStyle}" Text="未完了のみ表示" />
 
-            <ToggleButton
-                Margin="4,0"
-                BorderBrush="LightBlue"
-                BorderThickness="1,0,1,0"
-                Command="{Binding ToggleTextContentVisibilityCommand}"
-                IsChecked="True">
+                </ToggleButton>
 
-                <TextBlock Style="{StaticResource opacityTextBlockStyle}" Text="一行表示" />
+                <ToggleButton
+                    Margin="4,0"
+                    BorderBrush="LightBlue"
+                    BorderThickness="1,0,1,0"
+                    Command="{Binding ToggleTextContentVisibilityCommand}"
+                    IsChecked="True">
 
-            </ToggleButton>
+                    <TextBlock Style="{StaticResource opacityTextBlockStyle}" Text="一行表示" />
 
-            <TextBlock Margin="6,3" Text="日時指定 : " />
+                </ToggleButton>
 
-            <TextBox
-                MinWidth="30"
-                Text="{Binding DatabaseHelper.SqlCommandOption.DisplayDateRangeString, UpdateSourceTrigger=PropertyChanged}"
-                TextAlignment="Center">
-                <i:Interaction.Behaviors>
-                    <m:TextInputLimitBehavior />
-                </i:Interaction.Behaviors>
+                <TextBlock Margin="6,3" Text="日時指定 : " />
 
-            </TextBox>
+                <TextBox
+                    MinWidth="30"
+                    Background="{StaticResource lightBackgroundBrush}"
+                    BorderThickness="0"
+                    Text="{Binding DatabaseHelper.SqlCommandOption.DisplayDateRangeString, UpdateSourceTrigger=PropertyChanged}"
+                    TextAlignment="Center">
+                    <i:Interaction.Behaviors>
+                        <m:TextInputLimitBehavior />
+                    </i:Interaction.Behaviors>
+
+                </TextBox>
 
 
-            <TextBlock Margin="6,3" Text="日前まで表示" />
+                <TextBlock Margin="6,3" Text="日前まで表示" />
 
-            <Border
-                Width="1"
-                Margin="3,0"
-                Background="Black" />
+                <Border
+                    Width="1"
+                    Margin="3,1"
+                    Background="Black" />
 
-            <TextBlock Margin="6,3" Text="テキスト検索 : " />
+                <TextBlock Margin="6,3" Text="テキスト検索 : " />
+
+            </StackPanel>
 
             <TextBox
                 x:Name="searchTextBox"
-                Width="200"
+                Grid.Column="1"
+                Background="{StaticResource lightBackgroundBrush}"
+                BorderThickness="0"
                 Text="{Binding DatabaseHelper.SqlCommandOption.SearchString, UpdateSourceTrigger=PropertyChanged}">
                 <TextBox.InputBindings>
                     <KeyBinding Key="Enter" Command="{Binding DatabaseHelper.LoadCommand}" />
@@ -189,7 +208,7 @@
 
 
 
-        </ToolBar>
+        </Grid>
 
         <ListView
             x:Name="todoListView"

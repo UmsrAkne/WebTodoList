@@ -98,24 +98,43 @@
         </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
 
-        <Menu Grid.Row="0">
-            <MenuItem Header="ファイル">
-                <MenuItem Command="{Binding DatabaseHelper.ExportAllCommand}" Header="全てのTodoを出力" />
+        <Menu
+            Grid.Row="0"
+            Background="{StaticResource darkBackgroundBrush}"
+            Foreground="{StaticResource lightForegroundBrush}">
 
-                <MenuItem Command="{Binding ExitCommand}" Header="終了" />
+            <MenuItem Header="ファイル">
+                <MenuItem
+                    Command="{Binding DatabaseHelper.ExportAllCommand}"
+                    Foreground="Black"
+                    Header="全てのTodoを出力" />
+
+                <MenuItem
+                    Command="{Binding ExitCommand}"
+                    Foreground="Black"
+                    Header="終了" />
 
             </MenuItem>
 
             <MenuItem Header="接続">
-                <MenuItem Command="{Binding DatabaseHelper.TryFirstConnectCommand}" Header="再接続" />
+                <MenuItem
+                    Command="{Binding DatabaseHelper.TryFirstConnectCommand}"
+                    Foreground="Black"
+                    Header="再接続" />
 
-                <MenuItem Command="{Binding ChangeDatabaseServerCommand}" Header="RDSに接続">
+                <MenuItem
+                    Command="{Binding ChangeDatabaseServerCommand}"
+                    Foreground="Black"
+                    Header="RDSに接続">
                     <MenuItem.CommandParameter>
                         <m:RDSConnectionStrings />
                     </MenuItem.CommandParameter>
                 </MenuItem>
 
-                <MenuItem Command="{Binding ChangeDatabaseServerCommand}" Header="EC2に接続">
+                <MenuItem
+                    Command="{Binding ChangeDatabaseServerCommand}"
+                    Foreground="Black"
+                    Header="EC2に接続">
                     <MenuItem.CommandParameter>
                         <m:EC2ConnectionStrings />
                     </MenuItem.CommandParameter>
@@ -205,8 +224,6 @@
                     <KeyBinding Key="Enter" Command="{Binding DatabaseHelper.LoadCommand}" />
                 </TextBox.InputBindings>
             </TextBox>
-
-
 
         </Grid>
 

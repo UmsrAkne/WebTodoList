@@ -36,6 +36,10 @@
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
 
+            <Style TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
+            </Style>
+
             <ControlTemplate x:Key="radiusButtonTemplate" TargetType="ToggleButton">
                 <Border
                     x:Name="border"
@@ -139,9 +143,6 @@
 
             <Grid.Resources>
 
-                <Style TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
-                </Style>
                 <Style x:Key="opacityTextBlockStyle" TargetType="TextBlock">
                     <Setter Property="Foreground" Value="Black" />
 
@@ -545,9 +546,6 @@
                     <Setter Property="BorderThickness" Value="0.5" />
                 </Style>
 
-                <Style TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
-                </Style>
             </DockPanel.Resources>
 
 
@@ -606,12 +604,6 @@
         </DockPanel>
 
         <StatusBar Grid.Row="6" Background="{StaticResource darkBackgroundBrush}">
-            <StatusBar.Resources>
-                <Style TargetType="TextBlock">
-                    <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
-                </Style>
-
-            </StatusBar.Resources>
 
             <StatusBarItem Grid.Column="0">
                 <TextBlock Text="{Binding DatabaseHelper.Message}" />

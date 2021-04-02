@@ -25,6 +25,7 @@
                 <ResourceDictionary Source="../res/Dictionary1.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
+            <SolidColorBrush x:Key="darkBackgroundBrush_b" Color="#333333" />
             <SolidColorBrush x:Key="darkBackgroundBrush" Color="#444444" />
             <SolidColorBrush x:Key="mediumLightBackgroundBrush" Color="#777777" />
             <SolidColorBrush x:Key="lightBackgroundBrush" Color="#aaaaaa" />
@@ -279,15 +280,14 @@
             <ListView.ItemContainerStyle>
                 <Style BasedOn="{StaticResource ListViewItemContainerStyle}" TargetType="ListViewItem">
                     <Setter Property="ContextMenu" Value="{StaticResource listViewContextMenu}" />
-
                     <Style.Triggers>
 
                         <DataTrigger Binding="{Binding Completed}" Value="True">
-                            <Setter Property="Background" Value="{StaticResource darkBackgroundBrush}" />
+                            <Setter Property="Background" Value="{StaticResource darkBackgroundBrush_b}" />
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding Completed}" Value="False">
-                            <Setter Property="Background" Value="{StaticResource mediumLightBackgroundBrush}" />
+                            <Setter Property="Background" Value="{StaticResource darkBackgroundBrush}" />
                         </DataTrigger>
 
                     </Style.Triggers>

@@ -70,6 +70,7 @@
     </Compile>
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\DBHelper.cs" />
+    <Compile Include="Models\DBServerName.cs" />
     <Compile Include="Models\EC2ConnectionStrings.cs" />
     <Compile Include="Models\IDBConnectionStrings.cs" />
     <Compile Include="Models\RDSConnectionStrings.cs" />

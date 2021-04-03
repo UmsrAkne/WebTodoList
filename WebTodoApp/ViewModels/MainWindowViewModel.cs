@@ -38,7 +38,8 @@ namespace WebTodoApp.ViewModels
 
         public MainWindowViewModel()
         {
-            DatabaseHelper = new DBHelper("todo_table");
+            var dbserverName = (DBServerName)Enum.ToObject(typeof(DBServerName), Properties.Settings.Default.dbServerNumber);
+            DatabaseHelper = new DBHelper("todo_table",dbserverName);
         }
 
         private DelegateCommand insertTodoCommand;
@@ -96,13 +97,15 @@ namespace WebTodoApp.ViewModels
         private DelegateCommand<UIElement> focusCommand;
         #endregion
 
-        public DelegateCommand<IDBConnectionStrings> ChangeDatabaseServerCommand {
+        public DelegateCommand<object> ChangeDatabaseServerCommand {
             #region
-            get => changeDatabaseServerCommand ?? (changeDatabaseServerCommand = new DelegateCommand<IDBConnectionStrings>((IDBConnectionStrings dbinfo) => {
-                DatabaseHelper.changeDatabase(dbinfo);
+            get => changeDatabaseServerCommand ?? (changeDatabaseServerCommand = new DelegateCommand<object>((object dbinfo) => {
+                DatabaseHelper.changeDatabase((DBServerName)dbinfo);
+                Properties.Settings.Default.dbServerNumber = (int)dbinfo;
+                Properties.Settings.Default.Save();
             }));
         }
-        private DelegateCommand<IDBConnectionStrings> changeDatabaseServerCommand;
+        private DelegateCommand<object> changeDatabaseServerCommand;
         #endregion
 
 

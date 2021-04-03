@@ -30,8 +30,7 @@ namespace WebTodoApp.Models
         private SoundPlayer soundPlayer = new SoundPlayer(@"C:\Windows\Media\Windows Notify Calendar.wav");
         private string CurrentServiceName { get; set; }
 
-        public DBHelper(string tableName) {
-
+        private DBHelper(string tableName) {
             TableName = tableName;
             //createTable();
 
@@ -57,7 +56,10 @@ namespace WebTodoApp.Models
 
             timer.Start();
 
-            changeDatabase(new RDSConnectionStrings());
+        }
+
+        public DBHelper(string tableName, DBServerName dbServerName) : this(tableName){
+            changeDatabase(dbServerName);
         }
 
         public void insertTodo(Todo todo) {
@@ -308,7 +310,16 @@ namespace WebTodoApp.Models
             return todo;
         }
 
-        public void changeDatabase(IDBConnectionStrings destDatabaseInfo) {
+        public void changeDatabase(DBServerName dbServerName) {
+            IDBConnectionStrings destDatabaseInfo;
+
+            if (dbServerName == DBServerName.RDS) {
+                destDatabaseInfo = new RDSConnectionStrings();
+            }
+            else {
+                destDatabaseInfo = new EC2ConnectionStrings();
+            }
+
             connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
                 Host = destDatabaseInfo.HostName,
                 Username = destDatabaseInfo.UserName,

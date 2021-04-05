@@ -23,6 +23,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="../res/Dictionary1.xaml" />
+                <ResourceDictionary Source="../res/ContextMenuStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <SolidColorBrush x:Key="darkBackgroundBrush_b" Color="#333333" />

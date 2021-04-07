@@ -20,7 +20,7 @@
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
                     <Border
                         x:Name="Border"
-                        Background="{StaticResource mediumLightBackgroundBrush}"
+                        Background="{StaticResource darkBackgroundBrush}"
                         BorderThickness="1">
                         <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
                     </Border>

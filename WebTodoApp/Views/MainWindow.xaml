@@ -224,7 +224,7 @@
 
             <ListView.Resources>
 
-                <ContextMenu x:Key="listViewContextMenu">
+                <ContextMenu x:Key="listViewContextMenu" Foreground="{StaticResource lightForegroundBrush}">
 
                     <MenuItem Header="初期化">
                         <MenuItem

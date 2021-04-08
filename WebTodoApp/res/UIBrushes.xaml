@@ -5,7 +5,7 @@
 
     <SolidColorBrush x:Key="darkBackgroundBrush_b" Color="#333333" />
     <SolidColorBrush x:Key="darkBackgroundBrush" Color="#444444" />
-    <SolidColorBrush x:Key="mediumLightBackgroundBrush" Color="#777777" />
+    <SolidColorBrush x:Key="mediumLightBackgroundBrush" Color="#505050" />
     <SolidColorBrush x:Key="lightBackgroundBrush" Color="#aaaaaa" />
     <SolidColorBrush x:Key="lightForegroundBrush" Color="WhiteSmoke" />
 </ResourceDictionary>

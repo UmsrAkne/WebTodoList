@@ -22,15 +22,12 @@
 
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+
                 <ResourceDictionary Source="../res/Dictionary1.xaml" />
                 <ResourceDictionary Source="../res/ContextMenuStyle.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../res/UIBrushes.xaml" />
 
-            <SolidColorBrush x:Key="darkBackgroundBrush_b" Color="#333333" />
-            <SolidColorBrush x:Key="darkBackgroundBrush" Color="#444444" />
-            <SolidColorBrush x:Key="mediumLightBackgroundBrush" Color="#777777" />
-            <SolidColorBrush x:Key="lightBackgroundBrush" Color="#aaaaaa" />
-            <SolidColorBrush x:Key="lightForegroundBrush" Color="WhiteSmoke" />
+            </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="TextBox">
                 <Setter Property="Background" Value="{StaticResource ResourceKey=lightBackgroundBrush}" />

@@ -30,7 +30,8 @@
             </ResourceDictionary.MergedDictionaries>
 
             <Style TargetType="TextBox">
-                <Setter Property="Background" Value="{StaticResource ResourceKey=lightBackgroundBrush}" />
+                <Setter Property="Background" Value="{StaticResource ResourceKey=mediumLightBackgroundBrush}" />
+                <Setter Property="Foreground" Value="{StaticResource ResourceKey=lightForegroundBrush}" />
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="BorderThickness" Value="0" />
             </Style>
@@ -333,6 +334,7 @@
                             <CheckBox
                                 Grid.Column="0"
                                 Margin="0,1,0,0"
+                                Background="{StaticResource lightBackgroundBrush}"
                                 IsChecked="{Binding Completed}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Checked">

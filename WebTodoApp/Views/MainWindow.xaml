@@ -117,7 +117,6 @@
             </MenuItem>
 
             <MenuItem Header="接続">
-                <MenuItem Command="{Binding DatabaseHelper.TryFirstConnectCommand}" Header="再接続" />
 
                 <MenuItem
                     Command="{Binding ChangeDatabaseServerCommand}"

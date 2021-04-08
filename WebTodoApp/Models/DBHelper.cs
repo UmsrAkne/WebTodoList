@@ -329,28 +329,27 @@ namespace WebTodoApp.Models
             };
 
             CurrentServiceName = destDatabaseInfo.ServiceName;
-            TryFirstConnectCommand.Execute();
+            tryFirstConnectCommand();
         }
 
-        public DelegateCommand TryFirstConnectCommand {
-            get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
-                try {
-                    loadTodoList();
-                    Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
+        public void tryFirstConnectCommand() {
+            try {
+                loadTodoList();
+                Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
 
-                    if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
-                        ExportAllCommand.Execute();
-                        Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
-                        Properties.Settings.Default.Save();
-                    }
+                if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
+                    ExportAllCommand.Execute();
+                    Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
+                    Properties.Settings.Default.Save();
                 }
-                catch (TimeoutException) {
-                    Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
-                }
-            }));
+            }
+            catch (TimeoutException) {
+                Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
+            }
+            catch (SocketException) {
+                Message = "接続を試行しましたが、接続先のサーバーが存在しません。";
+            }
         }
-        private DelegateCommand tryFirstConnectCommand;
-
 
         public DelegateCommand LoadCommand {
             #region

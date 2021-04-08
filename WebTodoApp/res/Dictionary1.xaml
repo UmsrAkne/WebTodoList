@@ -1,11 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-
-    <SolidColorBrush x:Key="darkBackgroundBrush_b" Color="#333333" />
-    <SolidColorBrush x:Key="darkBackgroundBrush" Color="#444444" />
-    <SolidColorBrush x:Key="mediumLightBackgroundBrush" Color="#777777" />
-    <SolidColorBrush x:Key="lightBackgroundBrush" Color="#aaaaaa" />
-    <SolidColorBrush x:Key="lightForegroundBrush" Color="WhiteSmoke" />
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="UIBrushes.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="ListViewItemContainerStyle" TargetType="ListViewItem">
         <Setter Property="SnapsToDevicePixels" Value="true" />

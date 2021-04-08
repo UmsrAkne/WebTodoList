@@ -3,12 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:WebTodoApp.res">
 
-
-    <SolidColorBrush x:Key="darkBackgroundBrush_b" Color="#333333" />
-    <SolidColorBrush x:Key="darkBackgroundBrush" Color="#444444" />
-    <SolidColorBrush x:Key="mediumLightBackgroundBrush" Color="#777777" />
-    <SolidColorBrush x:Key="lightBackgroundBrush" Color="#aaaaaa" />
-    <SolidColorBrush x:Key="lightForegroundBrush" Color="WhiteSmoke" />
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="UIBrushes.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type ContextMenu}">
         <Setter Property="SnapsToDevicePixels" Value="True" />

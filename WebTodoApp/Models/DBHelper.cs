@@ -13,6 +13,7 @@ using System.Media;
 using Npgsql;
 using Prism.Commands;
 using Prism.Mvvm;
+using System.Net.Sockets;
 
 namespace WebTodoApp.Models
 {
@@ -26,6 +27,8 @@ namespace WebTodoApp.Models
 
         public HashSet<Todo> WorkingTodos { get; set; } = new HashSet<Todo>();
         private Timer timer = new Timer(10000);
+
+        public bool Connected { get; set; } = false;
 
         private SoundPlayer soundPlayer = new SoundPlayer(@"C:\Windows\Media\Windows Notify Calendar.wav");
         private string CurrentServiceName { get; set; }
@@ -328,29 +331,53 @@ namespace WebTodoApp.Models
                 Port =destDatabaseInfo.PortNumber
             };
 
-            CurrentServiceName = destDatabaseInfo.ServiceName;
-            TryFirstConnectCommand.Execute();
+            if (tryConnect()) {
+                CurrentServiceName = destDatabaseInfo.ServiceName;
+                tryFirstConnectCommand();
+            }
+            else {
+                TodoList = new List<Todo>();
+            }
         }
 
-        public DelegateCommand TryFirstConnectCommand {
-            get => tryFirstConnectCommand ?? (tryFirstConnectCommand = new DelegateCommand(() => {
-                try {
-                    loadTodoList();
-                    Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
+        private bool tryConnect() {
+            bool result = false;
+            try {
+                using (var con = DBConnection) {
+                    con.Open();
+                }
+                result = true;
+                Connected = true;
+            }
+            catch (TimeoutException) {
+                Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
+            }
+            catch (SocketException) {
+                Message = "接続を試行しましたが、接続先のサーバーが存在しません。";
+            }
 
-                    if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
-                        ExportAllCommand.Execute();
-                        Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
-                        Properties.Settings.Default.Save();
-                    }
-                }
-                catch (TimeoutException) {
-                    Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
-                }
-            }));
+            return result;
         }
-        private DelegateCommand tryFirstConnectCommand;
 
+        private void tryFirstConnectCommand() {
+            try {
+                loadTodoList();
+                Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
+
+                if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
+                    ExportAllCommand.Execute();
+                    Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
+                    Properties.Settings.Default.Save();
+                }
+
+            }
+            catch (TimeoutException) {
+                Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
+            }
+            catch (SocketException) {
+                Message = "接続を試行しましたが、接続先のサーバーが存在しません。";
+            }
+        }
 
         public DelegateCommand LoadCommand {
             #region
@@ -468,6 +495,9 @@ namespace WebTodoApp.Models
                 }
                 catch (TimeoutException e) {
                     // DBの接続に失敗時のコード。仮に接続に失敗した場合、何もできることはないので０を返すのみとする。
+                    return 0;
+                }
+                catch (SocketException) {
                     return 0;
                 }
             }

@@ -1,9 +1,11 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using WebTodoApp.Models;
+using WebTodoApp.Views;
 
 namespace WebTodoApp.ViewModels
 {
@@ -36,8 +38,11 @@ namespace WebTodoApp.ViewModels
         private Todo enteringTodo = new Todo();
         #endregion
 
-        public MainWindowViewModel()
+        private IDialogService DialogService { get; set; } 
+
+        public MainWindowViewModel(IDialogService dialogService)
         {
+            DialogService = dialogService;
             var dbserverName = (DBServerName)Enum.ToObject(typeof(DBServerName), Properties.Settings.Default.dbServerNumber);
             DatabaseHelper = new DBHelper("todo_table",dbserverName);
         }
@@ -107,6 +112,19 @@ namespace WebTodoApp.ViewModels
         }
         private DelegateCommand<object> changeDatabaseServerCommand;
         #endregion
+
+
+        public DelegateCommand ShowConnectionDialogCommand {
+            #region
+            get => showConnectionDialogCommand ?? (showConnectionDialogCommand = new DelegateCommand(() => {
+                var param = new DialogParameters();
+                DialogService.ShowDialog(nameof(ConnectionDialog), param, (IDialogResult result) => { 
+                });
+            }));
+        }
+        private DelegateCommand showConnectionDialogCommand;
+        #endregion
+
 
 
 

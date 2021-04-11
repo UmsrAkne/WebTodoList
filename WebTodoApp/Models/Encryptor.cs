@@ -47,8 +47,13 @@ namespace WebTodoApp.Models {
                     byte[] buffer = new byte[16];
                     int len = 0;
 
-                    while ((len = cryptoStream.Read(buffer, 0, 16)) > 0 ) {
-                        outStream.Write(buffer, 0, len);
+                    try{
+                        while ((len = cryptoStream.Read(buffer, 0, 16)) > 0 ) {
+                            outStream.Write(buffer, 0, len);
+                        }
+                    }
+                    catch (CryptographicException e) {
+                        throw e;
                     }
 
                 }

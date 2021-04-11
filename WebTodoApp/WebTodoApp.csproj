@@ -80,6 +80,7 @@
     <Compile Include="Models\DBHelper.cs" />
     <Compile Include="Models\DBServerName.cs" />
     <Compile Include="Models\EC2ConnectionStrings.cs" />
+    <Compile Include="Models\Encryptor.cs" />
     <Compile Include="Models\IDBConnectionStrings.cs" />
     <Compile Include="Models\RDSConnectionStrings.cs" />
     <Compile Include="Models\SQLCommandOption.cs" />

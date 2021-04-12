@@ -1,4 +1,5 @@
-﻿using Prism.Services.Dialogs;
+﻿using Prism.Commands;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,16 @@ namespace WebTodoApp.ViewModels {
 
         public void OnDialogOpened(IDialogParameters parameters) {
         }
+
+        public DelegateCommand CancelDialogCommand
+            {
+            #region
+            get => cancelDialogCommand ?? (cancelDialogCommand = new DelegateCommand(() => {
+                RequestClose.Invoke(null);
+            }));
+        }
+        private DelegateCommand cancelDialogCommand;
+        #endregion
+
     }
 }

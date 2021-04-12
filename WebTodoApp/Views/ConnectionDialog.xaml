@@ -33,7 +33,6 @@
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-
         <StackPanel
             Grid.Row="0"
             HorizontalAlignment="Center"
@@ -41,22 +40,22 @@
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock Width="80" Text="Host" />
-                <TextBox Width="250" />
+                <TextBox Width="250" Text="{Binding DBConnectionStrings.HostName}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock Width="80" Text="User name" />
-                <TextBox Width="250" />
+                <TextBox Width="250" Text="{Binding DBConnectionStrings.UserName}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock Width="80" Text="Password" />
-                <TextBox Width="250" />
+                <TextBox Width="250" Text="{Binding DBConnectionStrings.PassWord}" />
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock Width="80" Text="Port number" />
-                <TextBox Width="250" />
+                <TextBox Width="250" Text="{Binding DBConnectionStrings.PortNumber}" />
             </StackPanel>
 
         </StackPanel>

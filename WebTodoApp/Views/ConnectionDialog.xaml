@@ -76,6 +76,7 @@
                 Grid.Row="1"
                 Grid.Column="0"
                 Margin="4"
+                Command="{Binding ConnectCommand}"
                 Content="接続" />
 
             <Button

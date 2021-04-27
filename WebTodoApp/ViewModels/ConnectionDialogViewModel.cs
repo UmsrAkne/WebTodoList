@@ -17,11 +17,22 @@ namespace WebTodoApp.ViewModels {
 
         public bool CanCloseDialog() => true;
 
+        private DBHelper dbHelper = new DBHelper("todo_table", DBServerName.EC2);
+
         public void OnDialogClosed() {
         }
 
         public void OnDialogOpened(IDialogParameters parameters) {
         }
+
+        public DelegateCommand ConnectCommand {
+            #region
+            get => connectCommand ?? (connectCommand = new DelegateCommand(() => {
+                dbHelper.tryConnect();
+            }));
+        }
+        private DelegateCommand connectCommand;
+        #endregion
 
         public DelegateCommand CancelDialogCommand
             {

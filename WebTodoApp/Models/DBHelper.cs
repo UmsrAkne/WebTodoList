@@ -340,7 +340,7 @@ namespace WebTodoApp.Models
             }
         }
 
-        private bool tryConnect() {
+        public bool tryConnect() {
             bool result = false;
             try {
                 using (var con = DBConnection) {

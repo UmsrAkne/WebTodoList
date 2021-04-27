@@ -323,6 +323,10 @@ namespace WebTodoApp.Models
                 destDatabaseInfo = new EC2ConnectionStrings();
             }
 
+            changeDatabase(destDatabaseInfo);
+        }
+
+        public void changeDatabase(IDBConnectionStrings destDatabaseInfo) {
             connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
                 Host = destDatabaseInfo.HostName,
                 Username = destDatabaseInfo.UserName,

@@ -117,17 +117,7 @@
             </MenuItem>
 
             <MenuItem Header="接続">
-
-                <MenuItem
-                    Command="{Binding ChangeDatabaseServerCommand}"
-                    CommandParameter="{x:Static m:DBServerName.RDS}"
-                    Header="RDSに接続" />
-
-                <MenuItem
-                    Command="{Binding ChangeDatabaseServerCommand}"
-                    CommandParameter="{x:Static m:DBServerName.EC2}"
-                    Header="EC2に接続" />
-
+                <MenuItem Command="{Binding ShowConnectionDialogCommand}" Header="サーバーに接続" />
             </MenuItem>
         </Menu>
 

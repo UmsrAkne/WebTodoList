@@ -1,9 +1,11 @@
 ﻿using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Services.Dialogs;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using WebTodoApp.Models;
+using WebTodoApp.Views;
 
 namespace WebTodoApp.ViewModels
 {
@@ -36,10 +38,12 @@ namespace WebTodoApp.ViewModels
         private Todo enteringTodo = new Todo();
         #endregion
 
-        public MainWindowViewModel()
+        private IDialogService DialogService { get; set; } 
+
+        public MainWindowViewModel(IDialogService dialogService)
         {
-            var dbserverName = (DBServerName)Enum.ToObject(typeof(DBServerName), Properties.Settings.Default.dbServerNumber);
-            DatabaseHelper = new DBHelper("todo_table",dbserverName);
+            DialogService = dialogService;
+            DatabaseHelper = new DBHelper("todo_table",new AnyDBConnectionStrings("certification"));
         }
 
         private DelegateCommand insertTodoCommand;
@@ -97,16 +101,21 @@ namespace WebTodoApp.ViewModels
         private DelegateCommand<UIElement> focusCommand;
         #endregion
 
-        public DelegateCommand<object> ChangeDatabaseServerCommand {
+        public DelegateCommand ShowConnectionDialogCommand {
             #region
-            get => changeDatabaseServerCommand ?? (changeDatabaseServerCommand = new DelegateCommand<object>((object dbinfo) => {
-                DatabaseHelper.changeDatabase((DBServerName)dbinfo);
-                Properties.Settings.Default.dbServerNumber = (int)dbinfo;
-                Properties.Settings.Default.Save();
+            get => showConnectionDialogCommand ?? (showConnectionDialogCommand = new DelegateCommand(() => {
+                var param = new DialogParameters();
+                DialogService.ShowDialog(nameof(ConnectionDialog), param, (IDialogResult result) => {
+                    if(result.Result == ButtonResult.Yes) {
+                        var dbConnectionInfo = result.Parameters.GetValue<IDBConnectionStrings>(nameof(AnyDBConnectionStrings));
+                        DatabaseHelper.changeDatabase(dbConnectionInfo);
+                    }
+                });
             }));
         }
-        private DelegateCommand<object> changeDatabaseServerCommand;
+        private DelegateCommand showConnectionDialogCommand;
         #endregion
+
 
 
 

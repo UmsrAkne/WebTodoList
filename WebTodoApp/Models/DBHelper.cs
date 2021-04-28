@@ -61,8 +61,8 @@ namespace WebTodoApp.Models
 
         }
 
-        public DBHelper(string tableName, DBServerName dbServerName) : this(tableName){
-            changeDatabase(dbServerName);
+        public DBHelper(string tableName, IDBConnectionStrings dbConnectionStrings) : this(tableName){
+            changeDatabase(dbConnectionStrings);
         }
 
         public void insertTodo(Todo todo) {
@@ -313,16 +313,7 @@ namespace WebTodoApp.Models
             return todo;
         }
 
-        public void changeDatabase(DBServerName dbServerName) {
-            IDBConnectionStrings destDatabaseInfo;
-
-            if (dbServerName == DBServerName.RDS) {
-                destDatabaseInfo = new RDSConnectionStrings();
-            }
-            else {
-                destDatabaseInfo = new EC2ConnectionStrings();
-            }
-
+        public void changeDatabase(IDBConnectionStrings destDatabaseInfo) {
             connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
                 Host = destDatabaseInfo.HostName,
                 Username = destDatabaseInfo.UserName,
@@ -340,7 +331,7 @@ namespace WebTodoApp.Models
             }
         }
 
-        private bool tryConnect() {
+        public bool tryConnect() {
             bool result = false;
             try {
                 using (var con = DBConnection) {

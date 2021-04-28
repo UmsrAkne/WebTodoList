@@ -58,7 +58,11 @@ namespace WebTodoApp.ViewModels {
             #region
             get => connectCommand ?? (connectCommand = new DelegateCommand(() => {
                 saveCertification();
-                dbHelper.changeDatabase(DBConnectionStrings);
+
+                DialogParameters dp = new DialogParameters();
+                dp.Add(nameof(AnyDBConnectionStrings), DBConnectionStrings);
+                var result = new DialogResult(ButtonResult.Yes, dp);
+                RequestClose.Invoke(result);
             }));
         }
         private DelegateCommand connectCommand;
@@ -68,7 +72,7 @@ namespace WebTodoApp.ViewModels {
             {
             #region
             get => cancelDialogCommand ?? (cancelDialogCommand = new DelegateCommand(() => {
-                RequestClose.Invoke(null);
+                RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
             }));
         }
         private DelegateCommand cancelDialogCommand;

@@ -118,7 +118,11 @@ namespace WebTodoApp.ViewModels
             #region
             get => showConnectionDialogCommand ?? (showConnectionDialogCommand = new DelegateCommand(() => {
                 var param = new DialogParameters();
-                DialogService.ShowDialog(nameof(ConnectionDialog), param, (IDialogResult result) => { 
+                DialogService.ShowDialog(nameof(ConnectionDialog), param, (IDialogResult result) => {
+                    if(result.Result == ButtonResult.Yes) {
+                        var dbConnectionInfo = result.Parameters.GetValue<IDBConnectionStrings>(nameof(AnyDBConnectionStrings));
+                        DatabaseHelper.changeDatabase(dbConnectionInfo);
+                    }
                 });
             }));
         }

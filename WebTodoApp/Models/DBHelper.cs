@@ -61,8 +61,8 @@ namespace WebTodoApp.Models
 
         }
 
-        public DBHelper(string tableName, DBServerName dbServerName) : this(tableName){
-            changeDatabase(dbServerName);
+        public DBHelper(string tableName, IDBConnectionStrings dbConnectionStrings) : this(tableName){
+            changeDatabase(dbConnectionStrings);
         }
 
         public void insertTodo(Todo todo) {

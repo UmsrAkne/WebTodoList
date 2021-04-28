@@ -43,8 +43,7 @@ namespace WebTodoApp.ViewModels
         public MainWindowViewModel(IDialogService dialogService)
         {
             DialogService = dialogService;
-            var dbserverName = (DBServerName)Enum.ToObject(typeof(DBServerName), Properties.Settings.Default.dbServerNumber);
-            DatabaseHelper = new DBHelper("todo_table",dbserverName);
+            DatabaseHelper = new DBHelper("todo_table",new AnyDBConnectionStrings("certification"));
         }
 
         private DelegateCommand insertTodoCommand;

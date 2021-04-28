@@ -19,7 +19,7 @@ namespace WebTodoApp.ViewModels {
 
         public bool CanCloseDialog() => true;
 
-        private DBHelper dbHelper = new DBHelper("todo_table", DBServerName.EC2);
+        private DBHelper dbHelper;
         private Encryptor encryptor = new Encryptor();
 
         public void OnDialogClosed() {

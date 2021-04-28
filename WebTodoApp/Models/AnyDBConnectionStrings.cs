@@ -1,6 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,5 +21,32 @@ namespace WebTodoApp.Models {
         private int portNumber = 5432;
 
         public string ServiceName { get; set; }
+
+        public AnyDBConnectionStrings() {
+
+        }
+
+        /// <summary>
+        /// 認証情報が記載された暗号化済みファイルを復号し、各プロパティを入力します。
+        /// </summary>
+        /// <param name="certificationFilePath"></param>
+        public AnyDBConnectionStrings(string certificationFilePath) {
+            var certificationFileInfo = new FileInfo(certificationFilePath);
+            var encryptor = new Encryptor();
+
+            if (certificationFileInfo.Exists) {
+                using (var sr = new StreamReader(certificationFileInfo.Name)) {
+                    var encString = sr.ReadToEnd();
+                    var decString = encryptor.decrypt(encString);
+                    var cnStrings = decString.Split(' ');
+
+                    HostName = cnStrings[0];
+                    UserName = cnStrings[1];
+                    PassWord = cnStrings[2];
+                    PortNumber = int.Parse(cnStrings[3]);
+                }
+            }
+
+        }
     }
 }

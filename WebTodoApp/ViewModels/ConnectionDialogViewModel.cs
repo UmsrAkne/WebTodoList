@@ -29,20 +29,7 @@ namespace WebTodoApp.ViewModels {
         }
 
         public ConnectionDialogViewModel() {
-            var certificationFileInfo = new FileInfo("certification");
-
-            if (certificationFileInfo.Exists) {
-                using (var sr = new StreamReader(certificationFileInfo.Name)) {
-                    var encString = sr.ReadToEnd();
-                    var decString = encryptor.decrypt(encString);
-                    var cnStrings = decString.Split(' ');
-
-                    DBConnectionStrings.HostName = cnStrings[0];
-                    DBConnectionStrings.UserName = cnStrings[1];
-                    DBConnectionStrings.PassWord = cnStrings[2];
-                    DBConnectionStrings.PortNumber = int.Parse(cnStrings[3]);
-                }
-            }
+            DBConnectionStrings = new AnyDBConnectionStrings("certification");
         }
 
         private void saveCertification() {

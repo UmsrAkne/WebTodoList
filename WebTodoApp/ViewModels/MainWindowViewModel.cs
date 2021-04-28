@@ -101,18 +101,6 @@ namespace WebTodoApp.ViewModels
         private DelegateCommand<UIElement> focusCommand;
         #endregion
 
-        public DelegateCommand<object> ChangeDatabaseServerCommand {
-            #region
-            get => changeDatabaseServerCommand ?? (changeDatabaseServerCommand = new DelegateCommand<object>((object dbinfo) => {
-                DatabaseHelper.changeDatabase((DBServerName)dbinfo);
-                Properties.Settings.Default.dbServerNumber = (int)dbinfo;
-                Properties.Settings.Default.Save();
-            }));
-        }
-        private DelegateCommand<object> changeDatabaseServerCommand;
-        #endregion
-
-
         public DelegateCommand ShowConnectionDialogCommand {
             #region
             get => showConnectionDialogCommand ?? (showConnectionDialogCommand = new DelegateCommand(() => {

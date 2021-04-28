@@ -313,19 +313,6 @@ namespace WebTodoApp.Models
             return todo;
         }
 
-        public void changeDatabase(DBServerName dbServerName) {
-            IDBConnectionStrings destDatabaseInfo;
-
-            if (dbServerName == DBServerName.RDS) {
-                destDatabaseInfo = new RDSConnectionStrings();
-            }
-            else {
-                destDatabaseInfo = new EC2ConnectionStrings();
-            }
-
-            changeDatabase(destDatabaseInfo);
-        }
-
         public void changeDatabase(IDBConnectionStrings destDatabaseInfo) {
             connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
                 Host = destDatabaseInfo.HostName,

@@ -41,6 +41,11 @@
                 <Setter Property="Foreground" Value="{StaticResource lightForegroundBrush}" />
             </Style>
 
+            <Style TargetType="ScrollBar">
+                <Setter Property="Background" Value="{StaticResource darkBackgroundBrush_b}" />
+                <Setter Property="BorderBrush" Value="{StaticResource darkBackgroundBrush_b}" />
+            </Style>
+
             <ControlTemplate x:Key="radiusButtonTemplate" TargetType="ToggleButton">
                 <Border
                     x:Name="border"

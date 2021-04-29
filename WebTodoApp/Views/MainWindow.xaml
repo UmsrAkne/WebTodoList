@@ -53,11 +53,11 @@
 
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsPressed" Value="True">
-                        <Setter TargetName="border" Property="Background" Value="LightSkyBlue" />
+                        <Setter TargetName="border" Property="Background" Value="RoyalBlue" />
                     </Trigger>
 
                     <Trigger Property="IsChecked" Value="True">
-                        <Setter TargetName="border" Property="Background" Value="LightSkyBlue" />
+                        <Setter TargetName="border" Property="Background" Value="RoyalBlue" />
                     </Trigger>
 
                     <Trigger Property="IsChecked" Value="False">

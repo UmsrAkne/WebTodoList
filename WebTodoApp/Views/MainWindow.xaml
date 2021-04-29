@@ -26,6 +26,7 @@
                 <ResourceDictionary Source="../res/Dictionary1.xaml" />
                 <ResourceDictionary Source="../res/ContextMenuStyle.xaml" />
                 <ResourceDictionary Source="../res/UIBrushes.xaml" />
+                <ResourceDictionary Source="../res/CustomCheckBoxResource.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
@@ -336,15 +337,6 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
 
-                                <CheckBox.Style>
-                                    <Style TargetType="CheckBox">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Completed}" Value="True">
-                                                <Setter Property="IsEnabled" Value="False" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </CheckBox.Style>
                             </CheckBox>
 
                             <ToggleButton

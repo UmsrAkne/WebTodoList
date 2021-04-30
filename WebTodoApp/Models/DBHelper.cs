@@ -346,6 +346,9 @@ namespace WebTodoApp.Models
             catch (SocketException) {
                 Message = "接続を試行しましたが、接続先のサーバーが存在しません。";
             }
+            catch (ArgumentException) {
+                Message = "データベースへの接続に失敗しました。";
+            }
 
             return result;
         }
@@ -480,17 +483,16 @@ namespace WebTodoApp.Models
 
         public long TodoCount {
             get {
+                long count = 0;
                 try {
-                    long count = (long)(select( $"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"]);
-                    return count;
+                    count = (long)(select( $"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"]);
+                }catch(Exception e) {
+                    if(e is TimeoutException || e is SocketException || e is ArgumentException) {
+                        return 0;
+                    }
                 }
-                catch (TimeoutException e) {
-                    // DBの接続に失敗時のコード。仮に接続に失敗した場合、何もできることはないので０を返すのみとする。
-                    return 0;
-                }
-                catch (SocketException) {
-                    return 0;
-                }
+
+                return count;
             }
         }
 

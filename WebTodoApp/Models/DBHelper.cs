@@ -354,22 +354,13 @@ namespace WebTodoApp.Models
         }
 
         private void tryFirstConnectCommand() {
-            try {
-                loadTodoList();
-                Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
+            loadTodoList();
+            Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
 
-                if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
-                    ExportAllCommand.Execute();
-                    Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
-                    Properties.Settings.Default.Save();
-                }
-
-            }
-            catch (TimeoutException) {
-                Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
-            }
-            catch (SocketException) {
-                Message = "接続を試行しましたが、接続先のサーバーが存在しません。";
+            if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
+                ExportAllCommand.Execute();
+                Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
+                Properties.Settings.Default.Save();
             }
         }
 

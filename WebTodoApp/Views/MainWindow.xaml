@@ -316,9 +316,9 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="auto" />
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition Width="4*" />
+                                <ColumnDefinition Width="4*" MinWidth="300" />
                                 <ColumnDefinition Width="auto" />
-                                <ColumnDefinition MinWidth="170" />
+                                <ColumnDefinition Width="155" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>

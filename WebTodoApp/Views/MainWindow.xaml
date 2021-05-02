@@ -81,10 +81,13 @@
             Key="Return"
             Command="{Binding InsertTodoCommand}"
             Modifiers="Ctrl" />
+
         <KeyBinding
             Key="R"
             Command="{Binding DatabaseHelper.LoadCommand}"
             Modifiers="Ctrl" />
+
+        <KeyBinding Key="F5" Command="{Binding DatabaseHelper.LoadCommand}" />
 
         <KeyBinding
             Key="F"
@@ -117,6 +120,8 @@
 
             <MenuItem Header="ファイル">
                 <MenuItem Command="{Binding DatabaseHelper.ExportAllCommand}" Header="全てのTodoを出力" />
+
+                <MenuItem Command="{Binding DatabaseHelper.LoadCommand}" Header="リロード" />
 
                 <MenuItem Command="{Binding ExitCommand}" Header="終了" />
 

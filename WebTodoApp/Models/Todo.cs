@@ -75,6 +75,8 @@ namespace WebTodoApp.Models {
 
         public int ActualDuration { get; set; }
 
+        public string LabelColor { get; set; } = "Transparent";
+
         public bool Started {
             get => started;
             set {

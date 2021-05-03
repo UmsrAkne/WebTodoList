@@ -233,6 +233,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.Priority)} INTEGER NOT NULL, " +
                 $"{nameof(Todo.Duration)} INTEGER DEFAULT 0 NOT NULL, " +
                 $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', " +
+                $"{nameof(Todo.LabelColor)} TEXT NOT NULL, " +
                 $"{nameof(Todo.Tag)} TEXT NOT NULL " +
                 ");"
                 , new List<NpgsqlParameter>()

@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="res\ColorSelectionComboBoxResource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="res\ContextMenuStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -85,6 +89,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\AnyDBConnectionStrings.cs" />
+    <Compile Include="Models\ColorName.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\DBHelper.cs" />
     <Compile Include="Models\Encryptor.cs" />

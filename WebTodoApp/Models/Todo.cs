@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace WebTodoApp.Models {
     public class Todo : BindableBase {
 
-        public Todo() { 
+        public Todo() {
         }
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace WebTodoApp.Models {
             set {
 
                 // 初期値以外がセットされた場合は既に開始ボタンが一度押されているため false
-                if(value.Ticks != 0) {
+                if (value.Ticks != 0) {
                     CanStart = false;
                 }
 
@@ -62,7 +63,7 @@ namespace WebTodoApp.Models {
                     Started = false;
                     CanStart = false;
                 }
-                else if(value){
+                else if (value) {
                     CanStart = false;
                 }
 
@@ -75,7 +76,9 @@ namespace WebTodoApp.Models {
 
         public int ActualDuration { get; set; }
 
-        public ColorName LabelColor { get; set; } = ColorName.Transparent;
+        public SolidColorBrush LabelColor { get; set; } = new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorName.Transparent.ToString()));
+
+        public ColorName LabelColorName { get; set; } = ColorName.Transparent;
 
         public bool Started {
             get => started;

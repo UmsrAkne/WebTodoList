@@ -2,8 +2,10 @@
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using WebTodoApp.Models;
 using WebTodoApp.Views;
 
@@ -38,12 +40,23 @@ namespace WebTodoApp.ViewModels
         private Todo enteringTodo = new Todo();
         #endregion
 
+        public List<SolidColorBrush> LabelColors { get; set; }
+
         private IDialogService DialogService { get; set; } 
 
         public MainWindowViewModel(IDialogService dialogService)
         {
             DialogService = dialogService;
             DatabaseHelper = new DBHelper("todo_table",new AnyDBConnectionStrings("certification"));
+
+            var colors = Enum.GetValues(typeof(ColorName));
+            var colorList = new List<SolidColorBrush>();
+            foreach(var cName in colors) {
+                string cn = cName.ToString();
+                colorList.Add(new SolidColorBrush((Color)ColorConverter.ConvertFromString(cn)));
+            }
+
+            LabelColors = colorList;
         }
 
         private DelegateCommand insertTodoCommand;

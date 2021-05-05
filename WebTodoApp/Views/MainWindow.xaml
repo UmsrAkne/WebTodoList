@@ -27,6 +27,7 @@
                 <ResourceDictionary Source="../res/ContextMenuStyle.xaml" />
                 <ResourceDictionary Source="../res/UIBrushes.xaml" />
                 <ResourceDictionary Source="../res/CustomCheckBoxResource.xaml" />
+                <ResourceDictionary Source="../res/ColorSelectionComboBoxResource.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
@@ -308,6 +309,12 @@
                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
                                 Modifiers="Ctrl" />
                         </DockPanel.InputBindings>
+
+                        <ComboBox
+                            Margin="3,0,0,0"
+                            VerticalAlignment="Center"
+                            DockPanel.Dock="Left"
+                            ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.LabelColors}" />
 
                         <TextBlock
                             Width="20"

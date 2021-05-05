@@ -54,7 +54,7 @@
             <Border
                 x:Name="Border"
                 Grid.ColumnSpan="2"
-                Background="Blue"
+                Background="{Binding LabelColor}"
                 BorderThickness="1"
                 CornerRadius="3" />
 
@@ -113,12 +113,11 @@
     <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.CanContentScroll" Value="true" />
         <Setter Property="MinWidth" Value="25" />
         <Setter Property="MinHeight" Value="20" />
-
 
         <Setter Property="Template">
             <Setter.Value>
@@ -227,6 +226,7 @@
                         Width="20"
                         Height="20"
                         Padding="2"
+                        Background="{Binding}"
                         SnapsToDevicePixels="true">
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="SelectionStates">

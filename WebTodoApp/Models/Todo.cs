@@ -11,13 +11,21 @@ namespace WebTodoApp.Models {
     public class Todo : BindableBase {
 
         public Todo() {
+            var colors = Enum.GetValues(typeof(ColorName));
+            var colorList = new List<SolidColorBrush>();
+            foreach(var cName in colors) {
+                string cn = cName.ToString();
+                colorList.Add(new SolidColorBrush((Color)ColorConverter.ConvertFromString(cn)));
+            }
+
+            SelectableLableColors = colorList;
         }
 
         /// <summary>
         /// 規定の Todo のプロパティをコピーして未完了、未作業状態の新しい Todo を作成します。
         /// </summary>
         /// <param name="existTodo"></param>
-        public Todo(Todo existTodo) {
+        public Todo(Todo existTodo) : this() {
             Title = existTodo.Title;
             TextContent = existTodo.TextContent;
             Priority = existTodo.Priority;
@@ -76,9 +84,30 @@ namespace WebTodoApp.Models {
 
         public int ActualDuration { get; set; }
 
-        public SolidColorBrush LabelColor { get; set; } = new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorName.Transparent.ToString()));
+        private SolidColorBrush labelColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorName.Transparent.ToString())); 
+        public SolidColorBrush LabelColor {
+            get => labelColor;
+            private set => SetProperty(ref labelColor, value);
+        }
 
-        public ColorName LabelColorName { get; set; } = ColorName.Transparent;
+        private ColorName labelColorName = ColorName.Transparent;
+        public ColorName LabelColorName {
+            get => labelColorName;
+            set {
+                SetProperty(ref labelColorName, value);
+                LabelColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(LabelColorName.ToString()));
+            }
+        }
+
+        public List<SolidColorBrush> SelectableLableColors { get; private set; }
+
+        private int selectedColorIndex = 0;
+        public int SelectedColorIndex { get => selectedColorIndex;
+            set {
+                LabelColorName = (ColorName)Enum.ToObject(typeof(ColorName), value);
+                SetProperty(ref selectedColorIndex, value); 
+            }
+        }
 
         public bool Started {
             get => started;

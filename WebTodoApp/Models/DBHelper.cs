@@ -153,7 +153,8 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.StartDateTime)} = '{todo.StartDateTime}', " +
                 $"{nameof(Todo.Priority)} = :{nameof(todo.Priority)}, " +
                 $"{nameof(Todo.Duration)} = :{nameof(todo.Duration)}, " +
-                $"{nameof(Todo.Tag)} = :{nameof(todo.Tag)} " +
+                $"{nameof(Todo.Tag)} = :{nameof(todo.Tag)}, " +
+                $"{nameof(Todo.LabelColor)} = '{todo.LabelColorName}' " +
                 $"WHERE id = {todo.ID};"
                 ,ps
             );
@@ -310,6 +311,10 @@ namespace WebTodoApp.Models
             todo.Priority = (int)hashtable[nameof(Todo.Priority).ToLower()];
             todo.Duration = (int)hashtable[nameof(Todo.Duration).ToLower()];
             todo.Tag = (String)hashtable[nameof(Todo.Tag).ToLower()];
+
+            string labelColor = (String)hashtable[nameof(Todo.LabelColor).ToLower()];
+            todo.LabelColorName = (labelColor == "" || labelColor == ColorName.Transparent.ToString()) ?
+                 ColorName.Transparent : (ColorName)Enum.Parse(typeof(ColorName), labelColor, true);
 
             return todo;
         }

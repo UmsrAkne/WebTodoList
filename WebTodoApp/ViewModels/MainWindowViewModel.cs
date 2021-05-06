@@ -40,23 +40,12 @@ namespace WebTodoApp.ViewModels
         private Todo enteringTodo = new Todo();
         #endregion
 
-        public List<SolidColorBrush> LabelColors { get; set; }
-
         private IDialogService DialogService { get; set; } 
 
         public MainWindowViewModel(IDialogService dialogService)
         {
             DialogService = dialogService;
             DatabaseHelper = new DBHelper("todo_table",new AnyDBConnectionStrings("certification"));
-
-            var colors = Enum.GetValues(typeof(ColorName));
-            var colorList = new List<SolidColorBrush>();
-            foreach(var cName in colors) {
-                string cn = cName.ToString();
-                colorList.Add(new SolidColorBrush((Color)ColorConverter.ConvertFromString(cn)));
-            }
-
-            LabelColors = colorList;
         }
 
         private DelegateCommand insertTodoCommand;
@@ -128,9 +117,5 @@ namespace WebTodoApp.ViewModels
         }
         private DelegateCommand showConnectionDialogCommand;
         #endregion
-
-
-
-
     }
 }

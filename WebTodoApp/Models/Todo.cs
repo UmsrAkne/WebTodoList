@@ -30,6 +30,7 @@ namespace WebTodoApp.Models {
             TextContent = existTodo.TextContent;
             Priority = existTodo.Priority;
             Duration = existTodo.Duration;
+            LabelColorName = existTodo.LabelColorName;
             CreationDate = DateTime.Now;
         }
 
@@ -95,6 +96,7 @@ namespace WebTodoApp.Models {
             get => labelColorName;
             set {
                 SetProperty(ref labelColorName, value);
+                selectedColorIndex = (int)value;
                 LabelColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(LabelColorName.ToString()));
             }
         }

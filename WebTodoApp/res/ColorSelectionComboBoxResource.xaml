@@ -124,7 +124,7 @@
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="21" />
                         </Grid.ColumnDefinitions>
 
                         <ToggleButton

@@ -18,7 +18,7 @@
 
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="FocusVisualStyle" Value="{DynamicResource CheckBoxFocusVisual}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource CheckBoxFocusVisual}" />
 
         <Setter Property="Template">
             <Setter.Value>
@@ -47,7 +47,7 @@
                                         StrokeThickness="2"
                                         Visibility="Collapsed">
                                         <Path.Stroke>
-                                            <SolidColorBrush Color="{DynamicResource GlyphColor}" />
+                                            <SolidColorBrush Color="{StaticResource GlyphColor}" />
                                         </Path.Stroke>
                                     </Path>
 
@@ -60,7 +60,7 @@
                                         StrokeThickness="2"
                                         Visibility="Collapsed">
                                         <Path.Stroke>
-                                            <SolidColorBrush Color="{DynamicResource GlyphColor}" />
+                                            <SolidColorBrush Color="{StaticResource GlyphColor}" />
                                         </Path.Stroke>
                                     </Path>
                                 </Grid>

@@ -2,8 +2,10 @@
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using WebTodoApp.Models;
 using WebTodoApp.Views;
 
@@ -115,9 +117,5 @@ namespace WebTodoApp.ViewModels
         }
         private DelegateCommand showConnectionDialogCommand;
         #endregion
-
-
-
-
     }
 }

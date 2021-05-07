@@ -104,6 +104,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.StartDateTime)}," +
                 $"{nameof(Todo.Priority)}," +
                 $"{nameof(Todo.Duration)}," +
+                $"{nameof(Todo.LabelColor)}," +
                 $"{nameof(Todo.Tag)} ) " +
                 $"VALUES (" +
                 $"{maxID}," +
@@ -115,6 +116,7 @@ namespace WebTodoApp.Models
                 $"'{todo.StartDateTime}'," +
                 $":{nameof(todo.Priority)}," +
                 $":{nameof(todo.Duration)}," +
+                $"'{todo.LabelColorName}'," +
                 $":{nameof(todo.Tag)}" +
                 ");"
                 , ps
@@ -153,7 +155,8 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.StartDateTime)} = '{todo.StartDateTime}', " +
                 $"{nameof(Todo.Priority)} = :{nameof(todo.Priority)}, " +
                 $"{nameof(Todo.Duration)} = :{nameof(todo.Duration)}, " +
-                $"{nameof(Todo.Tag)} = :{nameof(todo.Tag)} " +
+                $"{nameof(Todo.Tag)} = :{nameof(todo.Tag)}, " +
+                $"{nameof(Todo.LabelColor)} = '{todo.LabelColorName}' " +
                 $"WHERE id = {todo.ID};"
                 ,ps
             );
@@ -233,6 +236,7 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.Priority)} INTEGER NOT NULL, " +
                 $"{nameof(Todo.Duration)} INTEGER DEFAULT 0 NOT NULL, " +
                 $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', " +
+                $"{nameof(Todo.LabelColor)} TEXT NOT NULL, " +
                 $"{nameof(Todo.Tag)} TEXT NOT NULL " +
                 ");"
                 , new List<NpgsqlParameter>()
@@ -309,6 +313,15 @@ namespace WebTodoApp.Models
             todo.Priority = (int)hashtable[nameof(Todo.Priority).ToLower()];
             todo.Duration = (int)hashtable[nameof(Todo.Duration).ToLower()];
             todo.Tag = (String)hashtable[nameof(Todo.Tag).ToLower()];
+
+            string labelColor = (String)hashtable[nameof(Todo.LabelColor).ToLower()];
+
+            if(!Enum.TryParse<ColorName>(labelColor, out ColorName result)) {
+                labelColor = ColorName.Transparent.ToString();
+            }
+
+            todo.LabelColorName = (labelColor == "" || labelColor == ColorName.Transparent.ToString()) ?
+                 ColorName.Transparent : (ColorName)Enum.Parse(typeof(ColorName), labelColor, true);
 
             return todo;
         }

@@ -27,6 +27,7 @@
                 <ResourceDictionary Source="../res/ContextMenuStyle.xaml" />
                 <ResourceDictionary Source="../res/UIBrushes.xaml" />
                 <ResourceDictionary Source="../res/CustomCheckBoxResource.xaml" />
+                <ResourceDictionary Source="../res/ColorSelectionComboBoxResource.xaml" />
 
             </ResourceDictionary.MergedDictionaries>
 
@@ -308,6 +309,20 @@
                                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}"
                                 Modifiers="Ctrl" />
                         </DockPanel.InputBindings>
+
+                        <ComboBox
+                            x:Name="colorSelectComboBox"
+                            Margin="3,0,0,0"
+                            VerticalAlignment="Center"
+                            DockPanel.Dock="Left"
+                            ItemsSource="{Binding SelectableLableColors}"
+                            SelectedIndex="{Binding SelectedColorIndex}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ComboBox>
 
                         <TextBlock
                             Width="20"

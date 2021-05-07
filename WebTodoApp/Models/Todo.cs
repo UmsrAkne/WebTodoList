@@ -5,22 +5,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace WebTodoApp.Models {
     public class Todo : BindableBase {
 
-        public Todo() { 
+        public Todo() {
+            var colors = Enum.GetValues(typeof(ColorName));
+            var colorList = new List<SolidColorBrush>();
+            foreach(var cName in colors) {
+                string cn = cName.ToString();
+                colorList.Add(new SolidColorBrush((Color)ColorConverter.ConvertFromString(cn)));
+            }
+
+            SelectableLableColors = colorList;
         }
 
         /// <summary>
         /// 規定の Todo のプロパティをコピーして未完了、未作業状態の新しい Todo を作成します。
         /// </summary>
         /// <param name="existTodo"></param>
-        public Todo(Todo existTodo) {
+        public Todo(Todo existTodo) : this() {
             Title = existTodo.Title;
             TextContent = existTodo.TextContent;
             Priority = existTodo.Priority;
             Duration = existTodo.Duration;
+            LabelColorName = existTodo.LabelColorName;
             CreationDate = DateTime.Now;
         }
 
@@ -33,7 +43,7 @@ namespace WebTodoApp.Models {
             set {
 
                 // 初期値以外がセットされた場合は既に開始ボタンが一度押されているため false
-                if(value.Ticks != 0) {
+                if (value.Ticks != 0) {
                     CanStart = false;
                 }
 
@@ -62,7 +72,7 @@ namespace WebTodoApp.Models {
                     Started = false;
                     CanStart = false;
                 }
-                else if(value){
+                else if (value) {
                     CanStart = false;
                 }
 
@@ -74,6 +84,32 @@ namespace WebTodoApp.Models {
         public int Duration { get; set; }
 
         public int ActualDuration { get; set; }
+
+        private SolidColorBrush labelColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorName.Transparent.ToString())); 
+        public SolidColorBrush LabelColor {
+            get => labelColor;
+            private set => SetProperty(ref labelColor, value);
+        }
+
+        private ColorName labelColorName = ColorName.Transparent;
+        public ColorName LabelColorName {
+            get => labelColorName;
+            set {
+                SetProperty(ref labelColorName, value);
+                selectedColorIndex = (int)value;
+                LabelColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(LabelColorName.ToString()));
+            }
+        }
+
+        public List<SolidColorBrush> SelectableLableColors { get; private set; }
+
+        private int selectedColorIndex = 0;
+        public int SelectedColorIndex { get => selectedColorIndex;
+            set {
+                LabelColorName = (ColorName)Enum.ToObject(typeof(ColorName), value);
+                SetProperty(ref selectedColorIndex, value); 
+            }
+        }
 
         public bool Started {
             get => started;

@@ -314,9 +314,17 @@
                             x:Name="colorSelectComboBox"
                             Margin="3,0,0,0"
                             VerticalAlignment="Center"
+                            Background="{Binding LabelColor}"
                             DockPanel.Dock="Left"
                             ItemsSource="{Binding SelectableLableColors}"
                             SelectedIndex="{Binding SelectedColorIndex}">
+
+                            <ComboBox.Resources>
+                                <Style TargetType="ToggleButton">
+                                    <Setter Property="Background" Value="{Binding LabelColor}" />
+                                </Style>
+                            </ComboBox.Resources>
+
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectionChanged">
                                     <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.DatabaseHelper.UpdateCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}}" />
@@ -553,6 +561,7 @@
 
 
             <Grid Margin="0,3" DockPanel.Dock="Top">
+
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="300" />
                     <ColumnDefinition Width="50" />
@@ -562,9 +571,17 @@
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
 
                     <ComboBox
-                        Width="20"
-                        Background="Red"
-                        ItemsSource="{Binding EnteringTodo.SelectableLableColors}" />
+                        Width="25"
+                        Height="Auto"
+                        Margin="5,0"
+                        ItemsSource="{Binding EnteringTodo.SelectableLableColors}">
+
+                        <ComboBox.Resources>
+                            <Style TargetType="ToggleButton">
+                                <Setter Property="Background" Value="{Binding EnteringTodo.LabelColor}" />
+                            </Style>
+                        </ComboBox.Resources>
+                    </ComboBox>
 
                     <TextBlock Text="Priority : " />
 

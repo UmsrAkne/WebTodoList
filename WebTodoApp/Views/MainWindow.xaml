@@ -554,45 +554,42 @@
 
             <Grid Margin="0,3" DockPanel.Dock="Top">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="50" />
                     <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition Width="7*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock
-                    Grid.Column="0"
-                    HorizontalAlignment="Right"
-                    Text="Priority : " />
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+
+                    <ComboBox
+                        Width="20"
+                        Background="Red"
+                        ItemsSource="{Binding EnteringTodo.SelectableLableColors}" />
+
+                    <TextBlock Text="Priority : " />
+
+                    <TextBox
+                        x:Name="PriorityInputTextBox"
+                        Width="100"
+                        Style="{StaticResource tabItemTextBoxStyle}"
+                        Text="{Binding EnteringTodo.Priority}" />
+
+                    <TextBlock Text="Duration : " />
+
+                    <TextBox
+                        Width="100"
+                        Style="{StaticResource tabItemTextBoxStyle}"
+                        Text="{Binding EnteringTodo.Duration}" />
+
+                </StackPanel>
+
+                <TextBlock Grid.Column="1" Text="Title : " />
 
                 <TextBox
-                    x:Name="PriorityInputTextBox"
-                    Grid.Column="1"
-                    Style="{StaticResource tabItemTextBoxStyle}"
-                    Text="{Binding EnteringTodo.Priority}" />
-
-                <TextBlock
                     Grid.Column="2"
-                    HorizontalAlignment="Right"
-                    Text="Duration : " />
-
-                <TextBox
-                    Grid.Column="3"
-                    Style="{StaticResource tabItemTextBoxStyle}"
-                    Text="{Binding EnteringTodo.Duration}" />
-
-                <TextBlock
-                    Grid.Column="4"
-                    HorizontalAlignment="Right"
-                    Text="Title : " />
-
-                <TextBox
-                    Grid.Column="5"
-                    HorizontalAlignment="Stretch"
                     Style="{StaticResource tabItemTextBoxStyle}"
                     Text="{Binding EnteringTodo.Title, UpdateSourceTrigger=PropertyChanged}" />
+
 
             </Grid>
 

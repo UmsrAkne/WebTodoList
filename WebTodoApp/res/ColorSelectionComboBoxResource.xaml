@@ -54,7 +54,7 @@
             <Border
                 x:Name="Border"
                 Grid.ColumnSpan="2"
-                Background="{Binding LabelColor}"
+                Background="{TemplateBinding Background}"
                 BorderBrush="Transparent"
                 BorderThickness="1"
                 CornerRadius="3" />
@@ -95,7 +95,6 @@
         <Border
             x:Name="PART_ContentHost"
             Width="20"
-            Background="{TemplateBinding Background}"
             Focusable="False" />
     </ControlTemplate>
 

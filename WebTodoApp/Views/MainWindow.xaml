@@ -574,7 +574,8 @@
                         Width="25"
                         Height="Auto"
                         Margin="5,0"
-                        ItemsSource="{Binding EnteringTodo.SelectableLableColors}">
+                        ItemsSource="{Binding EnteringTodo.SelectableLableColors}"
+                        SelectedIndex="{Binding EnteringTodo.SelectedColorIndex}">
 
                         <ComboBox.Resources>
                             <Style TargetType="ToggleButton">

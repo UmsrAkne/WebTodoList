@@ -6,10 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 namespace WebTodoApp.Models {
-    public class Todo : BindableBase {
 
+    [XmlInclude(typeof(Todo))]
+    [Serializable]
+    public class Todo : BindableBase {
         public Todo() {
             var colors = Enum.GetValues(typeof(ColorName));
             var colorList = new List<SolidColorBrush>();
@@ -86,6 +89,8 @@ namespace WebTodoApp.Models {
         public int ActualDuration { get; set; }
 
         private SolidColorBrush labelColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorName.Transparent.ToString())); 
+
+        [XmlIgnore]
         public SolidColorBrush LabelColor {
             get => labelColor;
             private set => SetProperty(ref labelColor, value);
@@ -101,6 +106,7 @@ namespace WebTodoApp.Models {
             }
         }
 
+        [XmlIgnore]
         public List<SolidColorBrush> SelectableLableColors { get; private set; }
 
         private int selectedColorIndex = 0;

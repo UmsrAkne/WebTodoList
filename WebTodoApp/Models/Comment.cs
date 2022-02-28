@@ -5,8 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebTodoApp.Models {
-    public class Comment : BindableBase{
+namespace WebTodoApp.Models
+{
+    public class Comment : BindableBase
+    {
         public int ID { get; set; }
 
         public DateTime CreationDateTime { get; set; }

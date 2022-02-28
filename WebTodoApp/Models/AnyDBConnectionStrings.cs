@@ -6,8 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebTodoApp.Models {
-    class AnyDBConnectionStrings : BindableBase, IDBConnectionStrings{
+namespace WebTodoApp.Models
+{
+    class AnyDBConnectionStrings : BindableBase, IDBConnectionStrings
+    {
         public string UserName { get => userName; set => SetProperty(ref userName, value); }
         private string userName = "";
 
@@ -22,7 +24,8 @@ namespace WebTodoApp.Models {
 
         public string ServiceName { get; set; }
 
-        public AnyDBConnectionStrings() {
+        public AnyDBConnectionStrings()
+        {
 
         }
 
@@ -30,12 +33,15 @@ namespace WebTodoApp.Models {
         /// 認証情報が記載された暗号化済みファイルを復号し、各プロパティを入力します。
         /// </summary>
         /// <param name="certificationFilePath"></param>
-        public AnyDBConnectionStrings(string certificationFilePath) {
+        public AnyDBConnectionStrings(string certificationFilePath)
+        {
             var certificationFileInfo = new FileInfo(certificationFilePath);
             var encryptor = new Encryptor();
 
-            if (certificationFileInfo.Exists) {
-                using (var sr = new StreamReader(certificationFileInfo.Name)) {
+            if (certificationFileInfo.Exists)
+            {
+                using (var sr = new StreamReader(certificationFileInfo.Name))
+                {
                     var encString = sr.ReadToEnd();
                     var decString = encryptor.decrypt(encString);
                     var cnStrings = decString.Split(' ');

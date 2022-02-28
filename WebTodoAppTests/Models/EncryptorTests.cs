@@ -7,11 +7,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 
-namespace WebTodoApp.Models.Tests {
+namespace WebTodoApp.Models.Tests
+{
     [TestClass()]
-    public class EncryptorTests {
+    public class EncryptorTests
+    {
         [TestMethod()]
-        public void encryptTest() {
+        public void encryptTest()
+        {
             var encryptor = new Encryptor();
 
             string encrypted = encryptor.encrypt("hello world");
@@ -22,7 +25,8 @@ namespace WebTodoApp.Models.Tests {
         }
 
         [TestMethod()]
-        public void decryptTest() {
+        public void decryptTest()
+        {
             var encryptor = new Encryptor();
 
             string encrypted = encryptor.encrypt("hello world");
@@ -34,10 +38,12 @@ namespace WebTodoApp.Models.Tests {
 
             CryptographicException ex = null;
 
-            try {
+            try
+            {
                 encryptor.decrypt(encrypted);
             }
-            catch (CryptographicException e) {
+            catch (CryptographicException e)
+            {
                 ex = e;
             }
 

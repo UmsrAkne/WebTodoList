@@ -33,7 +33,8 @@ namespace WebTodoApp.Models
         private SoundPlayer soundPlayer = new SoundPlayer(@"C:\Windows\Media\Windows Notify Calendar.wav");
         private string CurrentServiceName { get; set; }
 
-        private DBHelper(string tableName) {
+        private DBHelper(string tableName)
+        {
             TableName = tableName;
             //createTable();
 
@@ -41,17 +42,21 @@ namespace WebTodoApp.Models
             SqlCommandOption.Limit = 100;
             SqlCommandOption.TableName = TableName;
             SqlCommandOption.OrderByColumns.Add(
-                new SQLCommandOption.SQLCommandColumnOption() {
+                new SQLCommandOption.SQLCommandColumnOption()
+                {
                     Name = nameof(Todo.CreationDate),
                     DESC = true
                 }
             );
 
-            timer.Elapsed += (sender, e) => {
-                foreach(Todo t in WorkingTodos) {
+            timer.Elapsed += (sender, e) =>
+            {
+                foreach (Todo t in WorkingTodos)
+                {
                     t.updateElapsedTime();
 
-                    if((int)t.Duration == (int)(DateTime.Now - t.StartDateTime).TotalMinutes && !t.Completed) {
+                    if ((int)t.Duration == (int)(DateTime.Now - t.StartDateTime).TotalMinutes && !t.Completed)
+                    {
                         soundPlayer.Play();
                     }
                 }
@@ -61,11 +66,13 @@ namespace WebTodoApp.Models
 
         }
 
-        public DBHelper(string tableName, IDBConnectionStrings dbConnectionStrings) : this(tableName){
+        public DBHelper(string tableName, IDBConnectionStrings dbConnectionStrings) : this(tableName)
+        {
             changeDatabase(dbConnectionStrings);
         }
 
-        public void insertTodo(Todo todo) {
+        public void insertTodo(Todo todo)
+        {
             var count = select(
                 $"SELECT COUNT (*) FROM {TableName};",
                 new List<NpgsqlParameter>()
@@ -73,7 +80,8 @@ namespace WebTodoApp.Models
 
             int maxID = 0;
 
-            if((long)count["count"] > 0) {
+            if ((long)count["count"] > 0)
+            {
                 var maxIDRow = select(
                     $"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};",
                     new List<NpgsqlParameter>()
@@ -126,14 +134,17 @@ namespace WebTodoApp.Models
             loadTodoList();
         }
 
-        public void update(Todo todo) {
+        public void update(Todo todo)
+        {
             System.Diagnostics.Debug.WriteLine(todo);
-            if(todo.ID < 0 || !todo.existSource) {
+            if (todo.ID < 0 || !todo.existSource)
+            {
                 // 上記を満たす場合、更新すべきTodoのソース（行）が存在しない
                 throw new ArgumentException("更新すべき行を特定できないTodoが指定されました。");
             }
 
-            if (todo.updateStopping) {
+            if (todo.updateStopping)
+            {
                 return;
             }
 
@@ -158,17 +169,21 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.Tag)} = :{nameof(todo.Tag)}, " +
                 $"{nameof(Todo.LabelColor)} = '{todo.LabelColorName}' " +
                 $"WHERE id = {todo.ID};"
-                ,ps
+                , ps
             );
         }
 
-        public DelegateCommand<object> UpdateCommand {
+        public DelegateCommand<object> UpdateCommand
+        {
             #region
-            get => updateCommand ?? (updateCommand = new DelegateCommand<object>((object l) => {
+            get => updateCommand ?? (updateCommand = new DelegateCommand<object>((object l) =>
+            {
                 Todo todo = ((ListViewItem)l).Content as Todo;
-                if(todo != null) {
+                if (todo != null)
+                {
                     update(todo);
-                    if (todo.Started) {
+                    if (todo.Started)
+                    {
                         WorkingTodos.Add(todo);
                     }
                 }
@@ -182,19 +197,23 @@ namespace WebTodoApp.Models
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        private List<Hashtable> select(string commandText, List<NpgsqlParameter> parameters) {
-                var startTime = DateTime.Now;
+        private List<Hashtable> select(string commandText, List<NpgsqlParameter> parameters)
+        {
+            var startTime = DateTime.Now;
 
-            using (var con = DBConnection) {
+            using (var con = DBConnection)
+            {
                 List<Hashtable> resultList = new List<Hashtable>();
                 con.Open();
                 var command = new NpgsqlCommand(commandText, con);
                 parameters.ForEach(p => command.Parameters.Add(p));
                 var dataReader = command.ExecuteReader();
 
-                while (dataReader.Read()) {
+                while (dataReader.Read())
+                {
                     var hashtable = new Hashtable();
-                    for(int i = 0; i < dataReader.FieldCount; i++) {
+                    for (int i = 0; i < dataReader.FieldCount; i++)
+                    {
                         hashtable[dataReader.GetName(i)] = dataReader.GetValue(i);
                     }
                     resultList.Add(hashtable);
@@ -207,10 +226,12 @@ namespace WebTodoApp.Models
             };
         }
 
-        private void executeNonQuery(string CommandText, List<NpgsqlParameter> commandParams) {
+        private void executeNonQuery(string CommandText, List<NpgsqlParameter> commandParams)
+        {
             var startTime = DateTime.Now;
 
-            using (var con = DBConnection) {
+            using (var con = DBConnection)
+            {
                 con.Open();
                 var Command = new NpgsqlCommand(CommandText, con);
                 commandParams.ForEach((param) => { Command.Parameters.Add(param); });
@@ -224,7 +245,8 @@ namespace WebTodoApp.Models
         /// <summary>
         /// if not exists を含むテーブル生成用の sql文 を実行します。
         /// </summary>
-        private void createTable() {
+        private void createTable()
+        {
             executeNonQuery(
                 $"CREATE TABLE IF NOT EXISTS {TableName} (" +
                 $"id INTEGER PRIMARY KEY, " +
@@ -255,11 +277,13 @@ namespace WebTodoApp.Models
         public string TableName { get; private set; }
         public string CommentTableName { get; private set; } = "comments";
 
-        private NpgsqlConnection DBConnection {
+        private NpgsqlConnection DBConnection
+        {
             get => new NpgsqlConnection(connectionStringBuilder.ToString());
         }
 
-        private void loadTodoList() {
+        private void loadTodoList()
+        {
             var rows = select(
                 SqlCommandOption.buildSQL(),
                 SqlCommandOption.SqlParams
@@ -268,10 +292,12 @@ namespace WebTodoApp.Models
 
             WorkingTodos.Clear();
 
-            rows.ForEach((Hashtable row) => {
+            rows.ForEach((Hashtable row) =>
+            {
                 var t = toTodo(row);
 
-                if (t.Started) {
+                if (t.Started)
+                {
                     WorkingTodos.Add(t);
                 }
 
@@ -281,7 +307,8 @@ namespace WebTodoApp.Models
             TodoList = list;
         }
 
-        private Todo toTodo(Hashtable hashtable) {
+        private Todo toTodo(Hashtable hashtable)
+        {
             Todo todo = new Todo();
 
             todo.existSource = true;
@@ -295,18 +322,21 @@ namespace WebTodoApp.Models
             todo.CompletionDate = (DateTime)hashtable[nameof(Todo.CompletionDate).ToLower()];
             todo.StartDateTime = (DateTime)hashtable[nameof(Todo.StartDateTime).ToLower()];
 
-            if(todo.CompletionDate.Ticks != 0) {
+            if (todo.CompletionDate.Ticks != 0)
+            {
                 // 既に完了している状態
                 todo.Started = false;
                 todo.CanStart = false;
             }
-            else {
+            else
+            {
                 // todo 未完了の状態
                 todo.Started = (todo.StartDateTime.Ticks != 0);
                 todo.CanStart = (todo.CompletionDate.Ticks == 0 && todo.StartDateTime.Ticks == 0);
             }
 
-            if(todo.CompletionDate.Ticks != 0 && todo.StartDateTime.Ticks != 0) {
+            if (todo.CompletionDate.Ticks != 0 && todo.StartDateTime.Ticks != 0)
+            {
                 todo.ActualDuration = (int)(todo.CompletionDate - todo.StartDateTime).TotalMinutes;
             }
 
@@ -316,7 +346,8 @@ namespace WebTodoApp.Models
 
             string labelColor = (String)hashtable[nameof(Todo.LabelColor).ToLower()];
 
-            if(!Enum.TryParse<ColorName>(labelColor, out ColorName result)) {
+            if (!Enum.TryParse<ColorName>(labelColor, out ColorName result))
+            {
                 labelColor = ColorName.Transparent.ToString();
             }
 
@@ -326,60 +357,74 @@ namespace WebTodoApp.Models
             return todo;
         }
 
-        public void changeDatabase(IDBConnectionStrings destDatabaseInfo) {
-            connectionStringBuilder = new NpgsqlConnectionStringBuilder() {
+        public void changeDatabase(IDBConnectionStrings destDatabaseInfo)
+        {
+            connectionStringBuilder = new NpgsqlConnectionStringBuilder()
+            {
                 Host = destDatabaseInfo.HostName,
                 Username = destDatabaseInfo.UserName,
                 Database = "postgres",
                 Password = destDatabaseInfo.PassWord,
-                Port =destDatabaseInfo.PortNumber
+                Port = destDatabaseInfo.PortNumber
             };
 
-            if (tryConnect()) {
+            if (tryConnect())
+            {
                 CurrentServiceName = destDatabaseInfo.ServiceName;
                 tryFirstConnectCommand();
             }
-            else {
+            else
+            {
                 TodoList = new List<Todo>();
             }
         }
 
-        public bool tryConnect() {
+        public bool tryConnect()
+        {
             bool result = false;
-            try {
-                using (var con = DBConnection) {
+            try
+            {
+                using (var con = DBConnection)
+                {
                     con.Open();
                 }
                 result = true;
                 Connected = true;
             }
-            catch (TimeoutException) {
+            catch (TimeoutException)
+            {
                 Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
             }
-            catch (SocketException) {
+            catch (SocketException)
+            {
                 Message = "接続を試行しましたが、接続先のサーバーが存在しません。";
             }
-            catch (ArgumentException) {
+            catch (ArgumentException)
+            {
                 Message = "データベースへの接続に失敗しました。";
             }
 
             return result;
         }
 
-        private void tryFirstConnectCommand() {
+        private void tryFirstConnectCommand()
+        {
             loadTodoList();
             Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
 
-            if(DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0)) {
+            if (DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0))
+            {
                 ExportAllCommand.Execute();
                 Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
                 Properties.Settings.Default.Save();
             }
         }
 
-        public DelegateCommand LoadCommand {
+        public DelegateCommand LoadCommand
+        {
             #region
-            get => loadCommand ?? (loadCommand = new DelegateCommand(() => {
+            get => loadCommand ?? (loadCommand = new DelegateCommand(() =>
+            {
                 loadTodoList();
                 Message = "TodoList をリロードしました。";
             }));
@@ -388,9 +433,11 @@ namespace WebTodoApp.Models
         #endregion
 
 
-        public DelegateCommand<Todo> CopyTodoCommand {
+        public DelegateCommand<Todo> CopyTodoCommand
+        {
             #region
-            get => copyTodoCommand ?? (copyTodoCommand = new DelegateCommand<Todo>((sourceTodo) => {
+            get => copyTodoCommand ?? (copyTodoCommand = new DelegateCommand<Todo>((sourceTodo) =>
+            {
                 insertTodo(new Todo(sourceTodo));
             }));
         }
@@ -398,9 +445,11 @@ namespace WebTodoApp.Models
         #endregion
 
 
-        public DelegateCommand<Todo> CopyTodoWithoutTextCommand {
+        public DelegateCommand<Todo> CopyTodoWithoutTextCommand
+        {
             #region
-            get => copyTodoWithoutTextCommand ?? (copyTodoWithoutTextCommand = new DelegateCommand<Todo>((sourceTodo) => {
+            get => copyTodoWithoutTextCommand ?? (copyTodoWithoutTextCommand = new DelegateCommand<Todo>((sourceTodo) =>
+            {
                 Todo t = new Todo(sourceTodo) { TextContent = "" };
                 insertTodo(t);
             }));
@@ -409,10 +458,12 @@ namespace WebTodoApp.Models
         #endregion
 
 
-        public DelegateCommand<Todo> CopyAndContinueCommand {
+        public DelegateCommand<Todo> CopyAndContinueCommand
+        {
             #region
-            get => copyAndContinueCommand ?? (copyAndContinueCommand = new DelegateCommand<Todo>((sourceTodo) => {
-                Todo t = new Todo(sourceTodo) { Started = true};
+            get => copyAndContinueCommand ?? (copyAndContinueCommand = new DelegateCommand<Todo>((sourceTodo) =>
+            {
+                Todo t = new Todo(sourceTodo) { Started = true };
                 sourceTodo.CompleteCommand.Execute();
                 insertTodo(t);
             }));
@@ -421,9 +472,11 @@ namespace WebTodoApp.Models
         #endregion
 
 
-        public DelegateCommand<Todo> ClearTextContentCommand {
+        public DelegateCommand<Todo> ClearTextContentCommand
+        {
             #region
-            get => clearTextContentCommand ?? (clearTextContentCommand = new DelegateCommand<Todo>((sourceTodo) => {
+            get => clearTextContentCommand ?? (clearTextContentCommand = new DelegateCommand<Todo>((sourceTodo) =>
+            {
                 sourceTodo.TextContent = "";
                 update(sourceTodo);
             }));
@@ -432,9 +485,11 @@ namespace WebTodoApp.Models
         #endregion
 
 
-        public DelegateCommand<Todo> ResetTodoWorkingStatusCommand {
+        public DelegateCommand<Todo> ResetTodoWorkingStatusCommand
+        {
             #region
-            get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) => {
+            get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) =>
+            {
                 targetTodo.resetWorkingStatus();
                 update(targetTodo);
             }));
@@ -445,29 +500,35 @@ namespace WebTodoApp.Models
         /// <summary>
         /// データベースから全てのTodoを取り出してテキストファイルに出力します。
         /// </summary>
-        public DelegateCommand ExportAllCommand {
+        public DelegateCommand ExportAllCommand
+        {
             #region
-            get => exportAllCommand ?? (exportAllCommand = new DelegateCommand(() => {
+            get => exportAllCommand ?? (exportAllCommand = new DelegateCommand(() =>
+            {
                 var hashTable = select($"SELECT * FROM {TableName};", new List<NpgsqlParameter>());
                 var todos = new List<Todo>();
                 hashTable.ForEach((h) => todos.Add(toTodo(h)));
 
-                using (var sw = new StreamWriter( @"backup.xml", false, new UTF8Encoding(false))) {
+                using (var sw = new StreamWriter(@"backup.xml", false, new UTF8Encoding(false)))
+                {
                     XmlSerializer serializer1 = new XmlSerializer(typeof(List<Todo>));
                     serializer1.Serialize(sw, todos);
                 }
 
                 var commentHashTable = select($"select * from {CommentTableName};", new List<NpgsqlParameter>());
                 var comments = new List<Comment>();
-                commentHashTable.ForEach((h) => {
-                    comments.Add(new Comment() {
+                commentHashTable.ForEach((h) =>
+                {
+                    comments.Add(new Comment()
+                    {
                         ID = (int)h[nameof(Comment.ID).ToLower()],
                         CreationDateTime = (DateTime)h[nameof(Comment.CreationDateTime).ToLower()],
                         TextContent = (String)h[nameof(Comment.TextContent).ToLower()]
                     });
                 });
 
-                using (var sw = new StreamWriter( @"backup-comment.xml", false, new UTF8Encoding(false))) {
+                using (var sw = new StreamWriter(@"backup-comment.xml", false, new UTF8Encoding(false)))
+                {
                     new XmlSerializer(typeof(List<Comment>)).Serialize(sw, comments);
                 }
             }));
@@ -476,22 +537,30 @@ namespace WebTodoApp.Models
         #endregion
 
 
-        public String Message {
+        public String Message
+        {
             get => message;
-            set {
+            set
+            {
                 value = $"{DateTime.Now} " + value;
                 SetProperty(ref message, value);
             }
         }
         private String message = "";
 
-        public long TodoCount {
-            get {
+        public long TodoCount
+        {
+            get
+            {
                 long count = 0;
-                try {
-                    count = (long)(select( $"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"]);
-                }catch(Exception e) {
-                    if(e is TimeoutException || e is SocketException || e is ArgumentException) {
+                try
+                {
+                    count = (long)(select($"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"]);
+                }
+                catch (Exception e)
+                {
+                    if (e is TimeoutException || e is SocketException || e is ArgumentException)
+                    {
                         return 0;
                     }
                 }

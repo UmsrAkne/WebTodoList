@@ -16,9 +16,12 @@ namespace WebTodoApp.ViewModels
         private string _title = "Todo List";
         public string Title
         {
-            get {
-                if (DatabaseHelper != null && DatabaseHelper.WorkingTodos.Count == 1) {
-                    foreach(Todo t in DatabaseHelper.WorkingTodos) {
+            get
+            {
+                if (DatabaseHelper != null && DatabaseHelper.WorkingTodos.Count == 1)
+                {
+                    foreach (Todo t in DatabaseHelper.WorkingTodos)
+                    {
                         return $"{t.WorkingStatus} {t.Title}";
                     }
                 }
@@ -31,7 +34,8 @@ namespace WebTodoApp.ViewModels
 
         public DBHelper DatabaseHelper { get; set; }
 
-        public Todo EnteringTodo {
+        public Todo EnteringTodo
+        {
             #region
             get => enteringTodo;
             private set => SetProperty(ref enteringTodo, value);
@@ -40,18 +44,21 @@ namespace WebTodoApp.ViewModels
         private Todo enteringTodo = new Todo();
         #endregion
 
-        private IDialogService DialogService { get; set; } 
+        private IDialogService DialogService { get; set; }
 
         public MainWindowViewModel(IDialogService dialogService)
         {
             DialogService = dialogService;
-            DatabaseHelper = new DBHelper("todo_table",new AnyDBConnectionStrings("certification"));
+            DatabaseHelper = new DBHelper("todo_table", new AnyDBConnectionStrings("certification"));
         }
 
         private DelegateCommand insertTodoCommand;
-        public DelegateCommand InsertTodoCommand {
-            get => insertTodoCommand ?? (insertTodoCommand = new DelegateCommand(() => {
-                if(EnteringTodo.Title == "") {
+        public DelegateCommand InsertTodoCommand
+        {
+            get => insertTodoCommand ?? (insertTodoCommand = new DelegateCommand(() =>
+            {
+                if (EnteringTodo.Title == "")
+                {
                     return;
                 }
 
@@ -64,14 +71,18 @@ namespace WebTodoApp.ViewModels
         public Visibility TextContentVisiblity { get; set; } = Visibility.Collapsed;
         public Visibility SideTextContentVisiblity { get; set; } = Visibility.Visible;
 
-        public DelegateCommand ToggleTextContentVisibilityCommand {
+        public DelegateCommand ToggleTextContentVisibilityCommand
+        {
             #region
-            get => toggleTextContentVisibilityCommand ?? (toggleTextContentVisibilityCommand = new DelegateCommand(() => {
-                if(TextContentVisiblity == Visibility.Visible) {
+            get => toggleTextContentVisibilityCommand ?? (toggleTextContentVisibilityCommand = new DelegateCommand(() =>
+            {
+                if (TextContentVisiblity == Visibility.Visible)
+                {
                     TextContentVisiblity = Visibility.Collapsed;
                     SideTextContentVisiblity = Visibility.Visible;
                 }
-                else {
+                else
+                {
                     TextContentVisiblity = Visibility.Visible;
                     SideTextContentVisiblity = Visibility.Collapsed;
                 }
@@ -84,9 +95,11 @@ namespace WebTodoApp.ViewModels
         private DelegateCommand toggleTextContentVisibilityCommand;
         #endregion
 
-        public DelegateCommand ExitCommand {
+        public DelegateCommand ExitCommand
+        {
             #region
-            get => exitCommand ?? (exitCommand = new DelegateCommand(() => {
+            get => exitCommand ?? (exitCommand = new DelegateCommand(() =>
+            {
                 App.Current.Shutdown();
             }));
         }
@@ -94,21 +107,27 @@ namespace WebTodoApp.ViewModels
         #endregion
 
 
-        public DelegateCommand<UIElement> FocusCommand {
+        public DelegateCommand<UIElement> FocusCommand
+        {
             #region
-            get => focusCommand ?? (focusCommand = new DelegateCommand<UIElement>((focusableElement) => {
+            get => focusCommand ?? (focusCommand = new DelegateCommand<UIElement>((focusableElement) =>
+            {
                 focusableElement?.Focus();
             }));
         }
         private DelegateCommand<UIElement> focusCommand;
         #endregion
 
-        public DelegateCommand ShowConnectionDialogCommand {
+        public DelegateCommand ShowConnectionDialogCommand
+        {
             #region
-            get => showConnectionDialogCommand ?? (showConnectionDialogCommand = new DelegateCommand(() => {
+            get => showConnectionDialogCommand ?? (showConnectionDialogCommand = new DelegateCommand(() =>
+            {
                 var param = new DialogParameters();
-                DialogService.ShowDialog(nameof(ConnectionDialog), param, (IDialogResult result) => {
-                    if(result.Result == ButtonResult.Yes) {
+                DialogService.ShowDialog(nameof(ConnectionDialog), param, (IDialogResult result) =>
+                {
+                    if (result.Result == ButtonResult.Yes)
+                    {
                         var dbConnectionInfo = result.Parameters.GetValue<IDBConnectionStrings>(nameof(AnyDBConnectionStrings));
                         DatabaseHelper.changeDatabase(dbConnectionInfo);
                     }

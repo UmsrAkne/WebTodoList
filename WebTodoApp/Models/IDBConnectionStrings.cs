@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebTodoApp.Models {
-    public interface IDBConnectionStrings {
+namespace WebTodoApp.Models
+{
+    public interface IDBConnectionStrings
+    {
         string UserName { get; }
 
         string PassWord { get; }

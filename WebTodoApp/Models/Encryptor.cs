@@ -6,11 +6,15 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebTodoApp.Models {
-    public class Encryptor {
+namespace WebTodoApp.Models
+{
+    public class Encryptor
+    {
 
-        public string encrypt(string plainText) {
-            if(Key.Length == 0) {
+        public string encrypt(string plainText)
+        {
+            if (Key.Length == 0)
+            {
                 Key = getKey();
             }
 
@@ -20,8 +24,10 @@ namespace WebTodoApp.Models {
 
             using (var aesManaged = new AesManaged())
             using (var encryptor = aesManaged.CreateEncryptor(Key, iv))
-            using (var outStream = new MemoryStream()) {
-                using (var cryptoStream = new CryptoStream(outStream, encryptor, CryptoStreamMode.Write)) {
+            using (var outStream = new MemoryStream())
+            {
+                using (var cryptoStream = new CryptoStream(outStream, encryptor, CryptoStreamMode.Write))
+                {
                     cryptoStream.Write(src, 0, src.Length);
                 }
 
@@ -30,8 +36,10 @@ namespace WebTodoApp.Models {
             }
         }
 
-        public string decrypt(string encryptText) {
-            if(Key.Length == 0) {
+        public string decrypt(string encryptText)
+        {
+            if (Key.Length == 0)
+            {
                 Key = getKey();
             }
 
@@ -41,18 +49,23 @@ namespace WebTodoApp.Models {
 
             using (var aesManaged = new AesManaged())
             using (var decryptor = aesManaged.CreateDecryptor(Key, iv))
-            using (var inStream = new MemoryStream(src,false))
-            using (var outStream = new MemoryStream()) {
-                using (var cryptoStream = new CryptoStream(inStream, decryptor, CryptoStreamMode.Read)) {
+            using (var inStream = new MemoryStream(src, false))
+            using (var outStream = new MemoryStream())
+            {
+                using (var cryptoStream = new CryptoStream(inStream, decryptor, CryptoStreamMode.Read))
+                {
                     byte[] buffer = new byte[16];
                     int len = 0;
 
-                    try{
-                        while ((len = cryptoStream.Read(buffer, 0, 16)) > 0 ) {
+                    try
+                    {
+                        while ((len = cryptoStream.Read(buffer, 0, 16)) > 0)
+                        {
                             outStream.Write(buffer, 0, len);
                         }
                     }
-                    catch (CryptographicException e) {
+                    catch (CryptographicException e)
+                    {
                         throw e;
                     }
 
@@ -70,17 +83,19 @@ namespace WebTodoApp.Models {
         /// </summary>
         public byte[] Key { get; set; } = new byte[0];
 
-        private string getHash(string text) {
+        private string getHash(string text)
+        {
             var sha256 = SHA256.Create();
             byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
             return string.Concat(hash.Select(b => $"{b:x2}"));
         }
 
-        private byte[] getKey() {
+        private byte[] getKey()
+        {
             var r = new Rfc2898DeriveBytes(
                 getHash(Environment.MachineName),
                 new byte[16],
-                1000 
+                1000
             );
             return r.GetBytes(32);
         }

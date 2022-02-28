@@ -9,8 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using WebTodoApp.Models;
 
-namespace WebTodoApp.ViewModels {
-    class ConnectionDialogViewModel : IDialogAware {
+namespace WebTodoApp.ViewModels
+{
+    class ConnectionDialogViewModel : IDialogAware
+    {
         public string Title => "サーバーの情報を入力";
 
         public event Action<IDialogResult> RequestClose;
@@ -22,28 +24,35 @@ namespace WebTodoApp.ViewModels {
         private DBHelper dbHelper;
         private Encryptor encryptor = new Encryptor();
 
-        public void OnDialogClosed() {
+        public void OnDialogClosed()
+        {
         }
 
-        public void OnDialogOpened(IDialogParameters parameters) {
+        public void OnDialogOpened(IDialogParameters parameters)
+        {
         }
 
-        public ConnectionDialogViewModel() {
+        public ConnectionDialogViewModel()
+        {
             DBConnectionStrings = new AnyDBConnectionStrings("certification");
         }
 
-        private void saveCertification() {
+        private void saveCertification()
+        {
             string encrypted = encryptor.encrypt($"{DBConnectionStrings.HostName} {DBConnectionStrings.UserName} {DBConnectionStrings.PassWord} {DBConnectionStrings.PortNumber}");
 
             var certificationFileInfo = new FileInfo("certification");
-            using (StreamWriter sw = new StreamWriter(certificationFileInfo.Name, false)) {
+            using (StreamWriter sw = new StreamWriter(certificationFileInfo.Name, false))
+            {
                 sw.Write(encrypted);
             }
         }
 
-        public DelegateCommand ConnectCommand {
+        public DelegateCommand ConnectCommand
+        {
             #region
-            get => connectCommand ?? (connectCommand = new DelegateCommand(() => {
+            get => connectCommand ?? (connectCommand = new DelegateCommand(() =>
+            {
                 saveCertification();
 
                 DialogParameters dp = new DialogParameters();
@@ -56,9 +65,10 @@ namespace WebTodoApp.ViewModels {
         #endregion
 
         public DelegateCommand CancelDialogCommand
-            {
+        {
             #region
-            get => cancelDialogCommand ?? (cancelDialogCommand = new DelegateCommand(() => {
+            get => cancelDialogCommand ?? (cancelDialogCommand = new DelegateCommand(() =>
+            {
                 RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
             }));
         }

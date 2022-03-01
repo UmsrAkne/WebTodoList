@@ -24,21 +24,18 @@ namespace WebTodoApp.Models.Tests
                 {
                     Name = "firstColumn",
                     DESC = true
-                }
-            );
+                });
 
             commandOption.OrderByColumns.Add(
                 new SQLCommandOption.SQLCommandColumnOption()
                 {
                     Name = "secondColumn",
                     DESC = true
-                }
-            );
+                });
 
             Assert.AreEqual(
                 commandOption.buildSQL(),
-                "select * from testTableName where 1=1 order by firstColumn DESC ,secondColumn DESC LIMIT 20;"
-            );
+                "select * from testTableName where 1=1 order by firstColumn DESC ,secondColumn DESC LIMIT 20;");
 
         }
     }

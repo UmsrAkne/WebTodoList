@@ -25,7 +25,6 @@ namespace WebTodoApp.Models
             ((TextBox)AssociatedObject).PreviewTextInput -= previewTextInputEventHandler;
         }
 
-        //イベントハンドラ
         private void previewTextInputEventHandler(object sender, TextCompositionEventArgs e)
         {
             if (!int.TryParse(e.Text, out int result))

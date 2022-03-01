@@ -27,7 +27,6 @@ namespace WebTodoApp.Models
             ((TextBox)AssociatedObject).LostKeyboardFocus += lostKeyboardFocusHandler;
         }
 
-        //イベントハンドラ
         private void mouseDoubleClickeHandler(object sender, RoutedEventArgs e)
         {
             ((TextBox)sender).IsReadOnly = false;

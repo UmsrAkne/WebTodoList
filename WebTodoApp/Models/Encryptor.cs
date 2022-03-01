@@ -95,8 +95,8 @@ namespace WebTodoApp.Models
             var r = new Rfc2898DeriveBytes(
                 getHash(Environment.MachineName),
                 new byte[16],
-                1000
-            );
+                1000);
+
             return r.GetBytes(32);
         }
     }

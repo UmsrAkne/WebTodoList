@@ -36,7 +36,7 @@ namespace WebTodoApp.Models
         private DBHelper(string tableName)
         {
             TableName = tableName;
-            //createTable();
+            /// createTable();
 
             SqlCommandOption = new SQLCommandOption();
             SqlCommandOption.Limit = 100;
@@ -46,8 +46,7 @@ namespace WebTodoApp.Models
                 {
                     Name = nameof(Todo.CreationDate),
                     DESC = true
-                }
-            );
+                });
 
             timer.Elapsed += (sender, e) =>
             {
@@ -73,23 +72,15 @@ namespace WebTodoApp.Models
 
         public void insertTodo(Todo todo)
         {
-            var count = select(
-                $"SELECT COUNT (*) FROM {TableName};",
-                new List<NpgsqlParameter>()
-                )[0];
+            var count = select($"SELECT COUNT (*) FROM {TableName};", new List<NpgsqlParameter>())[0];
 
             int maxID = 0;
 
             if ((long)count["count"] > 0)
             {
-                var maxIDRow = select(
-                    $"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};",
-                    new List<NpgsqlParameter>()
-                    )[0];
-
+                var maxIDRow = select($"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};", new List<NpgsqlParameter>())[0];
                 maxID = (int)maxIDRow["max"] + 1;
-            };
-
+            }
 
             var ps = new List<NpgsqlParameter>();
 
@@ -126,9 +117,7 @@ namespace WebTodoApp.Models
                 $":{nameof(todo.Duration)}," +
                 $"'{todo.LabelColorName}'," +
                 $":{nameof(todo.Tag)}" +
-                ");"
-                , ps
-            );
+                ");", ps);
 
             RaisePropertyChanged(nameof(TodoCount));
             loadTodoList();
@@ -156,21 +145,22 @@ namespace WebTodoApp.Models
             ps.Add(new NpgsqlParameter(nameof(Todo.Duration), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Duration });
             ps.Add(new NpgsqlParameter(nameof(Todo.Tag), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Tag });
 
-            executeNonQuery(
-                $"update {TableName} SET " +
-                $"{nameof(Todo.Completed)} = {todo.Completed}, " +
-                $"{nameof(Todo.Title)} = :{nameof(todo.Title)}, " +
-                $"{nameof(Todo.TextContent)} = :{nameof(todo.TextContent)}, " +
-                $"{nameof(Todo.CreationDate)} = '{todo.CreationDate}', " +
-                $"{nameof(Todo.CompletionDate)} = '{todo.CompletionDate}', " +
-                $"{nameof(Todo.StartDateTime)} = '{todo.StartDateTime}', " +
-                $"{nameof(Todo.Priority)} = :{nameof(todo.Priority)}, " +
-                $"{nameof(Todo.Duration)} = :{nameof(todo.Duration)}, " +
-                $"{nameof(Todo.Tag)} = :{nameof(todo.Tag)}, " +
-                $"{nameof(Todo.LabelColor)} = '{todo.LabelColorName}' " +
-                $"WHERE id = {todo.ID};"
-                , ps
-            );
+            StringBuilder query = new StringBuilder();
+            query.Append($"update {TableName} SET ");
+            query.Append($"{nameof(Todo.Completed)} = {todo.Completed}, ");
+            query.Append($"{nameof(Todo.Title)} = :{nameof(todo.Title)}, ");
+            query.Append($"{nameof(Todo.TextContent)} = :{nameof(todo.TextContent)}, ");
+            query.Append($"{nameof(Todo.CreationDate)} = '{todo.CreationDate}', ");
+            query.Append($"{nameof(Todo.CompletionDate)} = '{todo.CompletionDate}', ");
+            query.Append($"{nameof(Todo.StartDateTime)} = '{todo.StartDateTime}', ");
+            query.Append($"{nameof(Todo.Priority)} = :{nameof(todo.Priority)}, ");
+            query.Append($"{nameof(Todo.Duration)} = :{nameof(todo.Duration)}, ");
+            query.Append($"{nameof(Todo.Tag)} = :{nameof(todo.Tag)}, ");
+            query.Append($"{nameof(Todo.LabelColor)} = '{todo.LabelColorName}' ");
+            query.Append($"WHERE id = {todo.ID};");
+
+            executeNonQuery(query.ToString(), ps);
+
         }
 
         public DelegateCommand<object> UpdateCommand
@@ -223,7 +213,7 @@ namespace WebTodoApp.Models
                 File.AppendAllText(@"sqllog.txt", $"{DateTime.Now} {processDuration}\t{commandText}{Environment.NewLine}");
 
                 return resultList;
-            };
+            }
         }
 
         private void executeNonQuery(string CommandText, List<NpgsqlParameter> commandParams)
@@ -260,18 +250,14 @@ namespace WebTodoApp.Models
                 $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', " +
                 $"{nameof(Todo.LabelColor)} TEXT NOT NULL, " +
                 $"{nameof(Todo.Tag)} TEXT NOT NULL " +
-                ");"
-                , new List<NpgsqlParameter>()
-            );
+                ");", new List<NpgsqlParameter>());
 
             executeNonQuery(
                 $"CREATE TABLE IF NOT EXISTS {CommentTableName} (" +
                 $"{nameof(Comment.ID)} INTEGER PRIMARY KEY, " +
                 $"{nameof(Comment.CreationDateTime)} TIMESTAMP NOT NULL," +
                 $"{nameof(Comment.TextContent)} TEXT NOT NULL " +
-                $");"
-                , new List<NpgsqlParameter>()
-            );
+                $");", new List<NpgsqlParameter>());
         }
 
         public string TableName { get; private set; }
@@ -284,10 +270,7 @@ namespace WebTodoApp.Models
 
         private void loadTodoList()
         {
-            var rows = select(
-                SqlCommandOption.buildSQL(),
-                SqlCommandOption.SqlParams
-                );
+            var rows = select(SqlCommandOption.buildSQL(), SqlCommandOption.SqlParams);
             var list = new List<Todo>();
 
             WorkingTodos.Clear();

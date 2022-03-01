@@ -124,6 +124,7 @@ namespace WebTodoApp.ViewModels
             get => showConnectionDialogCommand ?? (showConnectionDialogCommand = new DelegateCommand(() =>
             {
                 var param = new DialogParameters();
+
                 DialogService.ShowDialog(nameof(ConnectionDialog), param, (IDialogResult result) =>
                 {
                     if (result.Result == ButtonResult.Yes)

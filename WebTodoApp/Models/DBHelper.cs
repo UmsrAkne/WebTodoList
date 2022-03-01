@@ -92,32 +92,35 @@ namespace WebTodoApp.Models
             ps.Add(new NpgsqlParameter(nameof(Todo.Duration), NpgsqlTypes.NpgsqlDbType.Integer) { Value = todo.Duration });
             ps.Add(new NpgsqlParameter(nameof(Todo.Tag), NpgsqlTypes.NpgsqlDbType.Text) { Value = todo.Tag });
 
-            executeNonQuery(
-                $"INSERT INTO {TableName} ( " +
-                $"{nameof(Todo.ID)}, " +
-                $"{nameof(Todo.Completed)}, " +
-                $"{nameof(Todo.Title)}, " +
-                $"{nameof(Todo.TextContent)}," +
-                $"{nameof(Todo.CreationDate)}," +
-                $"{nameof(Todo.CompletionDate)}," +
-                $"{nameof(Todo.StartDateTime)}," +
-                $"{nameof(Todo.Priority)}," +
-                $"{nameof(Todo.Duration)}," +
-                $"{nameof(Todo.LabelColor)}," +
-                $"{nameof(Todo.Tag)} ) " +
-                $"VALUES (" +
-                $"{maxID}," +
-                $"{todo.Completed}," +
-                $":{nameof(todo.Title)}," +
-                $":{nameof(todo.TextContent)}," +
-                $"'{todo.CreationDate}'," +
-                $"'{todo.CompletionDate}'," +
-                $"'{todo.StartDateTime}'," +
-                $":{nameof(todo.Priority)}," +
-                $":{nameof(todo.Duration)}," +
-                $"'{todo.LabelColorName}'," +
-                $":{nameof(todo.Tag)}" +
-                ");", ps);
+            StringBuilder query = new StringBuilder();
+
+            query.Append($"INSERT INTO {TableName} ( ");
+            query.Append($"{nameof(Todo.ID)}, ");
+            query.Append($"{nameof(Todo.Completed)}, ");
+            query.Append($"{nameof(Todo.Title)}, ");
+            query.Append($"{nameof(Todo.TextContent)},");
+            query.Append($"{nameof(Todo.CreationDate)},");
+            query.Append($"{nameof(Todo.CompletionDate)},");
+            query.Append($"{nameof(Todo.StartDateTime)},");
+            query.Append($"{nameof(Todo.Priority)},");
+            query.Append($"{nameof(Todo.Duration)},");
+            query.Append($"{nameof(Todo.LabelColor)},");
+            query.Append($"{nameof(Todo.Tag)} ) ");
+            query.Append($"VALUES (");
+            query.Append($"{maxID},");
+            query.Append($"{todo.Completed},");
+            query.Append($":{nameof(todo.Title)},");
+            query.Append($":{nameof(todo.TextContent)},");
+            query.Append($"'{todo.CreationDate}',");
+            query.Append($"'{todo.CompletionDate}',");
+            query.Append($"'{todo.StartDateTime}',");
+            query.Append($":{nameof(todo.Priority)},");
+            query.Append($":{nameof(todo.Duration)},");
+            query.Append($"'{todo.LabelColorName}',");
+            query.Append($":{nameof(todo.Tag)}");
+            query.Append(");");
+
+            executeNonQuery(query.ToString(), ps);
 
             RaisePropertyChanged(nameof(TodoCount));
             loadTodoList();
@@ -160,7 +163,6 @@ namespace WebTodoApp.Models
             query.Append($"WHERE id = {todo.ID};");
 
             executeNonQuery(query.ToString(), ps);
-
         }
 
         public DelegateCommand<object> UpdateCommand

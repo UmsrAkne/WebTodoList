@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
-using System.Windows.Controls;
-using System.Xml.Serialization;
-using System.Media;
-using Npgsql;
-using Prism.Commands;
-using Prism.Mvvm;
-using System.Net.Sockets;
-
-namespace WebTodoApp.Models
+﻿namespace WebTodoApp.Models
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using System.Timers;
+    using System.Windows.Controls;
+    using System.Xml.Serialization;
+    using System.Media;
+    using Npgsql;
+    using Prism.Commands;
+    using Prism.Mvvm;
+    using System.Net.Sockets;
+
     public class DBHelper : BindableBase
     {
 
@@ -303,7 +300,7 @@ namespace WebTodoApp.Models
             todo.existSource = true;
 
             todo.ID = (int)hashtable[nameof(Todo.ID).ToLower()];
-            todo.Completed = (Boolean)hashtable[nameof(Todo.Completed).ToLower()];
+            todo.Completed = (bool)hashtable[nameof(Todo.Completed).ToLower()];
             todo.Title = (string)hashtable[nameof(Todo.Title).ToLower()];
             todo.TextContent = (string)hashtable[nameof(Todo.TextContent).ToLower()];
 
@@ -320,8 +317,8 @@ namespace WebTodoApp.Models
             else
             {
                 // todo 未完了の状態
-                todo.Started = (todo.StartDateTime.Ticks != 0);
-                todo.CanStart = (todo.CompletionDate.Ticks == 0 && todo.StartDateTime.Ticks == 0);
+                todo.Started = todo.StartDateTime.Ticks != 0;
+                todo.CanStart = todo.CompletionDate.Ticks == 0 && todo.StartDateTime.Ticks == 0;
             }
 
             if (todo.CompletionDate.Ticks != 0 && todo.StartDateTime.Ticks != 0)
@@ -331,16 +328,16 @@ namespace WebTodoApp.Models
 
             todo.Priority = (int)hashtable[nameof(Todo.Priority).ToLower()];
             todo.Duration = (int)hashtable[nameof(Todo.Duration).ToLower()];
-            todo.Tag = (String)hashtable[nameof(Todo.Tag).ToLower()];
+            todo.Tag = (string)hashtable[nameof(Todo.Tag).ToLower()];
 
-            string labelColor = (String)hashtable[nameof(Todo.LabelColor).ToLower()];
+            string labelColor = (string)hashtable[nameof(Todo.LabelColor).ToLower()];
 
             if (!Enum.TryParse<ColorName>(labelColor, out ColorName result))
             {
                 labelColor = ColorName.Transparent.ToString();
             }
 
-            todo.LabelColorName = (labelColor == "" || labelColor == ColorName.Transparent.ToString()) ?
+            todo.LabelColorName = (labelColor == string.Empty || labelColor == ColorName.Transparent.ToString()) ?
                  ColorName.Transparent : (ColorName)Enum.Parse(typeof(ColorName), labelColor, true);
 
             return todo;
@@ -439,7 +436,7 @@ namespace WebTodoApp.Models
             #region
             get => copyTodoWithoutTextCommand ?? (copyTodoWithoutTextCommand = new DelegateCommand<Todo>((sourceTodo) =>
             {
-                Todo t = new Todo(sourceTodo) { TextContent = "" };
+                Todo t = new Todo(sourceTodo) { TextContent = string.Empty };
                 insertTodo(t);
             }));
         }
@@ -466,7 +463,7 @@ namespace WebTodoApp.Models
             #region
             get => clearTextContentCommand ?? (clearTextContentCommand = new DelegateCommand<Todo>((sourceTodo) =>
             {
-                sourceTodo.TextContent = "";
+                sourceTodo.TextContent = string.Empty;
                 update(sourceTodo);
             }));
         }
@@ -512,7 +509,7 @@ namespace WebTodoApp.Models
                     {
                         ID = (int)h[nameof(Comment.ID).ToLower()],
                         CreationDateTime = (DateTime)h[nameof(Comment.CreationDateTime).ToLower()],
-                        TextContent = (String)h[nameof(Comment.TextContent).ToLower()]
+                        TextContent = (string)h[nameof(Comment.TextContent).ToLower()]
                     });
                 });
 
@@ -526,7 +523,7 @@ namespace WebTodoApp.Models
         #endregion
 
 
-        public String Message
+        public string Message
         {
             get => message;
             set
@@ -535,7 +532,7 @@ namespace WebTodoApp.Models
                 SetProperty(ref message, value);
             }
         }
-        private String message = "";
+        private string message = string.Empty;
 
         public long TodoCount
         {
@@ -544,7 +541,7 @@ namespace WebTodoApp.Models
                 long count = 0;
                 try
                 {
-                    count = (long)(select($"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"]);
+                    count = (long)select($"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"];
                 }
                 catch (Exception e)
                 {

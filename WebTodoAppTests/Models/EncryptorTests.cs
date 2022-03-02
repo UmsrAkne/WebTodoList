@@ -1,18 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using WebTodoApp.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
-
-namespace WebTodoApp.Models.Tests
+﻿namespace WebTodoApp.Models.Tests
 {
-    [TestClass()]
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
+    using System.Security.Cryptography;
+
+    [TestClass]
     public class EncryptorTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void encryptTest()
         {
             var encryptor = new Encryptor();
@@ -24,7 +18,7 @@ namespace WebTodoApp.Models.Tests
             Assert.IsFalse(encrypted.Contains("hello world"), "平文が暗号化文字列内に存在しない確認する。");
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void decryptTest()
         {
             var encryptor = new Encryptor();

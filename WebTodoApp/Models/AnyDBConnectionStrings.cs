@@ -1,23 +1,18 @@
-﻿using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebTodoApp.Models
+﻿namespace WebTodoApp.Models
 {
-    class AnyDBConnectionStrings : BindableBase, IDBConnectionStrings
+    using System.IO;
+    using Prism.Mvvm;
+
+    public class AnyDBConnectionStrings : BindableBase, IDBConnectionStrings
     {
         public string UserName { get => userName; set => SetProperty(ref userName, value); }
-        private string userName = "";
+        private string userName = string.Empty;
 
         public string PassWord { get => password; set => SetProperty(ref password, value); }
-        private string password = "";
+        private string password = string.Empty;
 
         public string HostName { get => hostName; set => SetProperty(ref hostName, value); }
-        private string hostName = "";
+        private string hostName = string.Empty;
 
         public int PortNumber { get => portNumber; set => SetProperty(ref portNumber, value); }
         private int portNumber = 5432;

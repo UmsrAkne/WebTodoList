@@ -1,15 +1,12 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Xml.Serialization;
-
-namespace WebTodoApp.Models
+﻿namespace WebTodoApp.Models
 {
+
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Media;
+    using System.Xml.Serialization;
+    using Prism.Commands;
+    using Prism.Mvvm;
 
     [XmlInclude(typeof(Todo))]
     [Serializable]
@@ -61,18 +58,19 @@ namespace WebTodoApp.Models
                 SetProperty(ref startDateTime, value);
             }
         }
+
         private DateTime startDateTime = new DateTime();
 
-        public String Title { get => title; set => SetProperty(ref title, value); }
-        private String title = "";
+        public string Title { get => title; set => SetProperty(ref title, value); }
+        private string title = string.Empty;
 
-        public String TextContent { get => textContent; set => SetProperty(ref textContent, value); }
-        private String textContent = "";
+        public string TextContent { get => textContent; set => SetProperty(ref textContent, value); }
+        private string textContent = string.Empty;
 
         // 優先順位は小さいほど高い
         public int Priority { get; set; } = 5;
 
-        public String Tag { get; set; } = "";
+        public string Tag { get; set; } = string.Empty;
 
         public bool Completed
         {
@@ -168,10 +166,10 @@ namespace WebTodoApp.Models
         /// </summary>
         public bool existSource { get; set; }
 
-        public String CreationDateShortString { get => CreationDate.ToString("MM/dd HH:mm"); }
-        public String CompletionDateShortString
+        public string CreationDateShortString { get => CreationDate.ToString("MM/dd HH:mm"); }
+        public string CompletionDateShortString
         {
-            get => (CompletionDate.Ticks == 0) ? "" : CompletionDate.ToString("MM/dd HH:mm");
+            get => (CompletionDate.Ticks == 0) ? string.Empty : CompletionDate.ToString("MM/dd HH:mm");
         }
 
         /// <summary>
@@ -204,7 +202,7 @@ namespace WebTodoApp.Models
         /// </summary>
         public Todo Self => this;
 
-        public String WorkingStatus
+        public string WorkingStatus
         {
             get
             {

@@ -1,12 +1,9 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebTodoApp.Models
+﻿namespace WebTodoApp.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using Npgsql;
+
     public class SQLCommandOption
     {
 
@@ -39,7 +36,7 @@ namespace WebTodoApp.Models
                 sql += $"AND {nameof(Todo.CreationDate)} >= '{pastDate}' ";
             }
 
-            if (SearchString != "")
+            if (SearchString != string.Empty)
             {
                 sql += $"AND " +
                     $"(" +
@@ -60,7 +57,7 @@ namespace WebTodoApp.Models
                 OrderByColumns.ForEach((SQLCommandColumnOption cco) =>
                 {
                     sql += $"{cco.Name} ";
-                    sql += (cco.DESC) ? "DESC ," : "ASC ,";
+                    sql += cco.DESC ? "DESC ," : "ASC ,";
                 });
 
                 sql = sql.Substring(0, sql.Length - 2); // 終端についているカンマを削除する
@@ -99,7 +96,7 @@ namespace WebTodoApp.Models
 
         private string displayDateRangeString = "0";
 
-        public string SearchString { get; set; } = "";
+        public string SearchString { get; set; } = string.Empty;
 
         public List<NpgsqlParameter> SqlParams
         {

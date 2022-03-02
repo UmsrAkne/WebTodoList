@@ -1,22 +1,18 @@
-﻿using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebTodoApp.Models
+﻿namespace WebTodoApp.Models
 {
+    using Prism.Mvvm;
+    using System;
+
     public class Comment : BindableBase
     {
         public int ID { get; set; }
 
         public DateTime CreationDateTime { get; set; }
 
-        public String TextContent { get => textContent; set => SetProperty(ref textContent, value); }
-        private String textContent = "";
+        public string TextContent { get => textContent; set => SetProperty(ref textContent, value); }
+        private string textContent = string.Empty;
 
-        public String CreationDateShortString { get => CreationDateTime.ToString("MM/dd HH:mm"); }
+        public string CreationDateShortString { get => CreationDateTime.ToString("MM/dd HH:mm"); }
 
     }
 }

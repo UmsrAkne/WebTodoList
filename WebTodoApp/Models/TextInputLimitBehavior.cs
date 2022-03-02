@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Interactivity;
-
-namespace WebTodoApp.Models
+﻿namespace WebTodoApp.Models
 {
+    using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Interactivity;
+
     public class TextInputLimitBehavior : Behavior<TextBox>
     {
 

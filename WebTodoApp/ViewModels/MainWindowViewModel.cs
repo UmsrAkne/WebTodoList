@@ -1,16 +1,16 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Services.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Media;
-using WebTodoApp.Models;
-using WebTodoApp.Views;
-
-namespace WebTodoApp.ViewModels
+﻿namespace WebTodoApp.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using Prism.Commands;
+    using Prism.Mvvm;
+    using Prism.Services.Dialogs;
+    using WebTodoApp.Models;
+    using WebTodoApp.Views;
+
     public class MainWindowViewModel : BindableBase
     {
         private string _title = "Todo List";
@@ -57,7 +57,7 @@ namespace WebTodoApp.ViewModels
         {
             get => insertTodoCommand ?? (insertTodoCommand = new DelegateCommand(() =>
             {
-                if (EnteringTodo.Title == "")
+                if (EnteringTodo.Title == string.Empty)
                 {
                     return;
                 }
@@ -125,7 +125,10 @@ namespace WebTodoApp.ViewModels
             {
                 var param = new DialogParameters();
 
-                DialogService.ShowDialog(nameof(ConnectionDialog), param, (IDialogResult result) =>
+                DialogService.ShowDialog(
+                    nameof(ConnectionDialog),
+                    param,
+                    (IDialogResult result) =>
                 {
                     if (result.Result == ButtonResult.Yes)
                     {

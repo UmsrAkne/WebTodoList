@@ -1,11 +1,10 @@
-﻿using WebTodoApp.Views;
-using Prism.Ioc;
-using Prism.Modularity;
-using System.Windows;
-using WebTodoApp.ViewModels;
-
-namespace WebTodoApp
+﻿namespace WebTodoApp
 {
+    using System.Windows;
+    using Prism.Ioc;
+    using WebTodoApp.Views;
+    using WebTodoApp.ViewModels;
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -16,7 +15,8 @@ namespace WebTodoApp
             return Container.Resolve<MainWindow>();
         }
 
-        protected override void RegisterTypes(IContainerRegistry containerRegistry) {
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
             containerRegistry.RegisterDialog<ConnectionDialog, ConnectionDialogViewModel>();
         }
     }

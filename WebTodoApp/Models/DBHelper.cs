@@ -239,27 +239,31 @@ namespace WebTodoApp.Models
         /// </summary>
         private void createTable()
         {
-            executeNonQuery(
-                $"CREATE TABLE IF NOT EXISTS {TableName} (" +
-                $"id INTEGER PRIMARY KEY, " +
-                $"{nameof(Todo.Completed)} BOOLEAN NOT NULL, " +
-                $"{nameof(Todo.Title)} TEXT NOT NULL, " +
-                $"{nameof(Todo.TextContent)} TEXT NOT NULL, " +
-                $"{nameof(Todo.CreationDate)} TIMESTAMP NOT NULL, " +
-                $"{nameof(Todo.CompletionDate)} TIMESTAMP NOT NULL, " +
-                $"{nameof(Todo.Priority)} INTEGER NOT NULL, " +
-                $"{nameof(Todo.Duration)} INTEGER DEFAULT 0 NOT NULL, " +
-                $"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', " +
-                $"{nameof(Todo.LabelColor)} TEXT NOT NULL, " +
-                $"{nameof(Todo.Tag)} TEXT NOT NULL " +
-                ");", new List<NpgsqlParameter>());
+            StringBuilder query = new StringBuilder();
+            query.Append($"CREATE TABLE IF NOT EXISTS {TableName} (");
+            query.Append($"id INTEGER PRIMARY KEY, ");
+            query.Append($"{nameof(Todo.Completed)} BOOLEAN NOT NULL, ");
+            query.Append($"{nameof(Todo.Title)} TEXT NOT NULL, ");
+            query.Append($"{nameof(Todo.TextContent)} TEXT NOT NULL, ");
+            query.Append($"{nameof(Todo.CreationDate)} TIMESTAMP NOT NULL, ");
+            query.Append($"{nameof(Todo.CompletionDate)} TIMESTAMP NOT NULL, ");
+            query.Append($"{nameof(Todo.Priority)} INTEGER NOT NULL, ");
+            query.Append($"{nameof(Todo.Duration)} INTEGER DEFAULT 0 NOT NULL, ");
+            query.Append($"{nameof(Todo.StartDateTime)} TIMESTAMP NOT NULL DEFAULT '0001/01/01 0:00:00', ");
+            query.Append($"{nameof(Todo.LabelColor)} TEXT NOT NULL, ");
+            query.Append($"{nameof(Todo.Tag)} TEXT NOT NULL ");
+            query.Append(");");
 
-            executeNonQuery(
-                $"CREATE TABLE IF NOT EXISTS {CommentTableName} (" +
-                $"{nameof(Comment.ID)} INTEGER PRIMARY KEY, " +
-                $"{nameof(Comment.CreationDateTime)} TIMESTAMP NOT NULL," +
-                $"{nameof(Comment.TextContent)} TEXT NOT NULL " +
-                $");", new List<NpgsqlParameter>());
+            executeNonQuery(query.ToString(), new List<NpgsqlParameter>());
+
+            StringBuilder commentTableQuery = new StringBuilder();
+            commentTableQuery.Append($"CREATE TABLE IF NOT EXISTS {CommentTableName} (");
+            commentTableQuery.Append($"{nameof(Comment.ID)} INTEGER PRIMARY KEY, ");
+            commentTableQuery.Append($"{nameof(Comment.CreationDateTime)} TIMESTAMP NOT NULL,");
+            commentTableQuery.Append($"{nameof(Comment.TextContent)} TEXT NOT NULL ");
+            commentTableQuery.Append($");");
+
+            executeNonQuery(commentTableQuery.ToString(), new List<NpgsqlParameter>());
         }
 
         public string TableName { get; private set; }

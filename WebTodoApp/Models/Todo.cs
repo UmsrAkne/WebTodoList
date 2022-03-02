@@ -171,8 +171,7 @@ namespace WebTodoApp.Models
         public String CreationDateShortString { get => CreationDate.ToString("MM/dd HH:mm"); }
         public String CompletionDateShortString
         {
-            get =>
-(CompletionDate.Ticks == 0) ? "" : CompletionDate.ToString("MM/dd HH:mm");
+            get => (CompletionDate.Ticks == 0) ? "" : CompletionDate.ToString("MM/dd HH:mm");
         }
 
         /// <summary>

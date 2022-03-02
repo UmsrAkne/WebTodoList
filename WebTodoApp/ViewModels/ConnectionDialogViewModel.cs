@@ -1,16 +1,11 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Services.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebTodoApp.Models;
-
-namespace WebTodoApp.ViewModels
+﻿namespace WebTodoApp.ViewModels
 {
+    using System;
+    using System.IO;
+    using Prism.Commands;
+    using Prism.Services.Dialogs;
+    using WebTodoApp.Models;
+
     class ConnectionDialogViewModel : IDialogAware
     {
         public string Title => "サーバーの情報を入力";
@@ -23,6 +18,8 @@ namespace WebTodoApp.ViewModels
 
         private DBHelper dbHelper;
         private Encryptor encryptor = new Encryptor();
+        private DelegateCommand connectCommand;
+        private DelegateCommand cancelDialogCommand;
 
         public void OnDialogClosed()
         {
@@ -50,7 +47,6 @@ namespace WebTodoApp.ViewModels
 
         public DelegateCommand ConnectCommand
         {
-            #region
             get => connectCommand ?? (connectCommand = new DelegateCommand(() =>
             {
                 saveCertification();
@@ -61,19 +57,13 @@ namespace WebTodoApp.ViewModels
                 RequestClose.Invoke(result);
             }));
         }
-        private DelegateCommand connectCommand;
-        #endregion
 
         public DelegateCommand CancelDialogCommand
         {
-            #region
             get => cancelDialogCommand ?? (cancelDialogCommand = new DelegateCommand(() =>
             {
                 RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
             }));
         }
-        private DelegateCommand cancelDialogCommand;
-        #endregion
-
     }
 }

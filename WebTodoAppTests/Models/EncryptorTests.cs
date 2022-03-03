@@ -1,7 +1,7 @@
 ﻿namespace WebTodoApp.Models.Tests
 {
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System.Security.Cryptography;
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class EncryptorTests

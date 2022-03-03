@@ -2,8 +2,8 @@
 {
     using System.Windows;
     using Prism.Ioc;
-    using WebTodoApp.Views;
     using WebTodoApp.ViewModels;
+    using WebTodoApp.Views;
 
     /// <summary>
     /// Interaction logic for App.xaml

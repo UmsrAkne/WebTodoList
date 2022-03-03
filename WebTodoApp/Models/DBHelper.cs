@@ -4,15 +4,15 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
+    using System.Media;
+    using System.Net.Sockets;
     using System.Text;
     using System.Timers;
     using System.Windows.Controls;
     using System.Xml.Serialization;
-    using System.Media;
     using Npgsql;
     using Prism.Commands;
     using Prism.Mvvm;
-    using System.Net.Sockets;
 
     public class DBHelper : BindableBase
     {

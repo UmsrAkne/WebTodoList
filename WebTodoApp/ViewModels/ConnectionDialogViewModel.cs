@@ -8,42 +8,21 @@
 
     class ConnectionDialogViewModel : IDialogAware
     {
-        public string Title => "サーバーの情報を入力";
-
-        public event Action<IDialogResult> RequestClose;
-
-        public AnyDBConnectionStrings DBConnectionStrings { get; } = new AnyDBConnectionStrings();
-
-        public bool CanCloseDialog() => true;
-
         private DBHelper dbHelper;
         private Encryptor encryptor = new Encryptor();
         private DelegateCommand connectCommand;
         private DelegateCommand cancelDialogCommand;
-
-        public void OnDialogClosed()
-        {
-        }
-
-        public void OnDialogOpened(IDialogParameters parameters)
-        {
-        }
 
         public ConnectionDialogViewModel()
         {
             DBConnectionStrings = new AnyDBConnectionStrings("certification");
         }
 
-        private void saveCertification()
-        {
-            string encrypted = encryptor.encrypt($"{DBConnectionStrings.HostName} {DBConnectionStrings.UserName} {DBConnectionStrings.PassWord} {DBConnectionStrings.PortNumber}");
+        public event Action<IDialogResult> RequestClose;
 
-            var certificationFileInfo = new FileInfo("certification");
-            using (StreamWriter sw = new StreamWriter(certificationFileInfo.Name, false))
-            {
-                sw.Write(encrypted);
-            }
-        }
+        public AnyDBConnectionStrings DBConnectionStrings { get; } = new AnyDBConnectionStrings();
+
+        public string Title => "サーバーの情報を入力";
 
         public DelegateCommand ConnectCommand
         {
@@ -64,6 +43,27 @@
             {
                 RequestClose.Invoke(new DialogResult(ButtonResult.Cancel));
             }));
+        }
+
+        public bool CanCloseDialog() => true;
+
+        public void OnDialogClosed()
+        {
+        }
+
+        public void OnDialogOpened(IDialogParameters parameters)
+        {
+        }
+
+        private void saveCertification()
+        {
+            string encrypted = encryptor.encrypt($"{DBConnectionStrings.HostName} {DBConnectionStrings.UserName} {DBConnectionStrings.PassWord} {DBConnectionStrings.PortNumber}");
+
+            var certificationFileInfo = new FileInfo("certification");
+            using (StreamWriter sw = new StreamWriter(certificationFileInfo.Name, false))
+            {
+                sw.Write(encrypted);
+            }
         }
     }
 }

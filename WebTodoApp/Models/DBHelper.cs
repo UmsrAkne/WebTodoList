@@ -18,17 +18,23 @@
     {
 
         private NpgsqlConnectionStringBuilder connectionStringBuilder;
-
-        public List<Todo> TodoList { get => todoList; private set => SetProperty(ref todoList, value); }
         private List<Todo> todoList = new List<Todo>();
-
-        public HashSet<Todo> WorkingTodos { get; set; } = new HashSet<Todo>();
         private Timer timer = new Timer(10000);
-
-        public bool Connected { get; set; } = false;
-
         private SoundPlayer soundPlayer = new SoundPlayer(@"C:\Windows\Media\Windows Notify Calendar.wav");
-        private string CurrentServiceName { get; set; }
+        private DelegateCommand<object> updateCommand;
+        private DelegateCommand<Todo> copyTodoCommand;
+        private DelegateCommand loadCommand;
+        private DelegateCommand<Todo> copyTodoWithoutTextCommand;
+        private DelegateCommand<Todo> copyAndContinueCommand;
+        private DelegateCommand<Todo> clearTextContentCommand;
+        private DelegateCommand<Todo> resetTodoWorkingStatusCommand;
+        private DelegateCommand exportAllCommand;
+        private string message = string.Empty;
+
+        public DBHelper(string tableName, IDBConnectionStrings dbConnectionStrings) : this(tableName)
+        {
+            changeDatabase(dbConnectionStrings);
+        }
 
         private DBHelper(string tableName)
         {
@@ -59,13 +65,182 @@
             };
 
             timer.Start();
-
         }
 
-        public DBHelper(string tableName, IDBConnectionStrings dbConnectionStrings) : this(tableName)
+        public List<Todo> TodoList { get => todoList; private set => SetProperty(ref todoList, value); }
+
+        public HashSet<Todo> WorkingTodos { get; set; } = new HashSet<Todo>();
+
+        public bool Connected { get; set; } = false;
+
+        public DelegateCommand<object> UpdateCommand
         {
-            changeDatabase(dbConnectionStrings);
+            #region
+            get => updateCommand ?? (updateCommand = new DelegateCommand<object>((object l) =>
+            {
+                Todo todo = ((ListViewItem)l).Content as Todo;
+                if (todo != null)
+                {
+                    update(todo);
+                    if (todo.Started)
+                    {
+                        WorkingTodos.Add(todo);
+                    }
+                }
+            }));
         }
+        #endregion
+
+        public string TableName { get; private set; }
+
+        public string CommentTableName { get; private set; } = "comments";
+
+        public DelegateCommand LoadCommand
+        {
+            #region
+            get => loadCommand ?? (loadCommand = new DelegateCommand(() =>
+            {
+                loadTodoList();
+                Message = "TodoList をリロードしました。";
+            }));
+        }
+        #endregion
+
+        public DelegateCommand<Todo> CopyTodoCommand
+        {
+            #region
+            get => copyTodoCommand ?? (copyTodoCommand = new DelegateCommand<Todo>((sourceTodo) =>
+            {
+                insertTodo(new Todo(sourceTodo));
+            }));
+        }
+        #endregion
+
+        public DelegateCommand<Todo> CopyTodoWithoutTextCommand
+        {
+            #region
+            get => copyTodoWithoutTextCommand ?? (copyTodoWithoutTextCommand = new DelegateCommand<Todo>((sourceTodo) =>
+            {
+                Todo t = new Todo(sourceTodo) { TextContent = string.Empty };
+                insertTodo(t);
+            }));
+        }
+        #endregion
+
+        public DelegateCommand<Todo> CopyAndContinueCommand
+        {
+            #region
+            get => copyAndContinueCommand ?? (copyAndContinueCommand = new DelegateCommand<Todo>((sourceTodo) =>
+            {
+                Todo t = new Todo(sourceTodo) { Started = true };
+                sourceTodo.CompleteCommand.Execute();
+                insertTodo(t);
+            }));
+        }
+        #endregion
+
+        public DelegateCommand<Todo> ClearTextContentCommand
+        {
+            #region
+            get => clearTextContentCommand ?? (clearTextContentCommand = new DelegateCommand<Todo>((sourceTodo) =>
+            {
+                sourceTodo.TextContent = string.Empty;
+                update(sourceTodo);
+            }));
+        }
+        #endregion
+
+        public DelegateCommand<Todo> ResetTodoWorkingStatusCommand
+        {
+            #region
+            get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) =>
+            {
+                targetTodo.resetWorkingStatus();
+                update(targetTodo);
+            }));
+        }
+        #endregion
+
+        /// <summary>
+        /// データベースから全てのTodoを取り出してテキストファイルに出力します。
+        /// </summary>
+        public DelegateCommand ExportAllCommand
+        {
+            #region
+            get => exportAllCommand ?? (exportAllCommand = new DelegateCommand(() =>
+            {
+                var hashTable = select($"SELECT * FROM {TableName};", new List<NpgsqlParameter>());
+                var todos = new List<Todo>();
+                hashTable.ForEach((h) => todos.Add(toTodo(h)));
+
+                using (var sw = new StreamWriter(@"backup.xml", false, new UTF8Encoding(false)))
+                {
+                    XmlSerializer serializer1 = new XmlSerializer(typeof(List<Todo>));
+                    serializer1.Serialize(sw, todos);
+                }
+
+                var commentHashTable = select($"select * from {CommentTableName};", new List<NpgsqlParameter>());
+                var comments = new List<Comment>();
+                commentHashTable.ForEach((h) =>
+                {
+                    comments.Add(new Comment()
+                    {
+                        ID = (int)h[nameof(Comment.ID).ToLower()],
+                        CreationDateTime = (DateTime)h[nameof(Comment.CreationDateTime).ToLower()],
+                        TextContent = (string)h[nameof(Comment.TextContent).ToLower()]
+                    });
+                });
+
+                using (var sw = new StreamWriter(@"backup-comment.xml", false, new UTF8Encoding(false)))
+                {
+                    new XmlSerializer(typeof(List<Comment>)).Serialize(sw, comments);
+                }
+            }));
+        }
+        #endregion
+
+
+        public string Message
+        {
+            get => message;
+            set
+            {
+                value = $"{DateTime.Now} " + value;
+                SetProperty(ref message, value);
+            }
+        }
+
+        public long TodoCount
+        {
+            get
+            {
+                long count = 0;
+                try
+                {
+                    count = (long)select($"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"];
+                }
+                catch (Exception e)
+                {
+                    if (e is TimeoutException || e is SocketException || e is ArgumentException)
+                    {
+                        return 0;
+                    }
+                }
+
+                return count;
+            }
+        }
+
+        public int BackupDateInterval { get; set; } = 7;
+
+        public SQLCommandOption SqlCommandOption { get; private set; }
+
+        private NpgsqlConnection DBConnection
+        {
+            get => new NpgsqlConnection(connectionStringBuilder.ToString());
+        }
+
+        private string CurrentServiceName { get; set; }
 
         public void insertTodo(Todo todo)
         {
@@ -162,24 +337,69 @@
             executeNonQuery(query.ToString(), ps);
         }
 
-        public DelegateCommand<object> UpdateCommand
+
+        public void changeDatabase(IDBConnectionStrings destDatabaseInfo)
         {
-            #region
-            get => updateCommand ?? (updateCommand = new DelegateCommand<object>((object l) =>
+            connectionStringBuilder = new NpgsqlConnectionStringBuilder()
             {
-                Todo todo = ((ListViewItem)l).Content as Todo;
-                if (todo != null)
-                {
-                    update(todo);
-                    if (todo.Started)
-                    {
-                        WorkingTodos.Add(todo);
-                    }
-                }
-            }));
+                Host = destDatabaseInfo.HostName,
+                Username = destDatabaseInfo.UserName,
+                Database = "postgres",
+                Password = destDatabaseInfo.PassWord,
+                Port = destDatabaseInfo.PortNumber
+            };
+
+            if (tryConnect())
+            {
+                CurrentServiceName = destDatabaseInfo.ServiceName;
+                tryFirstConnectCommand();
+            }
+            else
+            {
+                TodoList = new List<Todo>();
+            }
         }
-        private DelegateCommand<object> updateCommand;
-        #endregion
+
+        public bool tryConnect()
+        {
+            bool result = false;
+            try
+            {
+                using (var con = DBConnection)
+                {
+                    con.Open();
+                }
+                result = true;
+                Connected = true;
+            }
+            catch (TimeoutException)
+            {
+                Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
+            }
+            catch (SocketException)
+            {
+                Message = "接続を試行しましたが、接続先のサーバーが存在しません。";
+            }
+            catch (ArgumentException)
+            {
+                Message = "データベースへの接続に失敗しました。";
+            }
+
+            return result;
+        }
+
+        private void tryFirstConnectCommand()
+        {
+            loadTodoList();
+            Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
+
+            if (DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0))
+            {
+                ExportAllCommand.Execute();
+                Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
+                Properties.Settings.Default.Save();
+            }
+        }
 
         /// <summary>
         /// select で取得した dataReader から取り出した値を Hashtable に詰め、それをまとめたリストを取得します。
@@ -263,14 +483,6 @@
             executeNonQuery(commentTableQuery.ToString(), new List<NpgsqlParameter>());
         }
 
-        public string TableName { get; private set; }
-        public string CommentTableName { get; private set; } = "comments";
-
-        private NpgsqlConnection DBConnection
-        {
-            get => new NpgsqlConnection(connectionStringBuilder.ToString());
-        }
-
         private void loadTodoList()
         {
             var rows = select(SqlCommandOption.buildSQL(), SqlCommandOption.SqlParams);
@@ -342,221 +554,5 @@
 
             return todo;
         }
-
-        public void changeDatabase(IDBConnectionStrings destDatabaseInfo)
-        {
-            connectionStringBuilder = new NpgsqlConnectionStringBuilder()
-            {
-                Host = destDatabaseInfo.HostName,
-                Username = destDatabaseInfo.UserName,
-                Database = "postgres",
-                Password = destDatabaseInfo.PassWord,
-                Port = destDatabaseInfo.PortNumber
-            };
-
-            if (tryConnect())
-            {
-                CurrentServiceName = destDatabaseInfo.ServiceName;
-                tryFirstConnectCommand();
-            }
-            else
-            {
-                TodoList = new List<Todo>();
-            }
-        }
-
-        public bool tryConnect()
-        {
-            bool result = false;
-            try
-            {
-                using (var con = DBConnection)
-                {
-                    con.Open();
-                }
-                result = true;
-                Connected = true;
-            }
-            catch (TimeoutException)
-            {
-                Message = "接続を試行しましたがタイムアウトしました。データベースへの接続に失敗しました";
-            }
-            catch (SocketException)
-            {
-                Message = "接続を試行しましたが、接続先のサーバーが存在しません。";
-            }
-            catch (ArgumentException)
-            {
-                Message = "データベースへの接続に失敗しました。";
-            }
-
-            return result;
-        }
-
-        private void tryFirstConnectCommand()
-        {
-            loadTodoList();
-            Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
-
-            if (DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0))
-            {
-                ExportAllCommand.Execute();
-                Properties.Settings.Default.lastBackupDateTime = DateTime.Now;
-                Properties.Settings.Default.Save();
-            }
-        }
-
-        public DelegateCommand LoadCommand
-        {
-            #region
-            get => loadCommand ?? (loadCommand = new DelegateCommand(() =>
-            {
-                loadTodoList();
-                Message = "TodoList をリロードしました。";
-            }));
-        }
-        private DelegateCommand loadCommand;
-        #endregion
-
-
-        public DelegateCommand<Todo> CopyTodoCommand
-        {
-            #region
-            get => copyTodoCommand ?? (copyTodoCommand = new DelegateCommand<Todo>((sourceTodo) =>
-            {
-                insertTodo(new Todo(sourceTodo));
-            }));
-        }
-        private DelegateCommand<Todo> copyTodoCommand;
-        #endregion
-
-
-        public DelegateCommand<Todo> CopyTodoWithoutTextCommand
-        {
-            #region
-            get => copyTodoWithoutTextCommand ?? (copyTodoWithoutTextCommand = new DelegateCommand<Todo>((sourceTodo) =>
-            {
-                Todo t = new Todo(sourceTodo) { TextContent = string.Empty };
-                insertTodo(t);
-            }));
-        }
-        private DelegateCommand<Todo> copyTodoWithoutTextCommand;
-        #endregion
-
-
-        public DelegateCommand<Todo> CopyAndContinueCommand
-        {
-            #region
-            get => copyAndContinueCommand ?? (copyAndContinueCommand = new DelegateCommand<Todo>((sourceTodo) =>
-            {
-                Todo t = new Todo(sourceTodo) { Started = true };
-                sourceTodo.CompleteCommand.Execute();
-                insertTodo(t);
-            }));
-        }
-        private DelegateCommand<Todo> copyAndContinueCommand;
-        #endregion
-
-
-        public DelegateCommand<Todo> ClearTextContentCommand
-        {
-            #region
-            get => clearTextContentCommand ?? (clearTextContentCommand = new DelegateCommand<Todo>((sourceTodo) =>
-            {
-                sourceTodo.TextContent = string.Empty;
-                update(sourceTodo);
-            }));
-        }
-        private DelegateCommand<Todo> clearTextContentCommand;
-        #endregion
-
-
-        public DelegateCommand<Todo> ResetTodoWorkingStatusCommand
-        {
-            #region
-            get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) =>
-            {
-                targetTodo.resetWorkingStatus();
-                update(targetTodo);
-            }));
-        }
-        private DelegateCommand<Todo> resetTodoWorkingStatusCommand;
-        #endregion
-
-        /// <summary>
-        /// データベースから全てのTodoを取り出してテキストファイルに出力します。
-        /// </summary>
-        public DelegateCommand ExportAllCommand
-        {
-            #region
-            get => exportAllCommand ?? (exportAllCommand = new DelegateCommand(() =>
-            {
-                var hashTable = select($"SELECT * FROM {TableName};", new List<NpgsqlParameter>());
-                var todos = new List<Todo>();
-                hashTable.ForEach((h) => todos.Add(toTodo(h)));
-
-                using (var sw = new StreamWriter(@"backup.xml", false, new UTF8Encoding(false)))
-                {
-                    XmlSerializer serializer1 = new XmlSerializer(typeof(List<Todo>));
-                    serializer1.Serialize(sw, todos);
-                }
-
-                var commentHashTable = select($"select * from {CommentTableName};", new List<NpgsqlParameter>());
-                var comments = new List<Comment>();
-                commentHashTable.ForEach((h) =>
-                {
-                    comments.Add(new Comment()
-                    {
-                        ID = (int)h[nameof(Comment.ID).ToLower()],
-                        CreationDateTime = (DateTime)h[nameof(Comment.CreationDateTime).ToLower()],
-                        TextContent = (string)h[nameof(Comment.TextContent).ToLower()]
-                    });
-                });
-
-                using (var sw = new StreamWriter(@"backup-comment.xml", false, new UTF8Encoding(false)))
-                {
-                    new XmlSerializer(typeof(List<Comment>)).Serialize(sw, comments);
-                }
-            }));
-        }
-        private DelegateCommand exportAllCommand;
-        #endregion
-
-
-        public string Message
-        {
-            get => message;
-            set
-            {
-                value = $"{DateTime.Now} " + value;
-                SetProperty(ref message, value);
-            }
-        }
-        private string message = string.Empty;
-
-        public long TodoCount
-        {
-            get
-            {
-                long count = 0;
-                try
-                {
-                    count = (long)select($"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"];
-                }
-                catch (Exception e)
-                {
-                    if (e is TimeoutException || e is SocketException || e is ArgumentException)
-                    {
-                        return 0;
-                    }
-                }
-
-                return count;
-            }
-        }
-
-        public int BackupDateInterval { get; set; } = 7;
-
-        public SQLCommandOption SqlCommandOption { get; private set; }
     }
 }

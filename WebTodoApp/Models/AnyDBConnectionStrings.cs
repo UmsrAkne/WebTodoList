@@ -5,23 +5,13 @@
 
     public class AnyDBConnectionStrings : BindableBase, IDBConnectionStrings
     {
-        public string UserName { get => userName; set => SetProperty(ref userName, value); }
         private string userName = string.Empty;
-
-        public string PassWord { get => password; set => SetProperty(ref password, value); }
         private string password = string.Empty;
-
-        public string HostName { get => hostName; set => SetProperty(ref hostName, value); }
         private string hostName = string.Empty;
-
-        public int PortNumber { get => portNumber; set => SetProperty(ref portNumber, value); }
         private int portNumber = 5432;
-
-        public string ServiceName { get; set; }
 
         public AnyDBConnectionStrings()
         {
-
         }
 
         /// <summary>
@@ -47,7 +37,16 @@
                     PortNumber = int.Parse(cnStrings[3]);
                 }
             }
-
         }
+
+        public string UserName { get => userName; set => SetProperty(ref userName, value); }
+
+        public string PassWord { get => password; set => SetProperty(ref password, value); }
+
+        public string HostName { get => hostName; set => SetProperty(ref hostName, value); }
+
+        public int PortNumber { get => portNumber; set => SetProperty(ref portNumber, value); }
+
+        public string ServiceName { get; set; }
     }
 }

@@ -8,6 +8,12 @@
 
     public class Encryptor
     {
+        /// <summary>
+        /// 暗号、復号時に使用するキーをセットします。バイト配列のサイズは 32 でセットします。
+        /// このプロパティにはデフォルトで要素数０のバイト配列が入っています。
+        /// デフォルトの配列がセットされている場合は、コンピューター名から生成されるデフォルトの暗号鍵を使用して暗号化、復号を行います。
+        /// </summary>
+        public byte[] Key { get; set; } = new byte[0];
 
         public string encrypt(string plainText)
         {
@@ -73,13 +79,6 @@
                 return Encoding.Unicode.GetString(result);
             }
         }
-
-        /// <summary>
-        /// 暗号、復号時に使用するキーをセットします。バイト配列のサイズは 32 でセットします。
-        /// このプロパティにはデフォルトで要素数０のバイト配列が入っています。
-        /// デフォルトの配列がセットされている場合は、コンピューター名から生成されるデフォルトの暗号鍵を使用して暗号化、復号を行います。
-        /// </summary>
-        public byte[] Key { get; set; } = new byte[0];
 
         private string getHash(string text)
         {

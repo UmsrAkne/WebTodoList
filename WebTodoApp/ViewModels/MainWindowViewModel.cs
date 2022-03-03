@@ -14,6 +14,19 @@
     public class MainWindowViewModel : BindableBase
     {
         private string _title = "Todo List";
+        private Todo enteringTodo = new Todo();
+        private DelegateCommand insertTodoCommand;
+        private DelegateCommand toggleTextContentVisibilityCommand;
+        private DelegateCommand exitCommand;
+        private DelegateCommand<UIElement> focusCommand;
+        private DelegateCommand showConnectionDialogCommand;
+
+        public MainWindowViewModel(IDialogService dialogService)
+        {
+            DialogService = dialogService;
+            DatabaseHelper = new DBHelper("todo_table", new AnyDBConnectionStrings("certification"));
+        }
+
         public string Title
         {
             get
@@ -40,19 +53,8 @@
             get => enteringTodo;
             private set => SetProperty(ref enteringTodo, value);
         }
-
-        private Todo enteringTodo = new Todo();
         #endregion
 
-        private IDialogService DialogService { get; set; }
-
-        public MainWindowViewModel(IDialogService dialogService)
-        {
-            DialogService = dialogService;
-            DatabaseHelper = new DBHelper("todo_table", new AnyDBConnectionStrings("certification"));
-        }
-
-        private DelegateCommand insertTodoCommand;
         public DelegateCommand InsertTodoCommand
         {
             get => insertTodoCommand ?? (insertTodoCommand = new DelegateCommand(() =>
@@ -69,6 +71,7 @@
         }
 
         public Visibility TextContentVisiblity { get; set; } = Visibility.Collapsed;
+
         public Visibility SideTextContentVisiblity { get; set; } = Visibility.Visible;
 
         public DelegateCommand ToggleTextContentVisibilityCommand
@@ -92,7 +95,6 @@
 
             }));
         }
-        private DelegateCommand toggleTextContentVisibilityCommand;
         #endregion
 
         public DelegateCommand ExitCommand
@@ -103,9 +105,7 @@
                 App.Current.Shutdown();
             }));
         }
-        private DelegateCommand exitCommand;
         #endregion
-
 
         public DelegateCommand<UIElement> FocusCommand
         {
@@ -115,7 +115,6 @@
                 focusableElement?.Focus();
             }));
         }
-        private DelegateCommand<UIElement> focusCommand;
         #endregion
 
         public DelegateCommand ShowConnectionDialogCommand
@@ -138,7 +137,8 @@
                 });
             }));
         }
-        private DelegateCommand showConnectionDialogCommand;
         #endregion
+
+        private IDialogService DialogService { get; set; }
     }
 }

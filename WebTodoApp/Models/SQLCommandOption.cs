@@ -6,6 +6,7 @@
 
     public class SQLCommandOption
     {
+        private string displayDateRangeString = "0";
 
         public string TableName { get; set; }
 
@@ -16,6 +17,39 @@
         /// 取得する Todo を未完了の Todo のみに絞るかどうかを設定します。
         /// </summary>
         public bool ShowOnlyIncompleteTodo { get; set; }
+
+        /// <summary>
+        /// このプロパティにセットされた整数日前から Todo を表示するよう設定します。
+        /// 例えば 1 をセットした場合、その時の日付から、作成日時が一日前までの Todo を検索するSQLを生成します。
+        /// デフォルトは 0 となっており、この場合は全ての期間の Todo を指定します。
+        /// </summary>
+        public int DisplayDateRange { get; set; }
+
+        public string DisplayDateRangeString
+        {
+            get => displayDateRangeString;
+            set
+            {
+                if (int.TryParse(value, out int result))
+                {
+                    DisplayDateRange = result;
+                }
+                else
+                {
+                    DisplayDateRange = 0;
+                }
+
+                displayDateRangeString = DisplayDateRange.ToString();
+            }
+        }
+
+        public string SearchString { get; set; } = string.Empty;
+
+        public List<NpgsqlParameter> SqlParams
+        {
+            get;
+            private set;
+        } = new List<NpgsqlParameter>();
 
         public string buildSQL()
         {
@@ -68,41 +102,6 @@
 
             return sql;
         }
-
-        /// <summary>
-        /// このプロパティにセットされた整数日前から Todo を表示するよう設定します。
-        /// 例えば 1 をセットした場合、その時の日付から、作成日時が一日前までの Todo を検索するSQLを生成します。
-        /// デフォルトは 0 となっており、この場合は全ての期間の Todo を指定します。
-        /// </summary>
-        public int DisplayDateRange { get; set; }
-
-        public string DisplayDateRangeString
-        {
-            get => displayDateRangeString;
-            set
-            {
-                if (int.TryParse(value, out int result))
-                {
-                    DisplayDateRange = result;
-                }
-                else
-                {
-                    DisplayDateRange = 0;
-                }
-
-                displayDateRangeString = DisplayDateRange.ToString();
-            }
-        }
-
-        private string displayDateRangeString = "0";
-
-        public string SearchString { get; set; } = string.Empty;
-
-        public List<NpgsqlParameter> SqlParams
-        {
-            get;
-            private set;
-        } = new List<NpgsqlParameter>();
 
         public class SQLCommandColumnOption
         {

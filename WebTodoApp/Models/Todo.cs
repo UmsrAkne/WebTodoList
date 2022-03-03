@@ -12,6 +12,17 @@
     [Serializable]
     public class Todo : BindableBase
     {
+        private string title = string.Empty;
+        private string textContent = string.Empty;
+        private bool completed;
+        private SolidColorBrush labelColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorName.Transparent.ToString()));
+        private DateTime startDateTime = new DateTime();
+        private ColorName labelColorName = ColorName.Transparent;
+        private int selectedColorIndex = 0;
+        private bool started;
+        private bool canStart = true;
+        private DelegateCommand completeCommand;
+
         public Todo()
         {
             var colors = Enum.GetValues(typeof(ColorName));
@@ -42,7 +53,9 @@
         public int ID { get; set; } = -1;
 
         public DateTime CreationDate { get; set; } = new DateTime();
+
         public DateTime CompletionDate { get; set; } = new DateTime();
+
         public DateTime StartDateTime
         {
             get => startDateTime;
@@ -59,13 +72,9 @@
             }
         }
 
-        private DateTime startDateTime = new DateTime();
-
         public string Title { get => title; set => SetProperty(ref title, value); }
-        private string title = string.Empty;
 
         public string TextContent { get => textContent; set => SetProperty(ref textContent, value); }
-        private string textContent = string.Empty;
 
         // 優先順位は小さいほど高い
         public int Priority { get; set; } = 5;
@@ -92,13 +101,10 @@
                 SetProperty(ref completed, value);
             }
         }
-        private bool completed;
 
         public int Duration { get; set; }
 
         public int ActualDuration { get; set; }
-
-        private SolidColorBrush labelColor = new SolidColorBrush((Color)ColorConverter.ConvertFromString(ColorName.Transparent.ToString()));
 
         [XmlIgnore]
         public SolidColorBrush LabelColor
@@ -107,7 +113,6 @@
             private set => SetProperty(ref labelColor, value);
         }
 
-        private ColorName labelColorName = ColorName.Transparent;
         public ColorName LabelColorName
         {
             get => labelColorName;
@@ -122,7 +127,6 @@
         [XmlIgnore]
         public List<SolidColorBrush> SelectableLableColors { get; private set; }
 
-        private int selectedColorIndex = 0;
         public int SelectedColorIndex
         {
             get => selectedColorIndex;
@@ -147,7 +151,6 @@
                 SetProperty(ref started, value);
             }
         }
-        private bool started;
 
         public bool CanStart
         {
@@ -158,7 +161,6 @@
                 RaisePropertyChanged(nameof(WorkingStatus));
             }
         }
-        private bool canStart = true;
 
         /// <summary>
         /// この Todo オブジェクトがデータベースのデータを元に作られたものかどうかを示します。
@@ -167,6 +169,7 @@
         public bool existSource { get; set; }
 
         public string CreationDateShortString { get => CreationDate.ToString("MM/dd HH:mm"); }
+
         public string CompletionDateShortString
         {
             get => (CompletionDate.Ticks == 0) ? string.Empty : CompletionDate.ToString("MM/dd HH:mm");
@@ -193,7 +196,6 @@
                 RaisePropertyChanged(nameof(WorkingStatus));
             }));
         }
-        private DelegateCommand completeCommand;
         #endregion
 
         /// <summary>

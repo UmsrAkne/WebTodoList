@@ -13,7 +13,7 @@
 
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "Todo List";
+        private string title = "Todo List";
         private Todo enteringTodo = new Todo();
         private DelegateCommand insertTodoCommand;
         private DelegateCommand toggleTextContentVisibilityCommand;
@@ -42,7 +42,10 @@
                 return "Todo List";
             }
 
-            set { SetProperty(ref _title, value); }
+            set
+            {
+                SetProperty(ref title, value);
+            }
         }
 
         public DBHelper DatabaseHelper { get; set; }
@@ -65,7 +68,7 @@
                 }
 
                 EnteringTodo.CreationDate = System.DateTime.Now;
-                DatabaseHelper.insertTodo(EnteringTodo);
+                DatabaseHelper.InsertTodo(EnteringTodo);
                 EnteringTodo = new Todo();
             }));
         }
@@ -92,7 +95,6 @@
 
                 RaisePropertyChanged(nameof(TextContentVisiblity));
                 RaisePropertyChanged(nameof(SideTextContentVisiblity));
-
             }));
         }
         #endregion
@@ -132,7 +134,7 @@
                     if (result.Result == ButtonResult.Yes)
                     {
                         var dbConnectionInfo = result.Parameters.GetValue<IDBConnectionStrings>(nameof(AnyDBConnectionStrings));
-                        DatabaseHelper.changeDatabase(dbConnectionInfo);
+                        DatabaseHelper.ChangeDatabase(dbConnectionInfo);
                     }
                 });
             }));

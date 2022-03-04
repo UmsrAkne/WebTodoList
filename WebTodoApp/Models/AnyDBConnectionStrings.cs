@@ -28,13 +28,13 @@
                 using (var sr = new StreamReader(certificationFileInfo.Name))
                 {
                     var encString = sr.ReadToEnd();
-                    var decString = encryptor.decrypt(encString);
-                    var cnStrings = decString.Split(' ');
+                    var decString = encryptor.Decrypt(encString);
+                    var strings = decString.Split(' ');
 
-                    HostName = cnStrings[0];
-                    UserName = cnStrings[1];
-                    PassWord = cnStrings[2];
-                    PortNumber = int.Parse(cnStrings[3]);
+                    HostName = strings[0];
+                    UserName = strings[1];
+                    PassWord = strings[2];
+                    PortNumber = int.Parse(strings[3]);
                 }
             }
         }

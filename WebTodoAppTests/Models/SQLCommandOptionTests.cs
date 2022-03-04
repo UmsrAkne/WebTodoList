@@ -7,7 +7,7 @@
     public class SQLCommandOptionTests
     {
         [TestMethod]
-        public void buildSQLTest()
+        public void BuildSQLTest()
         {
             var commandOption = new SQLCommandOption();
             commandOption.Limit = 20;
@@ -28,7 +28,7 @@
                 });
 
             Assert.AreEqual(
-                commandOption.buildSQL(),
+                commandOption.BuildSQL(),
                 "select * from testTableName where 1=1 order by firstColumn DESC ,secondColumn DESC LIMIT 20;");
         }
     }

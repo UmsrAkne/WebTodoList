@@ -1,6 +1,5 @@
 ﻿namespace WebTodoApp.Models
 {
-
     using System;
     using System.Collections.Generic;
     using System.Windows.Media;
@@ -27,9 +26,9 @@
         {
             var colors = Enum.GetValues(typeof(ColorName));
             var colorList = new List<SolidColorBrush>();
-            foreach (var cName in colors)
+            foreach (var colorName in colors)
             {
-                string cn = cName.ToString();
+                string cn = colorName.ToString();
                 colorList.Add(new SolidColorBrush((Color)ColorConverter.ConvertFromString(cn)));
             }
 
@@ -165,7 +164,7 @@
         /// この Todo オブジェクトがデータベースのデータを元に作られたものかどうかを示します。
         /// このプロパティが false である場合は、新規作成された Todo であることを示します。
         /// </summary>
-        public bool existSource { get; set; }
+        public bool ExistSource { get; set; }
 
         public string CreationDateShortString { get => CreationDate.ToString("MM/dd HH:mm"); }
 
@@ -178,7 +177,7 @@
         /// このオブジェクトをパラメーターにしてデータベースに UPDATE をかける時、
         /// このプロパティに true がセットされていたらアップデートをしません。
         /// </summary>
-        public bool updateStopping { get; set; }
+        public bool UpdateStopping { get; set; }
 
         public DelegateCommand CompleteCommand
         {
@@ -226,9 +225,9 @@
         /// <summary>
         /// WorkingStatus に表示されている、作業開始からの経過時間の変更をビューに通知します。
         /// </summary>
-        public void updateElapsedTime() => RaisePropertyChanged(nameof(WorkingStatus));
+        public void UpdateElapsedTime() => RaisePropertyChanged(nameof(WorkingStatus));
 
-        public void resetWorkingStatus()
+        public void ResetWorkingStatus()
         {
             Completed = false;
             Started = false;
@@ -237,6 +236,5 @@
             CompletionDate = new DateTime();
             CanStart = true;
         }
-
     }
 }

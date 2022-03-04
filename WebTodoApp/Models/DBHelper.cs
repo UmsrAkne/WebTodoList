@@ -16,7 +16,6 @@
 
     public class DBHelper : BindableBase
     {
-
         private NpgsqlConnectionStringBuilder connectionStringBuilder;
         private List<Todo> todoList = new List<Todo>();
         private Timer timer = new Timer(10000);
@@ -31,9 +30,9 @@
         private DelegateCommand exportAllCommand;
         private string message = string.Empty;
 
-        public DBHelper(string tableName, IDBConnectionStrings dbConnectionStrings) : this(tableName)
+        public DBHelper(string tableName, IDBConnectionStrings dbconnectionStrings) : this(tableName)
         {
-            changeDatabase(dbConnectionStrings);
+            ChangeDatabase(dbconnectionStrings);
         }
 
         private DBHelper(string tableName)
@@ -55,7 +54,7 @@
             {
                 foreach (Todo t in WorkingTodos)
                 {
-                    t.updateElapsedTime();
+                    t.UpdateElapsedTime();
 
                     if ((int)t.Duration == (int)(DateTime.Now - t.StartDateTime).TotalMinutes && !t.Completed)
                     {
@@ -81,7 +80,7 @@
                 Todo todo = ((ListViewItem)l).Content as Todo;
                 if (todo != null)
                 {
-                    update(todo);
+                    Update(todo);
                     if (todo.Started)
                     {
                         WorkingTodos.Add(todo);
@@ -100,7 +99,7 @@
             #region
             get => loadCommand ?? (loadCommand = new DelegateCommand(() =>
             {
-                loadTodoList();
+                LoadTodoList();
                 Message = "TodoList をリロードしました。";
             }));
         }
@@ -111,7 +110,7 @@
             #region
             get => copyTodoCommand ?? (copyTodoCommand = new DelegateCommand<Todo>((sourceTodo) =>
             {
-                insertTodo(new Todo(sourceTodo));
+                InsertTodo(new Todo(sourceTodo));
             }));
         }
         #endregion
@@ -122,7 +121,7 @@
             get => copyTodoWithoutTextCommand ?? (copyTodoWithoutTextCommand = new DelegateCommand<Todo>((sourceTodo) =>
             {
                 Todo t = new Todo(sourceTodo) { TextContent = string.Empty };
-                insertTodo(t);
+                InsertTodo(t);
             }));
         }
         #endregion
@@ -134,7 +133,7 @@
             {
                 Todo t = new Todo(sourceTodo) { Started = true };
                 sourceTodo.CompleteCommand.Execute();
-                insertTodo(t);
+                InsertTodo(t);
             }));
         }
         #endregion
@@ -145,7 +144,7 @@
             get => clearTextContentCommand ?? (clearTextContentCommand = new DelegateCommand<Todo>((sourceTodo) =>
             {
                 sourceTodo.TextContent = string.Empty;
-                update(sourceTodo);
+                Update(sourceTodo);
             }));
         }
         #endregion
@@ -155,8 +154,8 @@
             #region
             get => resetTodoWorkingStatusCommand ?? (resetTodoWorkingStatusCommand = new DelegateCommand<Todo>((targetTodo) =>
             {
-                targetTodo.resetWorkingStatus();
-                update(targetTodo);
+                targetTodo.ResetWorkingStatus();
+                Update(targetTodo);
             }));
         }
         #endregion
@@ -169,9 +168,9 @@
             #region
             get => exportAllCommand ?? (exportAllCommand = new DelegateCommand(() =>
             {
-                var hashTable = select($"SELECT * FROM {TableName};", new List<NpgsqlParameter>());
+                var hashTable = Select($"SELECT * FROM {TableName};", new List<NpgsqlParameter>());
                 var todos = new List<Todo>();
-                hashTable.ForEach((h) => todos.Add(toTodo(h)));
+                hashTable.ForEach((h) => todos.Add(ToTodo(h)));
 
                 using (var sw = new StreamWriter(@"backup.xml", false, new UTF8Encoding(false)))
                 {
@@ -179,7 +178,7 @@
                     serializer1.Serialize(sw, todos);
                 }
 
-                var commentHashTable = select($"select * from {CommentTableName};", new List<NpgsqlParameter>());
+                var commentHashTable = Select($"select * from {CommentTableName};", new List<NpgsqlParameter>());
                 var comments = new List<Comment>();
                 commentHashTable.ForEach((h) =>
                 {
@@ -199,7 +198,6 @@
         }
         #endregion
 
-
         public string Message
         {
             get => message;
@@ -217,7 +215,7 @@
                 long count = 0;
                 try
                 {
-                    count = (long)select($"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"];
+                    count = (long)Select($"SELECT COUNT(*) FROM {TableName};", new List<NpgsqlParameter>())[0]["count"];
                 }
                 catch (Exception e)
                 {
@@ -242,15 +240,15 @@
 
         private string CurrentServiceName { get; set; }
 
-        public void insertTodo(Todo todo)
+        public void InsertTodo(Todo todo)
         {
-            var count = select($"SELECT COUNT (*) FROM {TableName};", new List<NpgsqlParameter>())[0];
+            var count = Select($"SELECT COUNT (*) FROM {TableName};", new List<NpgsqlParameter>())[0];
 
             int maxID = 0;
 
             if ((long)count["count"] > 0)
             {
-                var maxIDRow = select($"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};", new List<NpgsqlParameter>())[0];
+                var maxIDRow = Select($"SELECT MAX ({nameof(Todo.ID)}) FROM {TableName};", new List<NpgsqlParameter>())[0];
                 maxID = (int)maxIDRow["max"] + 1;
             }
 
@@ -292,22 +290,22 @@
             query.Append($":{nameof(todo.Tag)}");
             query.Append(");");
 
-            executeNonQuery(query.ToString(), ps);
+            ExecuteNonQuery(query.ToString(), ps);
 
             RaisePropertyChanged(nameof(TodoCount));
-            loadTodoList();
+            LoadTodoList();
         }
 
-        public void update(Todo todo)
+        public void Update(Todo todo)
         {
             System.Diagnostics.Debug.WriteLine(todo);
-            if (todo.ID < 0 || !todo.existSource)
+            if (todo.ID < 0 || !todo.ExistSource)
             {
                 // 上記を満たす場合、更新すべきTodoのソース（行）が存在しない
                 throw new ArgumentException("更新すべき行を特定できないTodoが指定されました。");
             }
 
-            if (todo.updateStopping)
+            if (todo.UpdateStopping)
             {
                 return;
             }
@@ -334,11 +332,10 @@
             query.Append($"{nameof(Todo.LabelColor)} = '{todo.LabelColorName}' ");
             query.Append($"WHERE id = {todo.ID};");
 
-            executeNonQuery(query.ToString(), ps);
+            ExecuteNonQuery(query.ToString(), ps);
         }
 
-
-        public void changeDatabase(IDBConnectionStrings destDatabaseInfo)
+        public void ChangeDatabase(IDBConnectionStrings destDatabaseInfo)
         {
             connectionStringBuilder = new NpgsqlConnectionStringBuilder()
             {
@@ -349,10 +346,10 @@
                 Port = destDatabaseInfo.PortNumber
             };
 
-            if (tryConnect())
+            if (TryConnect())
             {
                 CurrentServiceName = destDatabaseInfo.ServiceName;
-                tryFirstConnectCommand();
+                TryFirstConnectCommand();
             }
             else
             {
@@ -360,7 +357,7 @@
             }
         }
 
-        public bool tryConnect()
+        public bool TryConnect()
         {
             bool result = false;
             try
@@ -369,6 +366,7 @@
                 {
                     con.Open();
                 }
+
                 result = true;
                 Connected = true;
             }
@@ -388,9 +386,9 @@
             return result;
         }
 
-        private void tryFirstConnectCommand()
+        private void TryFirstConnectCommand()
         {
-            loadTodoList();
+            LoadTodoList();
             Message = $"データベースへの接続に成功。{CurrentServiceName} からTodoList をロードしました";
 
             if (DateTime.Now - Properties.Settings.Default.lastBackupDateTime > new TimeSpan(BackupDateInterval, 0, 0, 0))
@@ -406,7 +404,7 @@
         /// </summary>
         /// <param name="commandText"></param>
         /// <returns></returns>
-        private List<Hashtable> select(string commandText, List<NpgsqlParameter> parameters)
+        private List<Hashtable> Select(string commandText, List<NpgsqlParameter> parameters)
         {
             var startTime = DateTime.Now;
 
@@ -425,6 +423,7 @@
                     {
                         hashtable[dataReader.GetName(i)] = dataReader.GetValue(i);
                     }
+
                     resultList.Add(hashtable);
                 }
 
@@ -435,26 +434,26 @@
             }
         }
 
-        private void executeNonQuery(string CommandText, List<NpgsqlParameter> commandParams)
+        private void ExecuteNonQuery(string commandText, List<NpgsqlParameter> commandParams)
         {
             var startTime = DateTime.Now;
 
             using (var con = DBConnection)
             {
                 con.Open();
-                var Command = new NpgsqlCommand(CommandText, con);
-                commandParams.ForEach((param) => { Command.Parameters.Add(param); });
-                Command.ExecuteNonQuery();
+                var command = new NpgsqlCommand(commandText, con);
+                commandParams.ForEach((param) => { command.Parameters.Add(param); });
+                command.ExecuteNonQuery();
             }
 
             TimeSpan processDuration = DateTime.Now - startTime;
-            File.AppendAllText(@"sqllog.txt", $"{DateTime.Now} {processDuration}\t{CommandText}{Environment.NewLine}");
+            File.AppendAllText(@"sqllog.txt", $"{DateTime.Now} {processDuration}\t{commandText}{Environment.NewLine}");
         }
 
         /// <summary>
         /// if not exists を含むテーブル生成用の sql文 を実行します。
         /// </summary>
-        private void createTable()
+        private void CreateTable()
         {
             StringBuilder query = new StringBuilder();
             query.Append($"CREATE TABLE IF NOT EXISTS {TableName} (");
@@ -471,7 +470,7 @@
             query.Append($"{nameof(Todo.Tag)} TEXT NOT NULL ");
             query.Append(");");
 
-            executeNonQuery(query.ToString(), new List<NpgsqlParameter>());
+            ExecuteNonQuery(query.ToString(), new List<NpgsqlParameter>());
 
             StringBuilder commentTableQuery = new StringBuilder();
             commentTableQuery.Append($"CREATE TABLE IF NOT EXISTS {CommentTableName} (");
@@ -480,19 +479,19 @@
             commentTableQuery.Append($"{nameof(Comment.TextContent)} TEXT NOT NULL ");
             commentTableQuery.Append($");");
 
-            executeNonQuery(commentTableQuery.ToString(), new List<NpgsqlParameter>());
+            ExecuteNonQuery(commentTableQuery.ToString(), new List<NpgsqlParameter>());
         }
 
-        private void loadTodoList()
+        private void LoadTodoList()
         {
-            var rows = select(SqlCommandOption.buildSQL(), SqlCommandOption.SqlParams);
+            var rows = Select(SqlCommandOption.BuildSQL(), SqlCommandOption.SqlParams);
             var list = new List<Todo>();
 
             WorkingTodos.Clear();
 
             rows.ForEach((Hashtable row) =>
             {
-                var t = toTodo(row);
+                var t = ToTodo(row);
 
                 if (t.Started)
                 {
@@ -505,11 +504,11 @@
             TodoList = list;
         }
 
-        private Todo toTodo(Hashtable hashtable)
+        private Todo ToTodo(Hashtable hashtable)
         {
             Todo todo = new Todo();
 
-            todo.existSource = true;
+            todo.ExistSource = true;
 
             todo.ID = (int)hashtable[nameof(Todo.ID).ToLower()];
             todo.Completed = (bool)hashtable[nameof(Todo.Completed).ToLower()];

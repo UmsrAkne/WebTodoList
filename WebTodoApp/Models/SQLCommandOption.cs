@@ -11,6 +11,7 @@
         public string TableName { get; set; }
 
         public int Limit { get; set; } = 10;
+
         public List<SQLCommandColumnOption> OrderByColumns { get; set; } = new List<SQLCommandColumnOption>();
 
         /// <summary>
@@ -45,13 +46,9 @@
 
         public string SearchString { get; set; } = string.Empty;
 
-        public List<NpgsqlParameter> SqlParams
-        {
-            get;
-            private set;
-        } = new List<NpgsqlParameter>();
+        public List<NpgsqlParameter> SqlParams { get; private set; } = new List<NpgsqlParameter>();
 
-        public string buildSQL()
+        public string BuildSQL()
         {
             var sql = $"select * from {TableName} ";
 
@@ -106,6 +103,7 @@
         public class SQLCommandColumnOption
         {
             public string Name { get; set; }
+
             public bool DESC { get; set; }
         }
     }

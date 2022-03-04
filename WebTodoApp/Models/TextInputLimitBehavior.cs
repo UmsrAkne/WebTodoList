@@ -9,16 +9,16 @@
         protected override void OnAttached()
         {
             base.OnAttached();
-            ((TextBox)AssociatedObject).PreviewTextInput += previewTextInputEventHandler;
+            ((TextBox)AssociatedObject).PreviewTextInput += PreviewTextInputEventHandler;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
-            ((TextBox)AssociatedObject).PreviewTextInput -= previewTextInputEventHandler;
+            ((TextBox)AssociatedObject).PreviewTextInput -= PreviewTextInputEventHandler;
         }
 
-        private void previewTextInputEventHandler(object sender, TextCompositionEventArgs e)
+        private void PreviewTextInputEventHandler(object sender, TextCompositionEventArgs e)
         {
             if (!int.TryParse(e.Text, out int result))
             {

@@ -6,9 +6,8 @@
     using Prism.Services.Dialogs;
     using WebTodoApp.Models;
 
-    class ConnectionDialogViewModel : IDialogAware
+    public class ConnectionDialogViewModel : IDialogAware
     {
-        private DBHelper dbHelper;
         private Encryptor encryptor = new Encryptor();
         private DelegateCommand connectCommand;
         private DelegateCommand cancelDialogCommand;
@@ -28,7 +27,7 @@
         {
             get => connectCommand ?? (connectCommand = new DelegateCommand(() =>
             {
-                saveCertification();
+                SaveCertification();
 
                 DialogParameters dp = new DialogParameters();
                 dp.Add(nameof(AnyDBConnectionStrings), DBConnectionStrings);
@@ -55,9 +54,9 @@
         {
         }
 
-        private void saveCertification()
+        private void SaveCertification()
         {
-            string encrypted = encryptor.encrypt($"{DBConnectionStrings.HostName} {DBConnectionStrings.UserName} {DBConnectionStrings.PassWord} {DBConnectionStrings.PortNumber}");
+            string encrypted = encryptor.Encrypt($"{DBConnectionStrings.HostName} {DBConnectionStrings.UserName} {DBConnectionStrings.PassWord} {DBConnectionStrings.PortNumber}");
 
             var certificationFileInfo = new FileInfo("certification");
             using (StreamWriter sw = new StreamWriter(certificationFileInfo.Name, false))

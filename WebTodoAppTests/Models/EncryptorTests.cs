@@ -7,11 +7,11 @@
     public class EncryptorTests
     {
         [TestMethod]
-        public void encryptTest()
+        public void EncryptTest()
         {
             var encryptor = new Encryptor();
 
-            string encrypted = encryptor.encrypt("hello world");
+            string encrypted = encryptor.Encrypt("hello world");
 
             Assert.IsNotNull(encrypted, "内部値に関わらずとりあえず null ではないか。");
             Assert.IsTrue(encrypted.Length > 0, "暗号化した文字列が入力されているか。");
@@ -19,12 +19,12 @@
         }
 
         [TestMethod]
-        public void decryptTest()
+        public void DecryptTest()
         {
             var encryptor = new Encryptor();
 
-            string encrypted = encryptor.encrypt("hello world");
-            string decrypted = encryptor.decrypt(encrypted);
+            string encrypted = encryptor.Encrypt("hello world");
+            string decrypted = encryptor.Decrypt(encrypted);
             Assert.AreEqual(decrypted, "hello world", "暗号化、復号文字列を比較。");
 
             byte[] wrongKey = new byte[32];
@@ -34,7 +34,7 @@
 
             try
             {
-                encryptor.decrypt(encrypted);
+                encryptor.Decrypt(encrypted);
             }
             catch (CryptographicException e)
             {

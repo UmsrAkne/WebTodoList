@@ -1,6 +1,5 @@
 ﻿namespace WebTodoApp.Models
 {
-
     public enum ColorName
     {
         White,

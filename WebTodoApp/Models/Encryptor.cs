@@ -15,11 +15,11 @@
         /// </summary>
         public byte[] Key { get; set; } = new byte[0];
 
-        public string encrypt(string plainText)
+        public string Encrypt(string plainText)
         {
             if (Key.Length == 0)
             {
-                Key = getKey();
+                Key = GetKey();
             }
 
             byte[] src = Encoding.Unicode.GetBytes(plainText);
@@ -40,11 +40,11 @@
             }
         }
 
-        public string decrypt(string encryptText)
+        public string Decrypt(string encryptText)
         {
             if (Key.Length == 0)
             {
-                Key = getKey();
+                Key = GetKey();
             }
 
             byte[] iv = new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
@@ -72,7 +72,6 @@
                     {
                         throw e;
                     }
-
                 }
 
                 byte[] result = outStream.ToArray();
@@ -80,17 +79,17 @@
             }
         }
 
-        private string getHash(string text)
+        private string GetHash(string text)
         {
             var sha256 = SHA256.Create();
             byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
             return string.Concat(hash.Select(b => $"{b:x2}"));
         }
 
-        private byte[] getKey()
+        private byte[] GetKey()
         {
             var r = new Rfc2898DeriveBytes(
-                getHash(Environment.MachineName),
+                GetHash(Environment.MachineName),
                 new byte[16],
                 1000);
 

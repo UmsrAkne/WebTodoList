@@ -9,7 +9,6 @@
         [TestMethod]
         public void buildSQLTest()
         {
-
             var commandOption = new SQLCommandOption();
             commandOption.Limit = 20;
             commandOption.TableName = "testTableName";

@@ -83,7 +83,7 @@
                     new NpgsqlParameter("searchString", NpgsqlTypes.NpgsqlDbType.Text) { Value = $"%{SearchString}%" });
             }
 
-            // WHERE ここまで。ここから ORDER　
+            /// WHERE ここまで。ここから ORDER　
 
             if (OrderByColumns.Count > 0)
             {

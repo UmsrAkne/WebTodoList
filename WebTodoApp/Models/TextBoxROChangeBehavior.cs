@@ -7,7 +7,6 @@
 
     public class TextBoxROChangeBehavior : Behavior<TextBox>
     {
-
         protected override void OnAttached()
         {
             base.OnAttached();

@@ -61,7 +61,6 @@
             get => startDateTime;
             set
             {
-
                 // 初期値以外がセットされた場合は既に開始ボタンが一度押されているため false
                 if (value.Ticks != 0)
                 {

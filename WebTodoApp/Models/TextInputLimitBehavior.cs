@@ -6,7 +6,6 @@
 
     public class TextInputLimitBehavior : Behavior<TextBox>
     {
-
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -27,5 +26,4 @@
             }
         }
     }
-
 }

@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace WebTodoApp.Models
+{
+    using System;
+    using System.IO;
+    using System.Linq;
+    using System.Security.Cryptography;
+    using System.Text;
 
-namespace WebTodoApp.Models {
-    public class Encryptor {
+    public class Encryptor
+    {
+        /// <summary>
+        /// 暗号、復号時に使用するキーをセットします。バイト配列のサイズは 32 でセットします。
+        /// このプロパティにはデフォルトで要素数０のバイト配列が入っています。
+        /// デフォルトの配列がセットされている場合は、コンピューター名から生成されるデフォルトの暗号鍵を使用して暗号化、復号を行います。
+        /// </summary>
+        public byte[] Key { get; set; } = new byte[0];
 
-        public string encrypt(string plainText) {
-            if(Key.Length == 0) {
-                Key = getKey();
+        public string Encrypt(string plainText)
+        {
+            if (Key.Length == 0)
+            {
+                Key = GetKey();
             }
 
             byte[] src = Encoding.Unicode.GetBytes(plainText);
@@ -20,8 +28,10 @@ namespace WebTodoApp.Models {
 
             using (var aesManaged = new AesManaged())
             using (var encryptor = aesManaged.CreateEncryptor(Key, iv))
-            using (var outStream = new MemoryStream()) {
-                using (var cryptoStream = new CryptoStream(outStream, encryptor, CryptoStreamMode.Write)) {
+            using (var outStream = new MemoryStream())
+            {
+                using (var cryptoStream = new CryptoStream(outStream, encryptor, CryptoStreamMode.Write))
+                {
                     cryptoStream.Write(src, 0, src.Length);
                 }
 
@@ -30,9 +40,11 @@ namespace WebTodoApp.Models {
             }
         }
 
-        public string decrypt(string encryptText) {
-            if(Key.Length == 0) {
-                Key = getKey();
+        public string Decrypt(string encryptText)
+        {
+            if (Key.Length == 0)
+            {
+                Key = GetKey();
             }
 
             byte[] iv = new byte[] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
@@ -41,21 +53,25 @@ namespace WebTodoApp.Models {
 
             using (var aesManaged = new AesManaged())
             using (var decryptor = aesManaged.CreateDecryptor(Key, iv))
-            using (var inStream = new MemoryStream(src,false))
-            using (var outStream = new MemoryStream()) {
-                using (var cryptoStream = new CryptoStream(inStream, decryptor, CryptoStreamMode.Read)) {
+            using (var inStream = new MemoryStream(src, false))
+            using (var outStream = new MemoryStream())
+            {
+                using (var cryptoStream = new CryptoStream(inStream, decryptor, CryptoStreamMode.Read))
+                {
                     byte[] buffer = new byte[16];
                     int len = 0;
 
-                    try{
-                        while ((len = cryptoStream.Read(buffer, 0, 16)) > 0 ) {
+                    try
+                    {
+                        while ((len = cryptoStream.Read(buffer, 0, 16)) > 0)
+                        {
                             outStream.Write(buffer, 0, len);
                         }
                     }
-                    catch (CryptographicException e) {
+                    catch (CryptographicException e)
+                    {
                         throw e;
                     }
-
                 }
 
                 byte[] result = outStream.ToArray();
@@ -63,25 +79,20 @@ namespace WebTodoApp.Models {
             }
         }
 
-        /// <summary>
-        /// 暗号、復号時に使用するキーをセットします。バイト配列のサイズは 32 でセットします。
-        /// このプロパティにはデフォルトで要素数０のバイト配列が入っています。
-        /// デフォルトの配列がセットされている場合は、コンピューター名から生成されるデフォルトの暗号鍵を使用して暗号化、復号を行います。
-        /// </summary>
-        public byte[] Key { get; set; } = new byte[0];
-
-        private string getHash(string text) {
+        private string GetHash(string text)
+        {
             var sha256 = SHA256.Create();
             byte[] hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(text));
             return string.Concat(hash.Select(b => $"{b:x2}"));
         }
 
-        private byte[] getKey() {
+        private byte[] GetKey()
+        {
             var r = new Rfc2898DeriveBytes(
-                getHash(Environment.MachineName),
+                GetHash(Environment.MachineName),
                 new byte[16],
-                1000 
-            );
+                1000);
+
             return r.GetBytes(32);
         }
     }

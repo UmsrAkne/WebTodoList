@@ -217,6 +217,7 @@
         <ListView
             x:Name="todoListView"
             Grid.Row="2"
+            HorizontalContentAlignment="Stretch"
             Background="{StaticResource ResourceKey=darkBackgroundBrush}"
             BorderThickness="0"
             ItemsSource="{Binding DatabaseHelper.TodoList}">
@@ -451,10 +452,16 @@
 
                             </StackPanel>
 
-                            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                            <Grid Grid.Column="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
 
                                 <TextBox
                                     x:Name="titleTextBox"
+                                    Grid.Column="0"
                                     Margin="3,0"
                                     BorderBrush="Black"
                                     IsReadOnly="True"
@@ -473,13 +480,14 @@
 
                                 <!--  ただの区切り線  -->
                                 <Border
-                                    Width="1"
+                                    Grid.Column="1"
+                                    Width="2"
+                                    Margin="3,0"
                                     Background="Silver"
                                     Visibility="{Binding DataContext.SideTextContentVisiblity, ElementName=todoListView}" />
 
-
                                 <TextBox
-                                    Grid.Column="3"
+                                    Grid.Column="2"
                                     MinWidth="30"
                                     Margin="3,0"
                                     IsReadOnly="True"
@@ -500,7 +508,7 @@
 
                                 </TextBox>
 
-                            </StackPanel>
+                            </Grid>
 
                             <Border
                                 x:Name="TextContentBoarder"
